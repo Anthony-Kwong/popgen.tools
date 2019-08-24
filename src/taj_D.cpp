@@ -49,17 +49,18 @@ double a2f(int N){
 }
 
 // [[Rcpp::export]]
-double b1f(int N){
+double b1f(double N){
   double b1;
   b1=(N+1)/(3*(N-1));
+  Rcout<<b1<<std::endl;
   return(b1);
 }
 
 // [[Rcpp::export]]
-double b2f(int N){
+double b2f(double N){
   double b2;
-  int top=2*(N*N+N+3);
-  int bot=9*N*(N-1);
+  double top=2*(N*N+N+3);
+  double bot=9*N*(N-1);
   b2=top/bot;
   return(b2);
 }
@@ -196,5 +197,5 @@ double taj_D(NumericMatrix G){
 //
 
 /*** R
-a1f(2)
+b1f(4)
 */

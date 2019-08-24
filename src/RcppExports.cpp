@@ -38,23 +38,23 @@ BEGIN_RCPP
 END_RCPP
 }
 // b1f
-double b1f(int N);
+double b1f(double N);
 RcppExport SEXP _popgen_tools_b1f(SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< double >::type N(NSEXP);
     rcpp_result_gen = Rcpp::wrap(b1f(N));
     return rcpp_result_gen;
 END_RCPP
 }
 // b2f
-double b2f(int N);
+double b2f(double N);
 RcppExport SEXP _popgen_tools_b2f(SEXP NSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type N(NSEXP);
+    Rcpp::traits::input_parameter< double >::type N(NSEXP);
     rcpp_result_gen = Rcpp::wrap(b2f(N));
     return rcpp_result_gen;
 END_RCPP
