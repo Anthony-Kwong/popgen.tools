@@ -1,6 +1,10 @@
 #pacman::p_load(testthat,popgen.tools)
 
-test_that("Tajima's D coefficients computed correctly", {
+#If you ever get Error in .Call(<pointer: 0x0>, N) : NULL value passed as symbol address.
+#Try clearing your environment and rebuilding. 
+
+
+test_that("Tajima's D computed correctly", {
 
   #a1f
   N=4
@@ -39,3 +43,5 @@ test_that("Tajima's D coefficients computed correctly", {
   expect_equal(e1f(a1=a1,c1=c1),c1/a1)
   expect_equal(e2f(a1=a1,c2=c2,a2=a2),c2/(a1^2+a2))
 })
+
+
