@@ -72,14 +72,21 @@ bool present_row(NumericMatrix A, NumericVector x){
     }
   }
   
-  for(int i=0;i<ncols;i++){
+//  Rcout<<A.nrow()<<std::endl;
+  int num_rows=A.nrow();
+  for(int i=0;i<num_rows;i++){
     NumericVector row=A(i,_);
+//    Rcout<<i<<std::endl;
+//    Rcout<<row<<std::endl;
     if(vec_equal(row,x)==TRUE){
+//      Rcout<<"We found one folks!"<<std::endl;
       return TRUE;
     }
   }
   return FALSE;
 }
+
+//modify to return a list, keep track of haplotype frequencies
 
 //' unique_rows function
 //' 

@@ -13,6 +13,8 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
+//remember param is singular for the documentation
+
 //' h_stats function
 //' 
 //' Computes the h1,h2,h12 statistics. For more information see https://doi.org/10.1371/journal.pgen.1005004.
