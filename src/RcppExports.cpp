@@ -5,14 +5,14 @@
 
 using namespace Rcpp;
 
-// h12
-NumericVector h12(NumericVector x);
-RcppExport SEXP _popgen_tools_h12(SEXP xSEXP) {
+// h_stats
+int h_stats(NumericVector x);
+RcppExport SEXP _popgen_tools_h_stats(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(h12(x));
+    rcpp_result_gen = Rcpp::wrap(h_stats(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -154,9 +154,56 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fill_row
+NumericMatrix fill_row(NumericMatrix A, NumericVector x);
+RcppExport SEXP _popgen_tools_fill_row(SEXP ASEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(fill_row(A, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// present_row
+bool present_row(NumericMatrix A, NumericVector x);
+RcppExport SEXP _popgen_tools_present_row(SEXP ASEXP, SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(present_row(A, x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// unique_rows
+NumericMatrix unique_rows(NumericMatrix A);
+RcppExport SEXP _popgen_tools_unique_rows(SEXP ASEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
+    rcpp_result_gen = Rcpp::wrap(unique_rows(A));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vec_equal
+bool vec_equal(NumericVector x, NumericVector y);
+RcppExport SEXP _popgen_tools_vec_equal(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(vec_equal(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_popgen_tools_h12", (DL_FUNC) &_popgen_tools_h12, 1},
+    {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_a1f", (DL_FUNC) &_popgen_tools_a1f, 1},
     {"_popgen_tools_a2f", (DL_FUNC) &_popgen_tools_a2f, 1},
@@ -169,6 +216,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_theta_t", (DL_FUNC) &_popgen_tools_theta_t, 1},
     {"_popgen_tools_theta_w", (DL_FUNC) &_popgen_tools_theta_w, 1},
     {"_popgen_tools_taj_D", (DL_FUNC) &_popgen_tools_taj_D, 1},
+    {"_popgen_tools_fill_row", (DL_FUNC) &_popgen_tools_fill_row, 2},
+    {"_popgen_tools_present_row", (DL_FUNC) &_popgen_tools_present_row, 2},
+    {"_popgen_tools_unique_rows", (DL_FUNC) &_popgen_tools_unique_rows, 1},
+    {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},
     {NULL, NULL, 0}
 };
 

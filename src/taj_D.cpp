@@ -2,19 +2,6 @@
 using namespace Rcpp;
 
 
-
-//state the function so Cpp is happy
-// double a1f();
-// double a2f();
-// double b1f();
-// double b2f();
-// double c1f();
-// double c2f();
-// double e1f();
-// double e2f();
-// double theta_t();
-// double theta_w();
-
 //////////////////////////////////////////////////////////////////////////////
 
 //functions to compute the coefficients for Tajima's D. These require the number of
@@ -132,14 +119,15 @@ double theta_t(NumericMatrix G){
       k+=1;
     }
   }
-  int total=sum(diff);
+  //we need total to be a double. C++ prioritizes the nominator in division.
+  double total=sum(diff);
 //  Rcout<<diff<<std::endl;
+//  Rcout<<total<<" "<<total_pairs<<std::endl;
   double D=total/total_pairs;
   return (D);
 }
 
 //theta_w function
-
 // [[Rcpp::export]]
 double theta_w(NumericMatrix G){
   int N=G.nrow();

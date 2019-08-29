@@ -1,5 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "vec_equal.h"
+#include "unique_rows.h"
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp 
@@ -11,9 +13,18 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
+//' h_stats function
+//' 
+//' Computes the h1,h2,h12 statistics. For more information see https://doi.org/10.1371/journal.pgen.1005004.
+//' 
+//' @param G: A binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual. 
+//' @return A numeric vector of h stats. (h1,h2,h12)
+//' @examples h_stats(G)
+//' @export
 // [[Rcpp::export]]
-NumericVector h12(NumericVector x) {
-  return x * 2;
+int h_stats(NumericVector x) {
+  
+  return 0;
 }
 
 

@@ -42,6 +42,23 @@ test_that("Tajima's D computed correctly", {
   c2=7
   expect_equal(e1f(a1=a1,c1=c1),c1/a1)
   expect_equal(e2f(a1=a1,c2=c2,a2=a2),c2/(a1^2+a2))
+  
+  ##theta functions
+  set.seed(2019)
+  seq <-matrix(sample(0:1, size = 9, replace = TRUE), nc = 3) 
+  N<-nrow(seq)
+  num_pairs<-N*(N-1)/2
+  #4 pairwise diff
+  test<-theta_t(seq)/num_pairs
+  expect_equal(theta_t(seq),4/3)
+  
+  set.seed(2018)
+  seq <-matrix(sample(0:1, size = 12, replace = TRUE), nc = 4)
+  theta_t(seq)
+  
+  set.seed(1707)
+  seq<-matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
+  theta_t(seq)
 })
 
 
