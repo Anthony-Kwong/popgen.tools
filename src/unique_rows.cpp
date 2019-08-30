@@ -54,10 +54,10 @@ NumericMatrix fill_row(NumericMatrix A, NumericVector x){
 //' 
 //' @param A: NumericMatrix
 //' @param x: NumericVector
-//' @return boolean: true if the vector is present as a row in the matrix
+//' @return integer reocrding how many times the vector is present as a row in the matrix
 //' @export
 // [[Rcpp::export]]
-bool present_row(NumericMatrix A, NumericVector x){
+int present_row(NumericMatrix A, NumericVector x){
   int ncols=A.ncol();
   
   if(ncols!=x.size()){
@@ -68,9 +68,12 @@ bool present_row(NumericMatrix A, NumericVector x){
     catch(int e){
       Rcout<<"present_row error. Exception "<<e<<std::endl;
       Rcout<<"Error: Dimensions of vector x must match the number of columns in matrix A"<<std::endl;
-      return FALSE;
+      return 0;
     }
   }
+  
+  //record frequency
+  int freq=0;
   
 //  Rcout<<A.nrow()<<std::endl;
   int num_rows=A.nrow();
@@ -80,10 +83,10 @@ bool present_row(NumericMatrix A, NumericVector x){
 //    Rcout<<row<<std::endl;
     if(vec_equal(row,x)==TRUE){
 //      Rcout<<"We found one folks!"<<std::endl;
-      return TRUE;
+        freq+=1;
     }
   }
-  return FALSE;
+  return freq;
 }
 
 //modify to return a list, keep track of haplotype frequencies
@@ -116,7 +119,7 @@ NumericMatrix unique_rows(NumericMatrix A) {
   //loop across all rows
   for(int i=1; i<A.nrow(); i++){
     row=A(i,_);
-    if(present_row(B,row)==FALSE){
+    if(present_row(B,row)==0){
       B(i,_)=row;
       // Rcout<<"hit"<<std::endl;
       // Rcout<<row<<std::endl;
@@ -127,7 +130,6 @@ NumericMatrix unique_rows(NumericMatrix A) {
 //  Rcout<<B<<std::endl;
   NumericMatrix C= B(Range(0,index),Range(0,B.ncol()-1));
 //  Rcout<<C<<std::endl;
-  
   
   return C;
 }

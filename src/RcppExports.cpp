@@ -167,7 +167,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // present_row
-bool present_row(NumericMatrix A, NumericVector x);
+int present_row(NumericMatrix A, NumericVector x);
 RcppExport SEXP _popgen_tools_present_row(SEXP ASEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

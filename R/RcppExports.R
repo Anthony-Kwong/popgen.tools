@@ -80,7 +80,7 @@ fill_row <- function(A, x) {
 #' 
 #' @param A: NumericMatrix
 #' @param x: NumericVector
-#' @return boolean: true if the vector is present as a row in the matrix
+#' @return integer reocrding how many times the vector is present as a row in the matrix
 #' @export
 present_row <- function(A, x) {
     .Call(`_popgen_tools_present_row`, A, x)
