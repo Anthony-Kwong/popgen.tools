@@ -104,23 +104,26 @@ NumericMatrix unique_rows(NumericMatrix A) {
   //intialise matrix with dim nrow*nncol
   NumericMatrix B(A.nrow(),A.ncol());
   std::fill( B.begin(), B.end(), NumericVector::get_na());
-//  Rcout<<B<<std::endl;
   
+  //keep track of the count of each haplotype row
+  NumericVector freq(A.nrow()-1);
+  std::fill( freq.begin(), freq.end(), NumericVector::get_na());
+  
+//  Rcout<<freq<<std::endl;
+  
+//  Rcout<<B<<std::endl;
   
   //index keeps track of how many rows we have copied over. 
   int index=0;
   
-  //change design, keep indices of unique rows
-  
-  //copy first row of A into B
-  NumericVector row=A(0,_);
-  B(0,_)=row;
-  
   //loop across all rows
-  for(int i=1; i<A.nrow(); i++){
-    row=A(i,_);
-    if(present_row(B,row)==0){
-      B(i,_)=row;
+  for(int i=0; i<A.nrow(); i++){
+    NumericVector row=A(i,_);
+    int frequency=present_row(B,row);
+    
+    if(frequency==0){
+      B(index,_)=row;
+      freq(index)=present_row(A,row);
       // Rcout<<"hit"<<std::endl;
       // Rcout<<row<<std::endl;
       // Rcout<<B<<std::endl;
@@ -128,9 +131,9 @@ NumericMatrix unique_rows(NumericMatrix A) {
     }
   }
 //  Rcout<<B<<std::endl;
-  NumericMatrix C= B(Range(0,index),Range(0,B.ncol()-1));
+  NumericMatrix C= B(Range(0,index-1),Range(0,B.ncol()-1));
 //  Rcout<<C<<std::endl;
-  
+  Rcout<<freq<<std::endl;
   return C;
 }
 

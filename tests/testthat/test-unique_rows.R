@@ -48,8 +48,6 @@ test_that("present_row function works",{
   seq <-matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
   expect_equal(present_row(seq,c(0,0,0,0,0)),0)
   
-  seq<-rbind(seq,c(1,1,1,0,1),c(0,0,0,1,0))
-  expect_equal(present_row(seq,c(0,0,0,1,0)),2)
-  
-  
+  seq<-rbind(seq,c(1,1,1,0,1),c(1,1,1,0,1))
+  expect_equal(present_row(seq,c(1,1,1,0,1)),2)
 })
