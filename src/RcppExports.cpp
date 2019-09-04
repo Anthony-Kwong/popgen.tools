@@ -179,7 +179,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // unique_rows
-NumericMatrix unique_rows(NumericMatrix A);
+NumericVector unique_rows(NumericMatrix A);
 RcppExport SEXP _popgen_tools_unique_rows(SEXP ASEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

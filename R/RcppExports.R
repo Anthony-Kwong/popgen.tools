@@ -88,10 +88,10 @@ present_row <- function(A, x) {
 
 #' unique_rows function
 #' 
-#' Takes a NumericMatrix and returns all the unique rows as a NumericMatrix
+#' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
 #' 
 #' @param A: A general matrix of real values.
-#' @return A NumericMatrix whose rows are all the unique rows of input matrix A.
+#' @return A NumericVector. i'th element is the frequency of the i'th unique row.
 #' @examples unique_rows(A)
 #' @export
 unique_rows <- function(A) {

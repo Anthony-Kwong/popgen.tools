@@ -51,3 +51,13 @@ test_that("present_row function works",{
   seq<-rbind(seq,c(1,1,1,0,1),c(1,1,1,0,1))
   expect_equal(present_row(seq,c(1,1,1,0,1)),2)
 })
+
+test_that("unique_rows works"{
+  set.seed(901)
+  seq <-matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
+  seq<-rbind(seq,seq[4,])
+  seq<-rbind(seq,seq[4,])
+  unique_rows(seq)
+  
+  expect_equal(present_row(seq,c(0,0,0,0,0)),0)
+})

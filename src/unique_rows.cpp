@@ -93,14 +93,14 @@ int present_row(NumericMatrix A, NumericVector x){
 
 //' unique_rows function
 //' 
-//' Takes a NumericMatrix and returns all the unique rows as a NumericMatrix
+//' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
 //' 
 //' @param A: A general matrix of real values.
-//' @return A NumericMatrix whose rows are all the unique rows of input matrix A.
+//' @return A NumericVector. i'th element is the frequency of the i'th unique row.
 //' @examples unique_rows(A)
 //' @export
 // [[Rcpp::export]]
-NumericMatrix unique_rows(NumericMatrix A) {
+NumericVector unique_rows(NumericMatrix A) {
   //intialise matrix with dim nrow*nncol
   NumericMatrix B(A.nrow(),A.ncol());
   std::fill( B.begin(), B.end(), NumericVector::get_na());
@@ -131,10 +131,19 @@ NumericMatrix unique_rows(NumericMatrix A) {
     }
   }
 //  Rcout<<B<<std::endl;
-  NumericMatrix C= B(Range(0,index-1),Range(0,B.ncol()-1));
-//  Rcout<<C<<std::endl;
-  Rcout<<freq<<std::endl;
-  return C;
+
+  //Here's the matrix with all the unique rows for testing purposes. 
+  //NumericMatrix C= B(Range(0,index-1),Range(0,B.ncol()-1));
+  //Rcout<<C<<std::endl;
+  
+  //remove the NA's from freq
+  //freq=freq(Range(0,index-1));
+  //NumericVector test=freq(0,2);
+  //Rcout<<test<<std::endl;
+  NumericVector row_frequencies=na_omit(freq);
+  //Rcout<<freq<<std::endl;
+  //Rcout<<freq<<std::endl;
+  return row_frequencies;
 }
 
 
@@ -153,6 +162,9 @@ set.seed(1709)
 seq <-matrix(sample(0:1, size = 16, replace = TRUE), nc = 4) 
 x<-c(1,0,1,1)
 seq<-fill_row(seq,x)
+seq<-fill_row(seq,x)
+
 
 unique_rows(seq)
 */
+
