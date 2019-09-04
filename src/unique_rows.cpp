@@ -101,13 +101,18 @@ int present_row(NumericMatrix A, NumericVector x){
 //' @export
 // [[Rcpp::export]]
 NumericVector unique_rows(NumericMatrix A) {
+  
   //intialise matrix with dim nrow*nncol
   NumericMatrix B(A.nrow(),A.ncol());
   std::fill( B.begin(), B.end(), NumericVector::get_na());
+  Rcout<<B<<std::endl;
+  Rcout<<"Passed 1"<<std::endl;
   
   //keep track of the count of each haplotype row
-  NumericVector freq(A.nrow()-1);
+  NumericVector freq(A.nrow());
   std::fill( freq.begin(), freq.end(), NumericVector::get_na());
+  Rcout<<"Passed 2"<<std::endl;
+  Rcout<<freq<<std::endl;
   
 //  Rcout<<freq<<std::endl;
   
@@ -130,6 +135,7 @@ NumericVector unique_rows(NumericMatrix A) {
       index+=1; 
     }
   }
+  Rcout<<"Passed 3"<<std::endl;
 //  Rcout<<B<<std::endl;
 
   //Here's the matrix with all the unique rows for testing purposes. 
