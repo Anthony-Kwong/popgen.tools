@@ -89,8 +89,6 @@ int present_row(NumericMatrix A, NumericVector x){
   return freq;
 }
 
-//modify to return a list, keep track of haplotype frequencies
-
 //' unique_rows function
 //' 
 //' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
@@ -105,14 +103,14 @@ NumericVector unique_rows(NumericMatrix A) {
   //intialise matrix with dim nrow*nncol
   NumericMatrix B(A.nrow(),A.ncol());
   std::fill( B.begin(), B.end(), NumericVector::get_na());
-  Rcout<<B<<std::endl;
-  Rcout<<"Passed 1"<<std::endl;
+  //Rcout<<B<<std::endl;
+  //Rcout<<"Passed 1"<<std::endl;
   
   //keep track of the count of each haplotype row
   NumericVector freq(A.nrow());
   std::fill( freq.begin(), freq.end(), NumericVector::get_na());
-  Rcout<<"Passed 2"<<std::endl;
-  Rcout<<freq<<std::endl;
+  //Rcout<<"Passed 2"<<std::endl;
+  //Rcout<<freq<<std::endl;
   
 //  Rcout<<freq<<std::endl;
   
@@ -135,7 +133,7 @@ NumericVector unique_rows(NumericMatrix A) {
       index+=1; 
     }
   }
-  Rcout<<"Passed 3"<<std::endl;
+//  Rcout<<"Passed 3"<<std::endl;
 //  Rcout<<B<<std::endl;
 
   //Here's the matrix with all the unique rows for testing purposes. 
@@ -150,6 +148,29 @@ NumericVector unique_rows(NumericMatrix A) {
   //Rcout<<freq<<std::endl;
   //Rcout<<freq<<std::endl;
   return row_frequencies;
+}
+
+//find the first 3 largest elements in a vector of non-negative integers. 
+// [[Rcpp::export]]
+NumericVector three_top(NumericVector x){
+  //find the frequencies of 1st, 2nd, 3rd most common haplotypes
+  //if we ever need more frequencies use std::sort
+  int index=which_max(x);
+  double p_1=x[index];
+  x[index]=INT_MIN;
+  
+
+  index=which_max(x);
+  double p_2=x[index];
+  x[index]=INT_MIN;
+  //Rcout<<p_1<<" "<<p_2<<std::endl; 
+  
+  index=which_max(x);
+  double p_3=x[index];
+  Rcout<<p_1<<" "<<p_2<<" "<<p_3<<std::endl;
+  
+  NumericVector ans=NumericVector::create(p_1,p_2,p_3);
+  return ans;
 }
 
 

@@ -9,8 +9,8 @@
 #' @return A numeric vector of h stats. (h1,h2,h12)
 #' @examples h_stats(G)
 #' @export
-h_stats <- function(x) {
-    .Call(`_popgen_tools_h_stats`, x)
+h_stats <- function(G) {
+    .Call(`_popgen_tools_h_stats`, G)
 }
 
 rcpp_hello_world <- function() {
@@ -96,6 +96,10 @@ present_row <- function(A, x) {
 #' @export
 unique_rows <- function(A) {
     .Call(`_popgen_tools_unique_rows`, A)
+}
+
+three_top <- function(x) {
+    .Call(`_popgen_tools_three_top`, x)
 }
 
 #' vec_equal function for cpp

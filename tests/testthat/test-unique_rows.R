@@ -68,3 +68,11 @@ test_that("unique_rows works",{
   seq<-rbind(seq,seq[3,])
   expect_equal(unique_rows(seq),c(1,2,2,2))
 })
+
+test_that("three top works",{
+  x<-c(10,4,2,3,7,8,9)
+  expect_equal(three_top(x),c(10,9,8))
+  
+  y<-c(1,4,3,15,20,2,4,98,77)
+  expect_equal(three_top(y),c(98,77,20))
+})
