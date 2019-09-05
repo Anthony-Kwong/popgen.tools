@@ -24,7 +24,7 @@ using namespace Rcpp;
 //' @examples h_stats(G)
 //' @export
 // [[Rcpp::export]]
-int h_stats(NumericMatrix G) {
+NumericVector h_stats(NumericMatrix G) {
   NumericVector haplo_counts=unique_rows(G);
   int num_haplotypes=haplo_counts.size();
   int nsam=G.nrow();
@@ -68,8 +68,11 @@ int h_stats(NumericMatrix G) {
    //h3 stat is like h2 but takes top 3 
    double h3=h2+2*top_freqs[0]*top_freqs[2]+2*top_freqs[1]*top_freqs[2];
    Rcout<<"h3 "<<h3<<std::endl;
+   
+   NumericVector h_stats=NumericVector::create(h1,h2,h3);
+   Rcout<<h_stats<<std::endl;
   
-   return 0;
+   return h_stats;
 }
 
 
