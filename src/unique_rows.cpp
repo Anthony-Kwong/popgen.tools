@@ -167,7 +167,7 @@ NumericVector three_top(NumericVector x){
   
   index=which_max(x);
   double p_3=x[index];
-  Rcout<<p_1<<" "<<p_2<<" "<<p_3<<std::endl;
+  //Rcout<<p_1<<" "<<p_2<<" "<<p_3<<std::endl;
   
   NumericVector ans=NumericVector::create(p_1,p_2,p_3);
   return ans;
