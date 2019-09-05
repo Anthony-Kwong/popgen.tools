@@ -16,9 +16,20 @@ test_that("h_stats computed correctly",{
   seq<-row_replicate(seq,row=copy3,n=N3)
   seq<-row_replicate(seq,row=copy4,n=N4)
   
-  count=c(1,1,1,1)+c(0,N2,N3,N4)
-  freq=count/nrow(seq)
+  count=c(1,1,1,1)
+  count[copy2]=count[copy2]+N2
+  count[copy3]=count[copy3]+N3
+  count[copy4]=count[copy4]+N4
   
+  freq=count/nrow(seq)
+  freq=sort(freq,decreasing = TRUE)
+  
+  h1=freq %*% freq
+  h2=h1+2*freq[1]*freq[2]
+  h3=h2+2*freq[1]*freq[3]+2*freq[2]*freq[3]
+  
+  h=c(h1,h2,h3)
   output<-h_stats(seq)
-  nrow(seq)
+  
+  expect_equal(output,h)
 })
