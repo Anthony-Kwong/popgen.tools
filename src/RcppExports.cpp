@@ -6,7 +6,7 @@
 using namespace Rcpp;
 
 // h_stats
-int h_stats(NumericMatrix G);
+NumericVector h_stats(NumericMatrix G);
 RcppExport SEXP _popgen_tools_h_stats(SEXP GSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
