@@ -41,17 +41,14 @@ int h_stats(NumericMatrix G) {
     //Rcout<<p[i]<<std::endl;
   }
   
-  // //find the frequencies of 1st, 2nd, 3rd most common haplotypes
-  // //if we ever need more frequencies use std::sort
-  // int index=which_max(haplo_counts);
-  // double p_1=haplo_counts[index];
-  // haplo_counts[index]=NumericVector::get_na();
-  // 
-  // int index=which_max(haplo_counts);
-  // double p_2=haplo_counts[index];
-  // haplo_counts[index]=NumericVector::get_na();
-  
-  
+  //find the frequencies of 1st, 2nd, 3rd most common haplotypes
+  NumericVector top_hap=three_top(haplo_counts);
+  double top_freqs[3];
+  for(int i=0;i<3;i++){
+    top_freqs[i]=top_hap[i]*(1.0/nsam);
+  }
+  Rcout<<top_hap<<std::endl;
+  Rcout<<top_freqs<<std::endl;
   
   // Rcout<<p_1<<std::endl;
   // Rcout<<haplo_counts<<std::endl;
@@ -63,10 +60,14 @@ int h_stats(NumericMatrix G) {
   
   //compute h1
   double h1=0;
-   for(int i=0; i<num_haplotypes; i++){
-     h1=h1+p[i]*p[i];
-   }
+  for(int i=0; i<num_haplotypes; i++){
+    h1=h1+p[i]*p[i];
+  }
    //Rcout<<h1<<std::endl;
+   
+   //compute h2
+   //double h2=h1+2*;
+  
    
    
    
