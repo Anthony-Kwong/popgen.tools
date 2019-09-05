@@ -14,4 +14,18 @@ test_that("row_replicate works",{
   test=identical(seq,output)
   expect_equal(test,TRUE)
   
+  set.seed(31)
+  #default, this generates 4 unique rows
+  seq <-matrix(sample(0:1, size = 36, replace = TRUE), nc = 6)
+  
+  N=7
+  index=4
+  output<-row_replicate(seq,row=index,n=N)
+  
+  for(i in 1:N){
+    seq=rbind(seq,seq[index,]) 
+  }
+  
+  test=identical(seq,output)
+  expect_equal(test,TRUE)
 })
