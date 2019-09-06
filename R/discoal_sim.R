@@ -68,11 +68,11 @@ discoal_sim<-function(mu,recomb_rate,Ne,nSites,samplesize,s=0,discoal_path,fix_g
 
   #extract the random seeds
 
-  #str_extract_all(seeds, "[0-9]+")[[1]] retrieves the numbers and returns a list of 1, the + means you have a bunch of digits following
+  #stringr::str_extract_all(seeds, "[0-9]+")[[1]] retrieves the numbers and returns a list of 1, the + means you have a bunch of digits following
   #as.numeric then coerces it into a numeric vector of 2 elements
   #sim[2]: the second row of the sim always gives the 2 seeds
 
-  seeds=as.numeric(str_extract_all(sim[2], "[0-9]+")[[1]])
+  seeds=as.numeric(stringr::str_extract_all(sim[2], "[0-9]+")[[1]])
 
   #extract the number of segregating sites
 
@@ -88,7 +88,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,nSites,samplesize,s=0,discoal_path,fix_g
 
   positions=gsub(pattern="positions:",replacement ="",sim[substr(sim,1,5)=="posit"])
   #coerce the positions into numeric vector
-  positions=as.numeric(str_extract_all(positions, "[0-9]\\.[0-9]+")[[1]])
+  positions=as.numeric(stringr::str_extract_all(positions, "[0-9]\\.[0-9]+")[[1]])
 
   #extract genome matrix
 
