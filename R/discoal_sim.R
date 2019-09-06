@@ -21,7 +21,7 @@
 #' @examples sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
 #'
 #' @importFrom stringr str_extract_all
-#' @importFrom tidyverse %>%
+#' @import magrittr
 
 
 
