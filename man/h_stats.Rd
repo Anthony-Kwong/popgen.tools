@@ -4,7 +4,7 @@
 \alias{h_stats}
 \title{h_stats function}
 \usage{
-h_stats(x)
+h_stats(G)
 }
 \arguments{
 \item{G:}{A binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual.}

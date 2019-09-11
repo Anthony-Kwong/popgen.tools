@@ -10,51 +10,51 @@
 #' @examples h_stats(G)
 #' @export
 h_stats <- function(G) {
-    .Call(`_popgen_tools_h_stats`, G)
+    .Call('_popgen_tools_h_stats', PACKAGE = 'popgen.tools', G)
 }
 
 rcpp_hello_world <- function() {
-    .Call(`_popgen_tools_rcpp_hello_world`)
+    .Call('_popgen_tools_rcpp_hello_world', PACKAGE = 'popgen.tools')
 }
 
 a1f <- function(N) {
-    .Call(`_popgen_tools_a1f`, N)
+    .Call('_popgen_tools_a1f', PACKAGE = 'popgen.tools', N)
 }
 
 a2f <- function(N) {
-    .Call(`_popgen_tools_a2f`, N)
+    .Call('_popgen_tools_a2f', PACKAGE = 'popgen.tools', N)
 }
 
 b1f <- function(N) {
-    .Call(`_popgen_tools_b1f`, N)
+    .Call('_popgen_tools_b1f', PACKAGE = 'popgen.tools', N)
 }
 
 b2f <- function(N) {
-    .Call(`_popgen_tools_b2f`, N)
+    .Call('_popgen_tools_b2f', PACKAGE = 'popgen.tools', N)
 }
 
 c1f <- function(b1, a1) {
-    .Call(`_popgen_tools_c1f`, b1, a1)
+    .Call('_popgen_tools_c1f', PACKAGE = 'popgen.tools', b1, a1)
 }
 
 c2f <- function(a1, a2, b2, N) {
-    .Call(`_popgen_tools_c2f`, a1, a2, b2, N)
+    .Call('_popgen_tools_c2f', PACKAGE = 'popgen.tools', a1, a2, b2, N)
 }
 
 e1f <- function(c1, a1) {
-    .Call(`_popgen_tools_e1f`, c1, a1)
+    .Call('_popgen_tools_e1f', PACKAGE = 'popgen.tools', c1, a1)
 }
 
 e2f <- function(a1, a2, c2) {
-    .Call(`_popgen_tools_e2f`, a1, a2, c2)
+    .Call('_popgen_tools_e2f', PACKAGE = 'popgen.tools', a1, a2, c2)
 }
 
 theta_t <- function(G) {
-    .Call(`_popgen_tools_theta_t`, G)
+    .Call('_popgen_tools_theta_t', PACKAGE = 'popgen.tools', G)
 }
 
 theta_w <- function(G) {
-    .Call(`_popgen_tools_theta_w`, G)
+    .Call('_popgen_tools_theta_w', PACKAGE = 'popgen.tools', G)
 }
 
 #' taj_D function
@@ -63,7 +63,7 @@ theta_w <- function(G) {
 #' @examples taj_D(G)
 #' @export
 taj_D <- function(G) {
-    .Call(`_popgen_tools_taj_D`, G)
+    .Call('_popgen_tools_taj_D', PACKAGE = 'popgen.tools', G)
 }
 
 #' fill_row function
@@ -71,7 +71,7 @@ taj_D <- function(G) {
 #' @param A: A NumericMatrix.
 #' @param x: A NumericVector. 
 fill_row <- function(A, x) {
-    .Call(`_popgen_tools_fill_row`, A, x)
+    .Call('_popgen_tools_fill_row', PACKAGE = 'popgen.tools', A, x)
 }
 
 #' present_row function
@@ -83,7 +83,7 @@ fill_row <- function(A, x) {
 #' @return integer reocrding how many times the vector is present as a row in the matrix
 #' @export
 present_row <- function(A, x) {
-    .Call(`_popgen_tools_present_row`, A, x)
+    .Call('_popgen_tools_present_row', PACKAGE = 'popgen.tools', A, x)
 }
 
 #' unique_rows function
@@ -95,11 +95,11 @@ present_row <- function(A, x) {
 #' @examples unique_rows(A)
 #' @export
 unique_rows <- function(A) {
-    .Call(`_popgen_tools_unique_rows`, A)
+    .Call('_popgen_tools_unique_rows', PACKAGE = 'popgen.tools', A)
 }
 
 three_top <- function(x) {
-    .Call(`_popgen_tools_three_top`, x)
+    .Call('_popgen_tools_three_top', PACKAGE = 'popgen.tools', x)
 }
 
 #' vec_equal function for cpp
@@ -108,6 +108,6 @@ three_top <- function(x) {
 #' @examples vec_equal(x,y)
 #' @export
 vec_equal <- function(x, y) {
-    .Call(`_popgen_tools_vec_equal`, x, y)
+    .Call('_popgen_tools_vec_equal', PACKAGE = 'popgen.tools', x, y)
 }
 

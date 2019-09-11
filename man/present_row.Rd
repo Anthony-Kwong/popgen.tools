@@ -12,7 +12,7 @@ present_row(A, x)
 \item{x:}{NumericVector}
 }
 \value{
-boolean: true if the vector is present as a row in the matrix
+integer reocrding how many times the vector is present as a row in the matrix
 }
 \description{
 checks if a vector is present as a row in the input matrix
