@@ -18,17 +18,17 @@ test_that("Command entered correctly", {
 
   alpha=no_scientific(2*Ne*s) #scaled strength of selection
   theta=no_scientific(4*Ne*mu*nSites) #scaled mutation rate
-  rho=no_scientific(4*Ne*recomb_rate)  #recomb_rate is the probability of a cross over per basepair of sequence being modelled.
+  rho=no_scientific(4*Ne*recomb_rate*nSites)  #recomb_rate is the probability of a cross over per basepair of sequence being modelled.
   tau= no_scientific(fix/(4*Ne)) #scaled time for fixation
 
-  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(nSites),"-t",theta,"-r", rho,
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "-a", alpha, "-ws", tau)
   expect_equal(cmd,test_cmd)
 
   seeds=c(1,2)
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
   cmd<-sim$cmd
-  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(nSites),"-t",theta,"-r", rho,"-d", seeds[1],seeds[2],
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,"-d", seeds[1],seeds[2],
                  "-a", alpha, "-ws", tau)
   expect_equal(cmd,test_cmd)
 
@@ -37,7 +37,7 @@ test_that("Command entered correctly", {
   sweep="neutral"
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
   input_cmd=sim$cmd
-  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(nSites),"-t",theta,"-r", rho,
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "-wn", tau)
   expect_equal(input_cmd,test_cmd)
 })
@@ -80,7 +80,7 @@ test_that("Segsites extraction successful",{
   extracted_seg=sim$num_seg
   print(extracted_seg)
   #Ran in terminal to get this
-  actual_seg=9
+  actual_seg=3881
   expect_equal(extracted_seg,actual_seg)
 
   samplesize=1
@@ -95,7 +95,7 @@ test_that("Postions extraction successful",{
   recomb_rate=1e-8
   Ne=1000000
   nSites=1e5
-  samplesize=15
+  samplesize=3
   s=0.1
   fix=2
   discoal_path="~/work/programs/discoal/discoal"
@@ -105,15 +105,17 @@ test_that("Postions extraction successful",{
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
   extracted_pos=sim$pos
   #Ran the command in terminal to get these numbers
-  actual_pos=c(0.074125, 0.462233, 0.539124, 0.572956, 0.608014, 0.661452, 0.673324, 0.715790, 0.896508 )
+  actual_pos=c(0.575357, 0.592501, 0.677530, 0.991324 )
   expect_equal(extracted_pos,actual_pos)
 })
 
 test_that("Genome matrix extraction successful",{
+  #fix. Code acts funny when there is only one segsite
+  
   #input parameters
-  mu=2e-8
+  mu=2e-7
   recomb_rate=1e-8
-  Ne=1000000
+  Ne=500
   nSites=1e5
   samplesize=5
   s=0.1
@@ -125,7 +127,7 @@ test_that("Genome matrix extraction successful",{
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
 
   #Obtained via directly running command in terminal
-  actual=t(matrix(c(0,0,0,0,1,0,0,0,0,0,1,1,0,0,0,0,0,1,0,0),ncol=samplesize))
+  actual=cbind(c(1,0,0,0,0),c(0,0,0,1,0),c(0,0,0,1,0),c(1,0,0,0,0),c(0,1,0,0,0))
   extract=matrix(unlist(sim$genomes),nrow=samplesize)
   expect_equal(actual,extract)
 })

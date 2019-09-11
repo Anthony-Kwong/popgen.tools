@@ -32,7 +32,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,nSites,samplesize,s=0,discoal_path,fix_g
 
   alpha=(2*Ne*s) %>% no_scientific() #scaled strength of selection
   theta=(4*Ne*mu*nSites) %>% no_scientific() #scaled mutation rate
-  rho=(4*Ne*recomb_rate) %>% no_scientific() # recomb_rate is the probability of a cross over per basepair of sequence being modelled.
+  rho=(4*Ne*recomb_rate*nSites) %>% no_scientific() # recomb_rate is the probability of a cross over per basepair of sequence being modelled.
   tau= (fix_generation/(4*Ne)) %>% no_scientific() #scaled time for fixation
 
   #we will just do one simulation at a time for now. Modify at a later date.
@@ -40,13 +40,14 @@ discoal_sim<-function(mu,recomb_rate,Ne,nSites,samplesize,s=0,discoal_path,fix_g
 
   #generate discoal command
   if( missing(seed) ){
-    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(nSites),"-t",
+    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(200000),"-t",
               theta, "-r", rho)
   } else {
 
     #normally we won't input seeds. This is mainly for testing purposes.
+    #break points are 200,000 max. We have scaled mutation rates and recombination rates in rho and theta to account for this.  
 
-    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(nSites),"-t",
+    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(200000),"-t",
               theta, "-r", rho,"-d", no_scientific(seed[1]), no_scientific(seed[2]))
   }
 
