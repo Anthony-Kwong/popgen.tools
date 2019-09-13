@@ -102,7 +102,14 @@ discoal_sim<-function(mu,recomb_rate,Ne,nSites,samplesize,s=0,discoal_path,fix_g
   #use string_grab to take all the rows of the genome matrix. Transponse it as discoal displays
   #each individual as a row
   genome_matrix<-t(sapply(sim[start:end],string_grab,USE.NAMES = FALSE))
-
+  
+  if(sweep=="neutral"){
+    #select coeff is 0 for neutral case
+    obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,0,fix_generation)
+    return(obj)
+  }
+  
+  #for soft and hard sweeps, we need to include the selection coefficient
   obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,s,fix_generation)
   return(obj)
 #  return(list(cmd,seeds,segsites,positions,genome_matrix))
