@@ -17,6 +17,15 @@ rcpp_hello_world <- function() {
     .Call('_popgen_tools_rcpp_hello_world', PACKAGE = 'popgen.tools')
 }
 
+#' sub_win function
+#' Breaks down a matrix into a series of equal sized, non-overlapping windows
+#' @param G: A binary matrix of 0's and 1's. 
+#' @param num_win: Number of subwindows to break G into. 
+#' @returns A NumericMatrix list of the windows
+sub_win <- function(G, num_windows) {
+    .Call('_popgen_tools_sub_win', PACKAGE = 'popgen.tools', G, num_windows)
+}
+
 a1f <- function(N) {
     .Call('_popgen_tools_a1f', PACKAGE = 'popgen.tools', N)
 }

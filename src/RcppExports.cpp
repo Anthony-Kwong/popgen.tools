@@ -26,6 +26,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sub_win
+List sub_win(NumericMatrix G, int num_windows);
+RcppExport SEXP _popgen_tools_sub_win(SEXP GSEXP, SEXP num_windowsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    Rcpp::traits::input_parameter< int >::type num_windows(num_windowsSEXP);
+    rcpp_result_gen = Rcpp::wrap(sub_win(G, num_windows));
+    return rcpp_result_gen;
+END_RCPP
+}
 // a1f
 double a1f(int N);
 RcppExport SEXP _popgen_tools_a1f(SEXP NSEXP) {
@@ -216,6 +228,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
+    {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
     {"_popgen_tools_a1f", (DL_FUNC) &_popgen_tools_a1f, 1},
     {"_popgen_tools_a2f", (DL_FUNC) &_popgen_tools_a2f, 1},
     {"_popgen_tools_b1f", (DL_FUNC) &_popgen_tools_b1f, 1},
