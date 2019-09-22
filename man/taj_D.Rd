@@ -2,7 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{taj_D}
 \alias{taj_D}
-\title{taj_D function}
+\title{taj_D function
+Computes Tajima's D for a genome matrix.}
 \usage{
 taj_D(G)
 }
@@ -14,6 +15,7 @@ a scalar value of tajima's D for the sampled population.
 }
 \description{
 taj_D function
+Computes Tajima's D for a genome matrix.
 }
 \examples{
 taj_D(G)

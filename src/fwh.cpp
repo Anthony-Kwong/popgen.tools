@@ -12,10 +12,23 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
+//' theta_h function
+//' Computes theta_h for a genome matrix
+//' @param G: Binary genome matrix with 0's and 1's. Each column is a SNP, each row is an individual.
+//' @return scalar value of theta_h for that sampled population
+//' @examples
+//' @export
+// [[Rcpp::export]]
+double theta_h(NumericMatrix G){
+  return 0;
+}
+
 //' fwh function
 //' Computes Fay and Wu's H for a genome matrix. 
 //' @param G: Binary genome matrix with 0's and 1's. Each column is a SNP, each row is an individual.
 //' @return scalar value of Fay and Wu's H for that sampled population.  
+//' @examples
+//' @export
 // [[Rcpp::export]]
 NumericVector fwh(NumericVector x) {
   return x * 2;

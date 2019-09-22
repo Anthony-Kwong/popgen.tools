@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// theta_h
+double theta_h(NumericMatrix G);
+RcppExport SEXP _popgen_tools_theta_h(SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(theta_h(G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // fwh
 NumericVector fwh(NumericVector x);
 RcppExport SEXP _popgen_tools_fwh(SEXP xSEXP) {
@@ -237,6 +248,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_popgen_tools_theta_h", (DL_FUNC) &_popgen_tools_theta_h, 1},
     {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 1},
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
