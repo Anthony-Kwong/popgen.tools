@@ -85,7 +85,10 @@ double e2f(double a1, double a2, double c2){
 //Theta_t: Compute pairwise differences. In popgen, theta_t is also called pi.
 //Input: G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
 
-
+//' theta_t function
+//' Computes theta_t, the number of pairwise differences normalised by the number of pairs. 
+//' @param G: G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+//' @return scalar value of theta_t
 // [[Rcpp::export]]
 double theta_t(NumericMatrix G){
   int num_sam=G.nrow();
@@ -127,7 +130,10 @@ double theta_t(NumericMatrix G){
   return (D);
 }
 
-//theta_w function
+//'theta_w function
+//' Computes the average number of pairwise differences. 
+//' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+//' @return scalar value opf theta_w
 // [[Rcpp::export]]
 double theta_w(NumericMatrix G){
   int N=G.nrow();

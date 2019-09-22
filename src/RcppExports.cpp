@@ -5,6 +5,17 @@
 
 using namespace Rcpp;
 
+// fwh
+NumericVector fwh(NumericVector x);
+RcppExport SEXP _popgen_tools_fwh(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(fwh(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // h_stats
 NumericVector h_stats(NumericMatrix G);
 RcppExport SEXP _popgen_tools_h_stats(SEXP GSEXP) {
@@ -226,6 +237,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 1},
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
