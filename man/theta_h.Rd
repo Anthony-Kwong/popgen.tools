@@ -2,8 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{theta_h}
 \alias{theta_h}
-\title{theta_h function
-Computes theta_h for a genome matrix}
+\title{theta_h function}
 \usage{
 theta_h(G)
 }
@@ -14,6 +13,5 @@ theta_h(G)
 scalar value of theta_h for that sampled population
 }
 \description{
-theta_h function
 Computes theta_h for a genome matrix
 }

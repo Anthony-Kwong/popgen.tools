@@ -2,8 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{theta_w}
 \alias{theta_w}
-\title{theta_w function
-Computes the average number of pairwise differences.}
+\title{theta_w function}
 \usage{
 theta_w(G)
 }
@@ -14,7 +13,6 @@ theta_w(G)
 scalar value opf theta_w
 }
 \description{
-theta_w function
 Computes the average number of pairwise differences.
 }
 \examples{

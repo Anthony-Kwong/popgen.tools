@@ -1,12 +1,11 @@
 Package: popgen.tools
 Type: Package
-Title: What the Package Does in One 'Title Case' Line
+Title: Popgen Tools Package
 Version: 1.0
 Date: 2019-08-23
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: One paragraph description of what the package does as one
-        or more full sentences.
+Author: Anthony Kwong
+Maintainer: Anthony Kwong <a1708050@adelaide.edu.au>
+Description: Simulates genomes using the discoal package and compute summary statistics. 
 License: GPL (>= 2)
 Depends: magrittr
 Imports: 

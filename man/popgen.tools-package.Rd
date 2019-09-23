@@ -3,20 +3,19 @@
 \alias{popgen.tools}
 \docType{package}
 \title{
-  A short title line describing what the package does
+  Popgen Tools Package
 }
 \description{
-  A more detailed description of what the package does. A length
-  of about one to five lines is recommended.
+  This package uses the discoal package to generate coalescent simulations   and save them as sim objects. Functions are available to compute summary   statistics based on the infinite sites model. In discoal, each column in   genome matrix is a SNP and each row is an individual. Hence, the summary   statistic functions are written for genome matrices of this form. 
 }
 \details{
   This section should provide a more detailed overview of how to use the
   package, including the most important functions.
 }
 \author{
-Your Name, email optional.
+Anthony Kwong
 
-Maintainer: Your Name <your@email.com>
+Maintainer: Anthony Kwong <a1708050@adelaide.edu.au>
 }
 \references{
   This optional section can contain literature or other references for

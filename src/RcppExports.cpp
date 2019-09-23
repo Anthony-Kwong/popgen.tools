@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// count
+int count(NumericVector vec, int target);
+RcppExport SEXP _popgen_tools_count(SEXP vecSEXP, SEXP targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type vec(vecSEXP);
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    rcpp_result_gen = Rcpp::wrap(count(vec, target));
+    return rcpp_result_gen;
+END_RCPP
+}
 // theta_h
 double theta_h(NumericMatrix G);
 RcppExport SEXP _popgen_tools_theta_h(SEXP GSEXP) {
@@ -17,13 +29,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // fwh
-NumericVector fwh(NumericVector x);
-RcppExport SEXP _popgen_tools_fwh(SEXP xSEXP) {
+double fwh(double t_w, double t_h);
+RcppExport SEXP _popgen_tools_fwh(SEXP t_wSEXP, SEXP t_hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(fwh(x));
+    Rcpp::traits::input_parameter< double >::type t_w(t_wSEXP);
+    Rcpp::traits::input_parameter< double >::type t_h(t_hSEXP);
+    rcpp_result_gen = Rcpp::wrap(fwh(t_w, t_h));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -246,10 +259,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// w_max
+NumericVector w_max(NumericVector x);
+RcppExport SEXP _popgen_tools_w_max(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(w_max(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_popgen_tools_count", (DL_FUNC) &_popgen_tools_count, 2},
     {"_popgen_tools_theta_h", (DL_FUNC) &_popgen_tools_theta_h, 1},
-    {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 1},
+    {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 2},
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
@@ -269,6 +294,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_unique_rows", (DL_FUNC) &_popgen_tools_unique_rows, 1},
     {"_popgen_tools_three_top", (DL_FUNC) &_popgen_tools_three_top, 1},
     {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},
+    {"_popgen_tools_w_max", (DL_FUNC) &_popgen_tools_w_max, 1},
     {NULL, NULL, 0}
 };
 

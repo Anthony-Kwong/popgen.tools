@@ -2,18 +2,21 @@
 % Please edit documentation in R/RcppExports.R
 \name{fwh}
 \alias{fwh}
-\title{fwh function
-Computes Fay and Wu's H for a genome matrix.}
+\title{fwh function}
 \usage{
-fwh(x)
+fwh(t_w, t_h)
 }
 \arguments{
-\item{G:}{Binary genome matrix with 0's and 1's. Each column is a SNP, each row is an individual.}
+\item{t_w:}{theta_w for genome matrix G. Use theta_w(). Also called theta_pi in literature,}
+
+\item{t_h:}{theta_h for genome matrix G. Use theta_h().}
 }
 \value{
 scalar value of Fay and Wu's H for that sampled population.
 }
 \description{
-fwh function
-Computes Fay and Wu's H for a genome matrix.
+Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality.
+}
+\examples{
+fwh(theta_w(G),theta_h(G))
 }

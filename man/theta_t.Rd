@@ -2,8 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{theta_t}
 \alias{theta_t}
-\title{theta_t function
-Computes theta_t, the number of pairwise differences normalised by the number of pairs.}
+\title{theta_t function}
 \usage{
 theta_t(G)
 }
@@ -14,7 +13,6 @@ theta_t(G)
 scalar value of theta_t
 }
 \description{
-theta_t function
 Computes theta_t, the number of pairwise differences normalised by the number of pairs.
 }
 \examples{
