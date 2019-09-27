@@ -3,7 +3,7 @@
 #' @param mu mutation rate per base per generation. Warning! Check this again later in the discoal manual!
 #' @param recomb_rate The recombination rate per base per generation
 #' @param Ne The effective population size
-#' @param nSites The number of bases to simulate per genome
+#' @param genome_length The number of bases to simulate for each sample. 
 #' @param samplesize Number of samples to take from the population
 #' @param s selection coefficient for the selected mutation
 #' @param discoal_path path to your discoal program
@@ -18,36 +18,81 @@
 #'
 #' @export
 #'
-#' @examples sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+#' @examples sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
 #'
 #' @importFrom stringr str_extract_all
 #' @import magrittr
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,nSites,samplesize,s=0,discoal_path,fix_generation,seed,sweep){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation,seed,sweep){
+  
+  #====================================================================================
+  
+  "Explanation of how the simulator works. 
+  
+  In coalescent simulations, we don't simulate individual bases but a region [0,1].
+  We define length this region represents using....
+  
+  The nSites param within discoal technically don't represent the number of bases. They are
+  points where recombination can occur. The maximum nSites for discoal is 200,000 by default. 
+  
+  The genome_length param in this function represents the number of base pairs to simulate. 
+  To account for this, we scale up the mutation and recombination rates by genome_length. 
+  
+  Eg. Suppose you want to simulate a 1Mb region. The population size is N and the mutation
+  rate is 1e-8 per base. 
+  
+  theta=4*N*(1e-8)*(1*6)
+  
+  The same logic applies for the scaled recombination rate rho. 
+  
+  When a mutation happens, we randomly select a number from U~[0,1]. This 
+  will be the position of the mutation. 
+  
+  
+  "
+  
+  #====================================================================================
 
   #setting up params for discoal command. Discoals has to scale mutation, recombination rates and selection coefficient by Ne.
   #source: Kern 2017 "discoal-a coalescent simulator with selection"
 
-  alpha=(2*Ne*s) %>% no_scientific() #scaled strength of selection
-  theta=(4*Ne*mu*nSites) %>% no_scientific() #scaled mutation rate
-  rho=(4*Ne*recomb_rate*nSites) %>% no_scientific() # recomb_rate is the probability of a cross over per basepair of sequence being modelled.
-  tau= (fix_generation/(4*Ne)) %>% no_scientific() #scaled time for fixation
+  #These params are not scaled by the number of sites.
+  
+  #scaled strength of selection.
+  #Eg. A mutation with s=0.01 has 1% more probability of being passed down. The size of the region doesn't change this. 
+  alpha=(2*Ne*s) %>% no_scientific() 
+  
+  #Scaled time of fixation. 
+  #The time is defined by the number of coalescent units and only scales with pop size.
+  tau= (fix_generation/(4*Ne)) %>% no_scientific() 
+  
+  #These params are scaled by the number of sites. 
+  #Consider that both mutation rates and recombination rates are defined as P(event)/base.
+  
+  #scaled mutation rate.
+  theta=(4*Ne*mu*genome_length) %>% no_scientific()  
+  
+  #scaled recombination rate. 
+  rho=(4*Ne*recomb_rate*genome_length) %>% no_scientific() 
 
-  #we will just do one simulation at a time for now. Modify at a later date.
+  #To make the code easier, we will just do one simulation at a time for now. Modify at a later date.
   nrep=1
+  
+  #The maximum number of  break points (nSites) of discoal.
+  max_breakpoint=200000;
 
   #generate discoal command
   if( missing(seed) ){
-    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(200000),"-t",
+    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(max_breakpoint),"-t",
               theta, "-r", rho)
   } else {
 
     #normally we won't input seeds. This is mainly for testing purposes.
     #break points are 200,000 max. We have scaled mutation rates and recombination rates in rho and theta to account for this.  
 
-    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(200000),"-t",
+    cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(max_breakpoint),"-t",
               theta, "-r", rho,"-d", no_scientific(seed[1]), no_scientific(seed[2]))
   }
 
