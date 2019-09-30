@@ -2,8 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{sub_win}
 \alias{sub_win}
-\title{sub_win function
-Breaks down a matrix into a series of equal sized, non-overlapping windows}
+\title{sub_win function}
 \usage{
 sub_win(G, num_windows)
 }
@@ -12,7 +11,12 @@ sub_win(G, num_windows)
 
 \item{num_win:}{Number of subwindows to break G into.}
 }
+\value{
+A NumericMatrix list of the windows
+}
 \description{
-sub_win function
-Breaks down a matrix into a series of equal sized, non-overlapping windows
+Breaks down a matrix into a series of equal sized, non-overlapping windows.
+}
+\examples{
+sub_win(G,4)
 }

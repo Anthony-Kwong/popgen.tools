@@ -7,7 +7,9 @@ using namespace Rcpp;
 //' 
 //' @param G: A binary matrix of 0's and 1's. 
 //' @param num_win: Number of subwindows to break G into. 
-//' @returns A NumericMatrix list of the windows
+//' @return A NumericMatrix list of the windows
+//' @examples sub_win(G,4)
+//' @export
 // [[Rcpp::export]]
 List sub_win(NumericMatrix G,int num_windows) {
 
@@ -33,7 +35,7 @@ List sub_win(NumericMatrix G,int num_windows) {
       sub_win[i]=G(Range(0,nsam-1), Range(start,SNP-1));
     }
   }
-  
+
   return sub_win;
 }
 
@@ -46,7 +48,6 @@ List sub_win(NumericMatrix G,int num_windows) {
 /*** R
 set.seed(1989)
 SNP=10
-#default, this generates 4 unique rows
 seq <-matrix(sample(0:1, size = SNP*3, replace = TRUE), nc = SNP)
 test=sub_win(seq,3)
 

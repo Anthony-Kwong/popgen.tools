@@ -15,3 +15,6 @@ scalar value of theta_h for that sampled population
 \description{
 Computes theta_h for a genome matrix
 }
+\examples{
+theta_h(G)
+}

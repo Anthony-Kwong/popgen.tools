@@ -59,7 +59,9 @@ rcpp_hello_world <- function() {
 #' 
 #' @param G: A binary matrix of 0's and 1's. 
 #' @param num_win: Number of subwindows to break G into. 
-#' @returns A NumericMatrix list of the windows
+#' @return A NumericMatrix list of the windows
+#' @examples sub_win(G,4)
+#' @export
 sub_win <- function(G, num_windows) {
     .Call('_popgen_tools_sub_win', PACKAGE = 'popgen.tools', G, num_windows)
 }

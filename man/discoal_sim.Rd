@@ -4,8 +4,8 @@
 \alias{discoal_sim}
 \title{discoal_sim function}
 \usage{
-discoal_sim(mu, recomb_rate, Ne, nSites, samplesize, s = 0, discoal_path,
-  fix_generation, seed, sweep)
+discoal_sim(mu, recomb_rate, Ne, genome_length, samplesize, s = 0,
+  discoal_path, fix_generation, seed, sweep)
 }
 \arguments{
 \item{mu}{mutation rate per base per generation. Warning! Check this again later in the discoal manual!}
@@ -14,7 +14,7 @@ discoal_sim(mu, recomb_rate, Ne, nSites, samplesize, s = 0, discoal_path,
 
 \item{Ne}{The effective population size}
 
-\item{nSites}{The number of bases to simulate per genome}
+\item{genome_length}{The number of bases to simulate for each sample.}
 
 \item{samplesize}{Number of samples to take from the population}
 
@@ -37,6 +37,6 @@ sweep: the kind of selective sweep modelled. s: the selection coefficient
 discoal_sim function
 }
 \examples{
-sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,nSites=nSites,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
 
 }
