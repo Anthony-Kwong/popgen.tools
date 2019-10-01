@@ -202,13 +202,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // taj_D
-double taj_D(NumericMatrix G);
-RcppExport SEXP _popgen_tools_taj_D(SEXP GSEXP) {
+double taj_D(double t_t, double t_w, double var_taj);
+RcppExport SEXP _popgen_tools_taj_D(SEXP t_tSEXP, SEXP t_wSEXP, SEXP var_tajSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
-    rcpp_result_gen = Rcpp::wrap(taj_D(G));
+    Rcpp::traits::input_parameter< double >::type t_t(t_tSEXP);
+    Rcpp::traits::input_parameter< double >::type t_w(t_wSEXP);
+    Rcpp::traits::input_parameter< double >::type var_taj(var_tajSEXP);
+    rcpp_result_gen = Rcpp::wrap(taj_D(t_t, t_w, var_taj));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -300,7 +302,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_theta_t", (DL_FUNC) &_popgen_tools_theta_t, 1},
     {"_popgen_tools_theta_w", (DL_FUNC) &_popgen_tools_theta_w, 1},
     {"_popgen_tools_var_taj", (DL_FUNC) &_popgen_tools_var_taj, 1},
-    {"_popgen_tools_taj_D", (DL_FUNC) &_popgen_tools_taj_D, 1},
+    {"_popgen_tools_taj_D", (DL_FUNC) &_popgen_tools_taj_D, 3},
     {"_popgen_tools_fill_row", (DL_FUNC) &_popgen_tools_fill_row, 2},
     {"_popgen_tools_present_row", (DL_FUNC) &_popgen_tools_present_row, 2},
     {"_popgen_tools_unique_rows", (DL_FUNC) &_popgen_tools_unique_rows, 1},

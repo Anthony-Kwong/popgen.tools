@@ -69,23 +69,23 @@ test_that("Tajima variance term computer correctly",{
   expect_equal(var,var_taj(seq))
 })
 
-test_that("Tajima D computed correctly",{
-  ##theta functions
+test_that("theta_t function work correctly",{
   set.seed(2019)
   seq <-matrix(sample(0:1, size = 9, replace = TRUE), nc = 3) 
-  N<-nrow(seq)
-  num_pairs<-N*(N-1)/2
   #4 pairwise diff
-  test<-theta_t(seq)/num_pairs
-  expect_equal(theta_t(seq),4/3)
+  expect_equal(theta_t(seq),test_theta_t(seq))
   
-  set.seed(2018)
-  seq <-matrix(sample(0:1, size = 12, replace = TRUE), nc = 4)
-  theta_t(seq)
+  set.seed(1729)
+  SNP=20
+  seq <-matrix(sample(0:1, size = SNP*8, replace = TRUE), nc = SNP) 
+  expect_equal(theta_t(seq),test_theta_t(seq))
   
-  set.seed(1707)
-  seq<-matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
-  theta_t(seq)
+  
+})
+
+test_that("Tajima D computed correctly",{
+  
+  
 })
 
 

@@ -138,12 +138,14 @@ var_taj <- function(G) {
 #' 
 #' Computes Tajima's D for a genome matrix. 
 #' 
-#' @param G: A binary matrix of 0's and 1's. Each column is a SNP and each row is a sampled individual.
+#' @param t_t: theta_t for geneom matrix G. Use theta_t()
+#' @param t_w: theta_w for genome matrix G. Use theta_w()
+#' @param var_taj: Variance of tajima's D
 #' @return a scalar value of tajima's D for the sampled population. 
-#' @examples taj_D(G)
+#' @examples taj_D(theta_t(G),theta_w(G),var_taj(G))
 #' @export
-taj_D <- function(G) {
-    .Call('_popgen_tools_taj_D', PACKAGE = 'popgen.tools', G)
+taj_D <- function(t_t, t_w, var_taj) {
+    .Call('_popgen_tools_taj_D', PACKAGE = 'popgen.tools', t_t, t_w, var_taj)
 }
 
 #' fill_row function

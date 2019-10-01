@@ -196,33 +196,13 @@ double var_taj(NumericMatrix G){
 //' @param t_w: theta_w for genome matrix G. Use theta_w()
 //' @param var_taj: Variance of tajima's D
 //' @return a scalar value of tajima's D for the sampled population. 
-//' @examples taj_D(G)
+//' @examples taj_D(theta_t(G),theta_w(G),var_taj(G))
 //' @export
 // [[Rcpp::export]]
-double taj_D(NumericMatrix G){
-  int nsam=G.nrow();
+double taj_D(double t_t, double t_w, double var_taj){
   
-  //compute Tajima_D coefficients
-  double a_1=a1f(nsam);
-  double a_2=a2f(nsam);
-  
-  double b_1=b1f(nsam);
-  double b_2=b2f(nsam);
-  
-  //double c1f(double b1, double a1)
-  double c_1=c1f(b_1,a_1);
-  //double c2f(double a1, double a2, double b2, int N)
-  double c_2=c2f(a_1,a_2,b_2,nsam);
-  
-  //double e1f(double c1, double a1)
-  //double e2f(double a1, double a2, double c2)
-  double e_1=e1f(c_1,a_1);
-  double e_2=e2f(a_1,a_2,c_2);
-  
-  double var=e_1*nsam+e_2*nsam*(nsam-1);
-  
-  double top=theta_t(G)-theta_w(G);
-  return(top/pow(var,0.5));
+  double top=t_t-t_w;
+  return(top/pow(var_taj,0.5));
 }
 
 
