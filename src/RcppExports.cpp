@@ -190,6 +190,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// var_taj
+double var_taj(NumericMatrix G);
+RcppExport SEXP _popgen_tools_var_taj(SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(var_taj(G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // taj_D
 double taj_D(NumericMatrix G);
 RcppExport SEXP _popgen_tools_taj_D(SEXP GSEXP) {
@@ -288,6 +299,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_e2f", (DL_FUNC) &_popgen_tools_e2f, 3},
     {"_popgen_tools_theta_t", (DL_FUNC) &_popgen_tools_theta_t, 1},
     {"_popgen_tools_theta_w", (DL_FUNC) &_popgen_tools_theta_w, 1},
+    {"_popgen_tools_var_taj", (DL_FUNC) &_popgen_tools_var_taj, 1},
     {"_popgen_tools_taj_D", (DL_FUNC) &_popgen_tools_taj_D, 1},
     {"_popgen_tools_fill_row", (DL_FUNC) &_popgen_tools_fill_row, 2},
     {"_popgen_tools_present_row", (DL_FUNC) &_popgen_tools_present_row, 2},

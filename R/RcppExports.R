@@ -122,6 +122,18 @@ theta_w <- function(G) {
     .Call('_popgen_tools_theta_w', PACKAGE = 'popgen.tools', G)
 }
 
+#' var_taj function
+#' 
+#' Computes the variance of the nominator term in tajima's D. 
+#' 
+#' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+#' @return scalar value of the variance term in tajima's D.
+#' @examples var_taj(G)
+#' @export
+var_taj <- function(G) {
+    .Call('_popgen_tools_var_taj', PACKAGE = 'popgen.tools', G)
+}
+
 #' taj_D function
 #' 
 #' Computes Tajima's D for a genome matrix. 

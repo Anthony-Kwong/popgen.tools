@@ -154,11 +154,47 @@ double theta_w(NumericMatrix G){
 //remember this header has to be immediately above the Rcpp::export. 
 //otherwise documentation won't be generated. 
 
+//' var_taj function
+//' 
+//' Computes the variance of the nominator term in tajima's D. 
+//' 
+//' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+//' @return scalar value of the variance term in tajima's D.
+//' @examples var_taj(G)
+//' @export
+// [[Rcpp::export]]
+double var_taj(NumericMatrix G){
+  
+  int nsam=G.nrow();
+  
+  //compute Tajima_D coefficients
+  double a_1=a1f(nsam);
+  double a_2=a2f(nsam);
+  
+  double b_1=b1f(nsam);
+  double b_2=b2f(nsam);
+  
+  //double c1f(double b1, double a1)
+  double c_1=c1f(b_1,a_1);
+  //double c2f(double a1, double a2, double b2, int N)
+  double c_2=c2f(a_1,a_2,b_2,nsam);
+  
+  //double e1f(double c1, double a1)
+  //double e2f(double a1, double a2, double c2)
+  double e_1=e1f(c_1,a_1);
+  double e_2=e2f(a_1,a_2,c_2);
+  
+  double var=e_1*nsam+e_2*nsam*(nsam-1);
+  return var;
+}
+
 //' taj_D function
 //' 
 //' Computes Tajima's D for a genome matrix. 
 //' 
-//' @param G: A binary matrix of 0's and 1's. Each column is a SNP and each row is a sampled individual.
+//' @param t_t: theta_t for geneom matrix G. Use theta_t()
+//' @param t_w: theta_w for genome matrix G. Use theta_w()
+//' @param var_taj: Variance of tajima's D
 //' @return a scalar value of tajima's D for the sampled population. 
 //' @examples taj_D(G)
 //' @export

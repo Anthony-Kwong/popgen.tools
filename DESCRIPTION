@@ -7,7 +7,8 @@ Author: Anthony Kwong
 Maintainer: Anthony Kwong <a1708050@adelaide.edu.au>
 Description: Simulates genomes using the discoal package and compute summary statistics. 
 License: GPL (>= 2)
-Depends: magrittr
+Depends: 
+  magrittr
 Imports: 
   Rcpp (>= 1.0.1),
   stringr

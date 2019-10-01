@@ -42,7 +42,34 @@ test_that("Tajima's D computed correctly", {
   c2=7
   expect_equal(e1f(a1=a1,c1=c1),c1/a1)
   expect_equal(e2f(a1=a1,c2=c2,a2=a2),c2/(a1^2+a2))
+})
+
+test_that("Tajima variance term computer correctly",{
+  set.seed(1688)
+  SNP=15
+  seq <-matrix(sample(0:1, size =SNP*5 , replace = TRUE), nc = SNP) 
   
+  nsam=nrow(seq)
+  
+  #Compute tajima'D coefficients
+  a_1=a1f(nsam)
+  a_2=a2f(nsam)
+  
+  b_1=b1f(nsam)
+  b_2=b2f(nsam)
+  
+  c_1=c1f(b_1,a_1)
+  c_2=c2f(a_1,a_2,b_2,nsam)
+  
+  e_1=e1f(c_1,a_1)
+  e_2=e2f(a_1,a_2,c_2)
+  
+  var=e_1*nsam+e_2*nsam*(nsam-1)
+  
+  expect_equal(var,var_taj(seq))
+})
+
+test_that("Tajima D computed correctly",{
   ##theta functions
   set.seed(2019)
   seq <-matrix(sample(0:1, size = 9, replace = TRUE), nc = 3) 
