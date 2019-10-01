@@ -140,7 +140,7 @@ var_taj <- function(G) {
 #' 
 #' @param t_t: theta_t for geneom matrix G. Use theta_t()
 #' @param t_w: theta_w for genome matrix G. Use theta_w()
-#' @param var_taj: Variance of tajima's D
+#' @param var_taj: Variance of tajima's D. Use var_taj()
 #' @return a scalar value of tajima's D for the sampled population. 
 #' @examples taj_D(theta_t(G),theta_w(G),var_taj(G))
 #' @export

@@ -4,10 +4,14 @@
 \alias{taj_D}
 \title{taj_D function}
 \usage{
-taj_D(G)
+taj_D(t_t, t_w, var_taj)
 }
 \arguments{
-\item{G:}{A binary matrix of 0's and 1's. Each column is a SNP and each row is a sampled individual.}
+\item{t_t:}{theta_t for geneom matrix G. Use theta_t()}
+
+\item{t_w:}{theta_w for genome matrix G. Use theta_w()}
+
+\item{var_taj:}{Variance of tajima's D}
 }
 \value{
 a scalar value of tajima's D for the sampled population.
@@ -16,5 +20,5 @@ a scalar value of tajima's D for the sampled population.
 Computes Tajima's D for a genome matrix.
 }
 \examples{
-taj_D(G)
+taj_D(theta_t(G),theta_w(G),var_taj(G))
 }
