@@ -84,7 +84,17 @@ test_that("theta_t function work correctly",{
 })
 
 test_that("Tajima D computed correctly",{
+  set.seed(1762)
   
+  nums=rnorm(3,mean=5,sd=3)
+  
+  t=nums[1]
+  w=nums[2]
+  v=nums[3]
+  
+  test=(t-w)*v^(-0.5)
+  
+  expect_equal(taj_D(t,w,v),test)
   
 })
 
