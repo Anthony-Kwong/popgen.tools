@@ -17,11 +17,11 @@ sum_stats<-function(win_list){
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
   #Fay and Wu H, fwh(t_w,t_h)
-  H<-purrr::map2(basic_values$theta_w,basic_values$theta_h,fwh) %>% unlist()
+  H<-map2(basic_values$theta_w,basic_values$theta_h,fwh) %>% unlist()
   H<-H %>% tibble::enframe(name=NULL,value="FW_H") 
   
   #Tajima'D taj_D(t_t, t_w, var_taj)
-  D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
+  D<-pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
   # Haplotype stats (h1,h2,h12)
@@ -32,11 +32,3 @@ sum_stats<-function(win_list){
   #names(res)<-c("theta_h","theta_t","theta_w","var_taj")
   return(res)
 }
-
-#For building purposes. Will remove. 
-
-data<-readRDS("~/work/MPhil/data/toy_set.rds")
-sim<-data[[1]]
-n_win<-2
-win_list<-sub_win(sim$genomes,n_win)
-
