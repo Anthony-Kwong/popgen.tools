@@ -1,1 +1,0 @@
-bool vec_equal(NumericVector x, NumericVector y);
