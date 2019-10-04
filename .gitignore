@@ -1,8 +1,3 @@
-#For windos compiler
-src/*.o
-src/*.so
-src/*.dll
-
 # History files
 .Rhistory
 .Rapp.history
