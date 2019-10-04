@@ -11,7 +11,7 @@ taj_D(t_t, t_w, var_taj)
 
 \item{t_w:}{theta_w for genome matrix G. Use theta_w()}
 
-\item{var_taj:}{Variance of tajima's D}
+\item{var_taj:}{Variance of tajima's D. Use var_taj()}
 }
 \value{
 a scalar value of tajima's D for the sampled population.

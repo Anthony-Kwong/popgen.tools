@@ -39,7 +39,7 @@ double a2f(int N){
 double b1f(double N){
   double b1;
   b1=(N+1)/(3*(N-1));
-  Rcout<<b1<<std::endl;
+//  Rcout<<b1<<std::endl;
   return(b1);
 }
 
