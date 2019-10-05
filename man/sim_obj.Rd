@@ -30,3 +30,6 @@ an object called sim_obj
 \description{
 Generate a simulation object to store the data produced by discoal.
 }
+\examples{
+This is meant to be a hidden function.
+}

@@ -19,7 +19,7 @@
 #' @return an object called sim_obj
 #' @export
 #'
-#' @examples 
+#' @examples This is meant to be a hidden function.
 sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_generation){
 
   obj<-list(
