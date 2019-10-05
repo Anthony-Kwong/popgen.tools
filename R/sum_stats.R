@@ -1,8 +1,9 @@
 #' sum_stats function
 #' 
-#' Computes a variety of popgen summary stats on a genome matrix list.
+#' Turns a simulation object into a data frame. The genome matrix is partitioned into subwindows and summary statistics are computed. Each subwindow is a row on the output tibble. 
 #'
-#' @param windows: A list of  binary genome matrices. Columns are SNPs and rows are samples. 
+#' @param sim: a simulation object
+#' @param win_split: number of subwindows to split each genome matrix within the simulation. 
 #' @importFrom tibble enframe as_tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -10,20 +11,21 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function.
-sum_stats<-function(win_list){
+sum_stats<-function(sim,win_split){
+  win_list<-sub_win(sim$genomes,win_split)
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
-  #Fay and Wu H, fwh(t_w,t_h)
+  #Fay and Wu H, fwh(t_w,t_h)----
   H<-purrr::map2(basic_values$theta_w,basic_values$theta_h,fwh) %>% unlist()
   H<-H %>% tibble::enframe(name=NULL,value="FW_H") 
   
-  #Tajima'D taj_D(t_t, t_w, var_taj)
+  #Tajima'D taj_D(t_t, t_w, var_taj)----
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
-  # Haplotype stats (h1,h2,h12)
+  # Haplotype stats (h1,h2,h12)----
   h_values<-lapply(win_list,h_stats) 
   names(h_values)<-string_labels("sim",length(h_values))
   h_df<- h_values %>% tibble::as_tibble()
@@ -31,7 +33,28 @@ sum_stats<-function(win_list){
   colnames(h_df)<-c("h1","h2","h12")
   h_df<-h_df %>% tibble::as_tibble()
   
-  #tying everything back together. Tibble is great in giving neat names without the $. 
+  #Classify position of subwindows----
+  
+  #The subwindow with the mutation is "mut". Immediately adjacent subwindows are "close". Otherwise "far". 
+  pos<-sim$pos
+  #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
+  mutation_pos<-0.5
+  sweep_pos<-which.min(abs(pos-mutation_pos))
+  
+  #initialise position vector
+  position<-rep("far",win_split)
+  
+  #finding which subwindow the mutation lies in. 
+  whole_win_width<-length(pos)
+  width<-floor(whole_win_width/win_split)
+  mut_index<-ceiling(sweep_pos/width)
+  
+  
+
+
+  
+  #tying everything back together. ----
+  #Tibble is great in giving neat names without the $. 
   pi_est<-tibble::tibble(basic_values$theta_t)
   names(pi_est)<-"pi"
   df<-dplyr::bind_cols(D,H,h_df,pi_est)
@@ -40,11 +63,10 @@ sum_stats<-function(win_list){
 }
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
-# data<-readRDS("~/work/MPhil/data/toy_set.rds")
-# obs<-data[[1]]
-# sim<-obs$genomes
-# n_win=2
-# win_list<-sub_win(sim,n_win)
+ data<-readRDS("~/work/MPhil/data/toy_set.rds")
+ sim<-data[[1]]
+ win_split=5
+ #win_list<-sub_win(sim,n_win)
 
 ##### This version works hurray!
 

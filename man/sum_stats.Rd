@@ -4,16 +4,18 @@
 \alias{sum_stats}
 \title{sum_stats function}
 \usage{
-sum_stats(win_list)
+sum_stats(sim, win_split)
 }
 \arguments{
-\item{windows:}{A list of  binary genome matrices. Columns are SNPs and rows are samples.}
+\item{sim:}{a simulation object}
+
+\item{win_split:}{number of subwindows to split each genome matrix within the simulation.}
 }
 \value{
 list of summary stats for the input genome matrix
 }
 \description{
-Computes a variety of popgen summary stats on a genome matrix list.
+Turns a simulation object into a data frame. The genome matrix is partitioned into subwindows and summary statistics are computed. Each subwindow is a row on the output tibble.
 }
 \examples{
 sum_stats(win_list)
