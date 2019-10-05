@@ -26,15 +26,9 @@ sum_stats<-function(win_list){
   h_values<-lapply(win_list,h_stats) 
   names(h_values)<-string_labels("sim",length(h_values))
   test<- h_values %>% tibble::as_tibble()
+  df<-test %>% as.matrix() %>% t()
+  colnames(df)<-c("h1","h2","h12")
   
-  # Haplotype stats (h1,h2,h12)
-  #  h_values<-lapply(win_list,h_stats) 
-  #  names(h_values)<-string_labels("sim",length(h_values))
-  #  test<- h_values %>% tibble::as_tibble()
-  # df<-test %>% as.matrix() %>% t()
-  #  colnames(df)<-c("h1","h2","h12")
-  
-  #names(res)<-c("theta_h","theta_t","theta_w","var_taj")
   return(res)
 }
 
