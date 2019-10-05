@@ -11,9 +11,7 @@ Depends:
   magrittr
 Imports: 
   Rcpp (>= 1.0.1),
-  stringr,
-  tibble,
-  purrr
+  stringr
 LinkingTo: Rcpp
 RoxygenNote: 6.1.1
 Encoding: UTF-8
