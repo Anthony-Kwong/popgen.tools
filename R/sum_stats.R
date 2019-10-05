@@ -5,6 +5,7 @@
 #' @param windows: A list of  binary genome matrices. Columns are SNPs and rows are samples. 
 #' @importFrom tibble enframe as_tibble
 #' @importFrom purrr map2 pmap
+#' @importFrom dplyr bind_cols
 #' @return list of summary stats for the input genome matrix
 #' @export
 #' @examples sum_stats(win_list)
@@ -25,12 +26,25 @@ sum_stats<-function(win_list){
   # Haplotype stats (h1,h2,h12)
   h_values<-lapply(win_list,h_stats) 
   names(h_values)<-string_labels("sim",length(h_values))
-  test<- h_values %>% tibble::as_tibble()
-  df<-test %>% as.matrix() %>% t()
-  colnames(df)<-c("h1","h2","h12")
+  h_df<- h_values %>% tibble::as_tibble()
+  h_df<-h_df %>% as.matrix() %>% t()
+  colnames(h_df)<-c("h1","h2","h12")
+  h_df<-h_df %>% tibble::as_tibble()
   
-  return(res)
+  #tying everything back together. Tibble is great in giving neat names without the $. 
+  pi_est<-tibble::tibble(basic_values$theta_t)
+  names(pi_est)<-"pi"
+  df<-dplyr::bind_cols(D,H,h_df,pi_est)
+
+  return(df)
 }
+
+#inserting for building purposes. Will remove. This bit causes trouble if left in. 
+# data<-readRDS("~/work/MPhil/data/toy_set.rds")
+# obs<-data[[1]]
+# sim<-obs$genomes
+# n_win=2
+# win_list<-sub_win(sim,n_win)
 
 ##### This version works hurray!
 
