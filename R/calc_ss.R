@@ -25,23 +25,9 @@ calc_ss<-function(win_list){
   
   # Haplotype stats (h1,h2,h12)
   h_values<-lapply(win_list,h_stats) 
- # names(h_values)<-SS_labels("sim",length(h_values))
-  tidyr::gather(h_values)
-  names(h_values)<-c("sim1","sim2")
-  
-  test<- h_values %>% tibble::as_tibble() %>% as.matrix()
- # col
-  
- # %>% tidyr::gather()
+  names(h_values)<-SS_labels("sim",length(h_values))
+  test<- h_values %>% as.matrix()
   
   #names(res)<-c("theta_h","theta_t","theta_w","var_taj")
   return(res)
 }
-
-#inserting for building purposes. Will remove. 
-data<-readRDS("~/work/MPhil/data/toy_set.rds")
-obs<-data[[1]]
-sim<-obs$genomes
-n_win=2
-win_list<-sub_win(sim,n_win)
-
