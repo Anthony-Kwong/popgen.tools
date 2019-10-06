@@ -58,7 +58,7 @@ sum_stats<-function(sim,win_split,ID){
     position[mut_index-1]="close"
   }
   
-  if((mut_index+1)<whole_win_width){
+  if((mut_index+1)<win_split){
     position[mut_index+1]="close"
   }
   
@@ -82,15 +82,24 @@ sum_stats<-function(sim,win_split,ID){
   df<-dplyr::bind_cols(df,h_df)
   
   #change sweep and position into factors.
-  df[,c("sweep","position")]<-lapply(df[,c("sweep","position")],as.factor)
+  #df[,c("sweep","position")]<-lapply(df[,c("sweep","position")],as.factor)
 
   return(df)
 }
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/toy_set.rds")
- # sim<-data[[1]]
- # win_split=5
+ # df<-data[1:500]
+ # test<-generate_df(df,3)
+ # 
+ # sim<-data[[100]]
+ # win_split=3
+ # test1<-sum_stats(sim,3,100)
+
+
+ generate_df(data,10)
+ #sim<-data[[1]]
+ #win_split=5
 
 ##### This version works hurray!
 
