@@ -9,7 +9,7 @@
 #' @return dataframe containing summary statistics of all the subwindows across all the simulations. 
 #' @export 
 #'
-#' @examples
+#' @examples generate_df(sim_list,10)
 generate_df<-function(sim_list,win_split){
   num_sim<-length(sim_list)
   

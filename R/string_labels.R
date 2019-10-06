@@ -13,4 +13,3 @@ string_labels<-function(f,it){
   return(string_vec)
 }
 
-#TEST NOT MADE!!!

@@ -17,3 +17,6 @@ dataframe containing summary statistics of all the subwindows across all the sim
 \description{
 Takes a list of simulation objects and produces a data frame. The genome matrix of each simulation is broken into a series of non-overlapping subwindows and SS are computed. Each subwindow is a row on the final dataframe.
 }
+\examples{
+generate_df(sim_list,10)
+}
