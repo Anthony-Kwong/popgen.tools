@@ -14,6 +14,11 @@
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function.
 sum_stats<-function(sim,win_split,ID){
+  #if the number of win_split<num_seg-1, we discard it. One column subwindows aren't useful.
+  if(win_split<=(sim$num_seg-1)){
+    return(NULL)
+  }
+  
   win_list<-sub_win(sim$genomes,win_split)
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
@@ -89,15 +94,17 @@ sum_stats<-function(sim,win_split,ID){
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/toy_set.rds")
- # df<-data[1:500]
+ # df<-data[1:405]
  # test<-generate_df(df,3)
  # 
- # sim<-data[[100]]
+ # 
+ # 
+ # sim<-data[[405]]
  # win_split=3
  # test1<-sum_stats(sim,3,100)
 
 
- generate_df(data,10)
+ #generate_df(data,10)
  #sim<-data[[1]]
  #win_split=5
 
