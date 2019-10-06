@@ -104,13 +104,11 @@ sum_stats<-function(sim,win_split,ID){
  # df<-data[1:414]
  # test<-generate_df(df,2)
  # 
- # sim<-data[[483]]
- # win_split=2
- # test1<-sum_stats(sim,win_split,100)
- # #
- #  generate_df(data,2)
- #sim<-data[[1]]
- #win_split=5
+ #  generate_df(data,10)
+ # 
+ #  sim<-data[[213]]
+ #  win_split=10
+ #  test1<-sum_stats(sim,win_split,100)
 
 ##### This version works hurray!
 

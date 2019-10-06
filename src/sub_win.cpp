@@ -17,6 +17,8 @@ List sub_win(NumericMatrix G,int num_windows) {
   int width=SNP/num_windows;
   int nsam=G.nrow();
   
+  Rcout<<"SNP:"<<SNP<<" width:"<<width<<" nsam:"<<nsam<<std::endl;
+  
   List sub_win(num_windows);
   
   //index keeps track of which columns have been copied over
@@ -26,11 +28,11 @@ List sub_win(NumericMatrix G,int num_windows) {
     
     if(i<num_windows-1){
       int end=start+width;
-      //Rcout<<"start "<<start<<" end"<<end<<std::endl;
+      Rcout<<"start "<<start<<" end"<<end<<std::endl;
       sub_win[i]=G(Range(0,nsam-1), Range(start,end));
       start=end+1;
     } else {
-      //Rcout<<"start "<<start<<" end"<<SNP<<std::endl;
+      Rcout<<"start "<<start<<" end"<<SNP<<std::endl;
       //remember indices start at 0
       sub_win[i]=G(Range(0,nsam-1), Range(start,SNP-1));
     }
@@ -50,5 +52,13 @@ set.seed(1989)
 SNP=10
 seq <-matrix(sample(0:1, size = SNP*3, replace = TRUE), nc = SNP)
 test=sub_win(seq,3)
+
+####
+
+sim<-data[[213]]
+seq<-sim$genomes
+win_split=10
+sub_win(seq,win_split)
+#test1<-sum_stats(sim,win_split,100)
 
 */
