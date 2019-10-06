@@ -11,6 +11,9 @@ generate_df(sim_list, win_split)
 
 \item{win_split}{number of subwindows desired to split each genome matrix per simulation}
 }
+\value{
+dataframe containing summary statistics of all the subwindows across all the simulations.
+}
 \description{
-Takes a list of simulation objects and produces a data frame. The genome matrix of each simulation is broken into a series of non-overlapping subwindows and SS are computed.
+Takes a list of simulation objects and produces a data frame. The genome matrix of each simulation is broken into a series of non-overlapping subwindows and SS are computed. Each subwindow is a row on the final dataframe.
 }

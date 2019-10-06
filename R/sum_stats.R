@@ -3,7 +3,8 @@
 #' Turns a simulation object into a data frame. The genome matrix is partitioned into subwindows and summary statistics are computed. Each subwindow is a row on the output tibble. 
 #'
 #' @param sim: a simulation object
-#' @param win_split: number of subwindows to split each genome matrix within the simulation. 
+#' @param win_split: number of subwindows to split each genome matrix within the simulation.
+#' @param ID: an ID value to group subwindows under the simulation it came from. 
 #' @importFrom tibble enframe as_tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -12,7 +13,7 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function.
-sum_stats<-function(sim,win_split){
+sum_stats<-function(sim,win_split,ID){
   win_list<-sub_win(sim$genomes,win_split)
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
@@ -72,10 +73,12 @@ sum_stats<-function(sim,win_split){
   sweep<-sim$sweep
   sweep<-rep(sweep,win_split)
   
+  ID<-rep(ID,win_split)
+  
   #tying everything back together. ----
   #Tibble is great in giving neat names without the $. 
   pi_est<-basic_values$theta_t
-  df<-tibble::tibble(sweep,snp,position,D,H,pi_est)
+  df<-tibble::tibble(sweep,ID,snp,position,D,H,pi_est)
   df<-dplyr::bind_cols(df,h_df)
   
   #change sweep and position into factors.

@@ -4,12 +4,14 @@
 \alias{sum_stats}
 \title{sum_stats function}
 \usage{
-sum_stats(sim, win_split)
+sum_stats(sim, win_split, ID)
 }
 \arguments{
 \item{sim:}{a simulation object}
 
 \item{win_split:}{number of subwindows to split each genome matrix within the simulation.}
+
+\item{ID:}{an ID value to group subwindows under the simulation it came from.}
 }
 \value{
 list of summary stats for the input genome matrix
