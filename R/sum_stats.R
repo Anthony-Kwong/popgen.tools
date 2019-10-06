@@ -14,8 +14,10 @@
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function.
 sum_stats<-function(sim,win_split,ID){
-  #if the number of win_split<num_seg-1, we discard it. One column subwindows aren't useful.
-  if(win_split<=(sim$num_seg-1)){
+  print(ID)
+  
+  #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.
+  if(win_split>=sim$num_seg-1){
     return(NULL)
   }
   
@@ -56,6 +58,11 @@ sum_stats<-function(sim,win_split,ID){
   width<-floor(whole_win_width/win_split)
   mut_index<-ceiling(sweep_pos/width)
   
+  #account for mutation occuring on the last sub_window. If SNPs cannot be completely equally divided between the subwindows, the remainder goes to the last subwindow. 
+  if(mut_index>win_split){
+    mut_index=win_split
+  }
+  
   #updating position vector
   position[mut_index]<-"mut"
   
@@ -94,17 +101,14 @@ sum_stats<-function(sim,win_split,ID){
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/toy_set.rds")
- # df<-data[1:405]
- # test<-generate_df(df,3)
+ # df<-data[1:414]
+ # test<-generate_df(df,2)
  # 
- # 
- # 
- # sim<-data[[405]]
- # win_split=3
- # test1<-sum_stats(sim,3,100)
-
-
- #generate_df(data,10)
+ # sim<-data[[483]]
+ # win_split=2
+ # test1<-sum_stats(sim,win_split,100)
+ # #
+ #  generate_df(data,2)
  #sim<-data[[1]]
  #win_split=5
 
