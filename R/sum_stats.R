@@ -25,6 +25,14 @@ sum_stats<-function(sim,win_split,ID){
   # }
   
   win_list<-sub_win(sim$genomes,win_split)
+  
+  #for cases where there are more subwindows than SNPs
+  if(length(win_list)==0){
+    txt<-paste("reject ",ID)
+    print(txt)
+    return (NULL)
+  }
+  
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
@@ -101,6 +109,8 @@ sum_stats<-function(sim,win_split,ID){
 
   return(df)
 }
+
+
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/toy_set.rds")
