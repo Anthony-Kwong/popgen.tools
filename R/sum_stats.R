@@ -15,12 +15,14 @@
 #' This is meant to be a hidden function.
 sum_stats<-function(sim,win_split,ID){
   #Quick way to see where the simulations are up to. 
-  print(ID)
+ # print(ID)
   
-  #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.
-  if(win_split>=(sim$num_seg-1)){
-    return(NULL)
-  }
+  # #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.
+  # if(win_split>=(sim$num_seg-1)){
+  #   txt<-paste("reject",ID)
+  #   print(txt)
+  #   return(NULL)
+  # }
   
   win_list<-sub_win(sim$genomes,win_split)
   ss<-list(theta_h,theta_t,theta_w,var_taj)
