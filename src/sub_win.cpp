@@ -26,13 +26,15 @@ List sub_win(NumericMatrix G,int num_windows) {
   
   List sub_win(num_windows);
   
+  //if the G.ncol() is not divisible by num_windows, we put the extra SNPs onto the last window
+  
   //index keeps track of which columns have been copied over
   int start=0;
   
   for(int i=0;i<num_windows;i++){
     
-    if(i<num_windows-1){
-      int end=start+width;
+    if(i<(num_windows-1)){
+      int end=start+width-1;
       Rcout<<"start "<<start<<" end"<<end<<std::endl;
       sub_win[i]=G(Range(0,nsam-1), Range(start,end));
       start=end+1;
