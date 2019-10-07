@@ -17,7 +17,7 @@ sum_stats<-function(sim,win_split,ID){
   print(ID)
   
   #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.
-  if(win_split>=sim$num_seg-1){
+  if(win_split>=(sim$num_seg-1)){
     return(NULL)
   }
   
