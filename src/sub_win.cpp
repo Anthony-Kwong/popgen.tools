@@ -22,7 +22,7 @@ List sub_win(NumericMatrix G,int num_windows) {
     return NULL;
   }
   
-  Rcout<<"SNP:"<<SNP<<" width:"<<width<<" nsam:"<<nsam<<std::endl;
+//  Rcout<<"SNP:"<<SNP<<" width:"<<width<<" nsam:"<<nsam<<std::endl;
   
   List sub_win(num_windows);
   
@@ -35,11 +35,11 @@ List sub_win(NumericMatrix G,int num_windows) {
     
     if(i<(num_windows-1)){
       int end=start+width-1;
-      Rcout<<"start "<<start<<" end"<<end<<std::endl;
+//      Rcout<<"start "<<start<<" end"<<end<<std::endl;
       sub_win[i]=G(Range(0,nsam-1), Range(start,end));
       start=end+1;
     } else {
-      Rcout<<"start "<<start<<" end"<<(SNP-1)<<std::endl;
+//      Rcout<<"start "<<start<<" end"<<(SNP-1)<<std::endl;
       //remember indices start at 0
       sub_win[i]=G(Range(0,nsam-1), Range(start,SNP-1));
     }

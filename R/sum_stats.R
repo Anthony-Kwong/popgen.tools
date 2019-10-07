@@ -14,6 +14,7 @@
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function.
 sum_stats<-function(sim,win_split,ID){
+  #Quick way to see where the simulations are up to. 
   print(ID)
   
   #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.

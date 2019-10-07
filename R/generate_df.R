@@ -18,5 +18,8 @@ generate_df<-function(sim_list,win_split){
   split<-rep(win_split,num_sim)
   df_list<-purrr::pmap(list(sim_list,split,x),sum_stats)
   df<-dplyr::bind_rows(df_list)
+  
+  #change sweep and position into factors.
+  df[,c("sweep","ID","position")]<-lapply(df[,c("sweep","ID","position")],as.factor)
   return(df)
 }
