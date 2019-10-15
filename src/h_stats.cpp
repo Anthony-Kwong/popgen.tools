@@ -46,13 +46,15 @@ NumericVector h_stats(NumericMatrix G) {
   
    
    //the h2 stat combines the frequencies of the top 2 most common haplotypes into one haplotype. We use a shortcut to compute it. 
-   double h2=h1+2*p[0]*p[1];
-   Rcout<<"h2 "<<h2<<std::endl;
-   // 
-   // //h3 stat is like h2 but takes top 3 
-   // double h3=h2+2*top_freqs[0]*top_freqs[2]+2*top_freqs[1]*top_freqs[2];
-   // //Rcout<<"h3 "<<h3<<std::endl;
-   // 
+   double h12=h1+2*p[0]*p[1];
+   Rcout<<"h12 "<<h12<<std::endl;
+
+   //h3 stat is like h2 but takes top 3
+   double h123=h12+2*p[0]*p[2]+2*p[1]*p[2];
+   Rcout<<"h123 "<<h123<<std::endl;
+
+   
+      // 
    // NumericVector h_stats=NumericVector::create(h1,h2,h3);
    //Rcout<<h_stats<<std::endl;
   
