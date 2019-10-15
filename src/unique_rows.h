@@ -1,4 +1,4 @@
 NumericMatrix fill_row(NumericMatrix A, NumericVector x);
 int present_row(NumericMatrix A, NumericVector x);
 NumericVector unique_rows(NumericMatrix A);
-NumericVector three_top(NumericVector x);
+Rcpp::NumericVector vec_sort(Rcpp::NumericVector x);

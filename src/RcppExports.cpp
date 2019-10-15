@@ -249,14 +249,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// three_top
-NumericVector three_top(NumericVector x);
-RcppExport SEXP _popgen_tools_three_top(SEXP xSEXP) {
+// vec_sort
+Rcpp::NumericVector vec_sort(Rcpp::NumericVector x);
+RcppExport SEXP _popgen_tools_vec_sort(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(three_top(x));
+    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(vec_sort(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -306,7 +306,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_fill_row", (DL_FUNC) &_popgen_tools_fill_row, 2},
     {"_popgen_tools_present_row", (DL_FUNC) &_popgen_tools_present_row, 2},
     {"_popgen_tools_unique_rows", (DL_FUNC) &_popgen_tools_unique_rows, 1},
-    {"_popgen_tools_three_top", (DL_FUNC) &_popgen_tools_three_top, 1},
+    {"_popgen_tools_vec_sort", (DL_FUNC) &_popgen_tools_vec_sort, 1},
     {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},
     {"_popgen_tools_w_max", (DL_FUNC) &_popgen_tools_w_max, 1},
     {NULL, NULL, 0}

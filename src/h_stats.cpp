@@ -53,11 +53,11 @@ NumericVector h_stats(NumericMatrix G) {
   //Rcout<<"h1 "<<h1<<std::endl;
   
   //find the frequencies of 1st, 2nd, 3rd most common haplotypes
-  NumericVector top_hap=three_top(haplo_counts);
-  double top_freqs[3];
-  for(int i=0;i<3;i++){
-    top_freqs[i]=top_hap[i]*(1.0/nsam);
-  }
+  // NumericVector top_hap=three_top(haplo_counts);
+  // double top_freqs[3];
+  // for(int i=0;i<3;i++){
+  //   top_freqs[i]=top_hap[i]*(1.0/nsam);
+  // }
   
   //Rcout<<top_hap<<std::endl;
   
@@ -67,17 +67,17 @@ NumericVector h_stats(NumericMatrix G) {
  // }
    
    //the h2 stat combines the frequencies of the top 2 most common haplotypes into one haplotype.
-   double h2=h1+2*top_freqs[0]*top_freqs[1];
-   //Rcout<<"h2 "<<h2<<std::endl;
-  
-   //h3 stat is like h2 but takes top 3 
-   double h3=h2+2*top_freqs[0]*top_freqs[2]+2*top_freqs[1]*top_freqs[2];
-   //Rcout<<"h3 "<<h3<<std::endl;
-   
-   NumericVector h_stats=NumericVector::create(h1,h2,h3);
+   // double h2=h1+2*top_freqs[0]*top_freqs[1];
+   // //Rcout<<"h2 "<<h2<<std::endl;
+   // 
+   // //h3 stat is like h2 but takes top 3 
+   // double h3=h2+2*top_freqs[0]*top_freqs[2]+2*top_freqs[1]*top_freqs[2];
+   // //Rcout<<"h3 "<<h3<<std::endl;
+   // 
+   // NumericVector h_stats=NumericVector::create(h1,h2,h3);
    //Rcout<<h_stats<<std::endl;
   
-   return h_stats;
+   return 0;
 }
 
 

@@ -153,28 +153,20 @@ NumericVector unique_rows(NumericMatrix A) {
   return row_frequencies;
 }
 
-//find the first 3 largest elements in a vector of non-negative integers. 
+//' vec_sort function
+//' 
+//' Sorts the elements of a NumericVector in descending order
+//' 
+//' @param x: NumericVector
+//' @return NumericVector with elements of x sorted in descending order
+//' @examples x<-c(1,8,2,2,3)
+//' vec_sort(x)
+//' @export
 // [[Rcpp::export]]
-NumericVector three_top(NumericVector x){
-  //find the frequencies of 1st, 2nd, 3rd most common haplotypes
-  //if we ever need more frequencies use std::sort
-  int index=which_max(x);
-  double p_1=x[index];
-  x[index]=INT_MIN;
-  
-  //FLAG FOR BUG. INT_MIN is causing issues. 
-
-  index=which_max(x);
-  double p_2=x[index];
-  x[index]=INT_MIN;
-  //Rcout<<p_1<<" "<<p_2<<std::endl; 
-  
-  index=which_max(x);
-  double p_3=x[index];
-  //Rcout<<p_1<<" "<<p_2<<" "<<p_3<<std::endl;
-  
-  NumericVector ans=NumericVector::create(p_1,p_2,p_3);
-  return ans;
+Rcpp::NumericVector vec_sort(Rcpp::NumericVector x) {
+  Rcpp::NumericVector res = Rcpp::clone(x);
+  res.sort(true);
+  return res;
 }
 
 

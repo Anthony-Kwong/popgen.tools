@@ -183,8 +183,17 @@ unique_rows <- function(A) {
     .Call('_popgen_tools_unique_rows', PACKAGE = 'popgen.tools', A)
 }
 
-three_top <- function(x) {
-    .Call('_popgen_tools_three_top', PACKAGE = 'popgen.tools', x)
+#' vec_sort function
+#' 
+#' Sorts the elements of a NumericVector in descending order
+#' 
+#' @param x: NumericVector
+#' @return NumericVector with elements of x sorted in descending order
+#' @examples x<-c(1,8,2,2,3)
+#' vec_sort(x)
+#' @export
+vec_sort <- function(x) {
+    .Call('_popgen_tools_vec_sort', PACKAGE = 'popgen.tools', x)
 }
 
 #' vec_equal function for cpp
