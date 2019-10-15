@@ -16,8 +16,11 @@ using namespace Rcpp;
 
 //' fill_row function
 //' takes a NumericVector and adds it as a new row on the bottom of a matrix
-//' @param A: A NumericMatrix.
-//' @param x: A NumericVector. 
+//' @param A: A NumericMatrix
+//' @param x: A NumericVector
+//' @return a new matrix where vector x is bound as the bottom row of A
+//' @examples fill_row(A,x)
+//' @export
 // [[Rcpp::export]]
 NumericMatrix fill_row(NumericMatrix A, NumericVector x){
   int colA=A.ncol();
@@ -54,7 +57,7 @@ NumericMatrix fill_row(NumericMatrix A, NumericVector x){
 //' 
 //' @param A: NumericMatrix
 //' @param x: NumericVector
-//' @return integer reocrding how many times the vector is present as a row in the matrix
+//' @return integer recording how many times the vector is present as a row in the matrix
 //' @export
 // [[Rcpp::export]]
 int present_row(NumericMatrix A, NumericVector x){
@@ -159,6 +162,7 @@ NumericVector three_top(NumericVector x){
   double p_1=x[index];
   x[index]=INT_MIN;
   
+  //FLAG FOR BUG. INT_MIN is causing issues. 
 
   index=which_max(x);
   double p_2=x[index];

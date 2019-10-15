@@ -150,8 +150,11 @@ taj_D <- function(t_t, t_w, var_taj) {
 
 #' fill_row function
 #' takes a NumericVector and adds it as a new row on the bottom of a matrix
-#' @param A: A NumericMatrix.
-#' @param x: A NumericVector. 
+#' @param A: A NumericMatrix
+#' @param x: A NumericVector
+#' @return a new matrix where vector x is bound as the bottom row of A
+#' @examples fill_row(A,x)
+#' @export
 fill_row <- function(A, x) {
     .Call('_popgen_tools_fill_row', PACKAGE = 'popgen.tools', A, x)
 }
@@ -162,7 +165,7 @@ fill_row <- function(A, x) {
 #' 
 #' @param A: NumericMatrix
 #' @param x: NumericVector
-#' @return integer reocrding how many times the vector is present as a row in the matrix
+#' @return integer recording how many times the vector is present as a row in the matrix
 #' @export
 present_row <- function(A, x) {
     .Call('_popgen_tools_present_row', PACKAGE = 'popgen.tools', A, x)
