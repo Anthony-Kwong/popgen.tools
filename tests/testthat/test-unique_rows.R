@@ -29,6 +29,8 @@ test_that("fill_row function works",{
 # })
 
 
+
+
 test_that("present_row function works",{
   #eventually fix this so we compare with R function that counts. 
   #right now I have just counted them

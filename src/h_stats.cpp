@@ -31,8 +31,11 @@ NumericVector h_stats(NumericMatrix G) {
   //Rcout<<haplo_counts<<std::endl;
   //Rcout<<p<<" Before"<<std::endl;
   
+  //double vector to store the frequencies of each haplotype
   double p [num_haplotypes];
   //Rcout<<p<<std::endl;
+  
+  //flag for change. unique_rows should give frequencies already.
   
   //convert counts to frequencies. I used NumericVector before because of functional support
   //and ease of debugging. 
@@ -54,12 +57,13 @@ NumericVector h_stats(NumericMatrix G) {
   for(int i=0;i<3;i++){
     top_freqs[i]=top_hap[i]*(1.0/nsam);
   }
+  
   //Rcout<<top_hap<<std::endl;
   
   //testing if frequencies were calculated correctly
-  for(int i=0;i<3;i++){
+ // for(int i=0;i<3;i++){
     //Rcout<<top_freqs[i]<<std::endl;
-  }
+ // }
    
    //the h2 stat combines the frequencies of the top 2 most common haplotypes into one haplotype.
    double h2=h1+2*top_freqs[0]*top_freqs[1];

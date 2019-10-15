@@ -8,11 +8,17 @@ takes a NumericVector and adds it as a new row on the bottom of a matrix}
 fill_row(A, x)
 }
 \arguments{
-\item{A:}{A NumericMatrix.}
+\item{A:}{A NumericMatrix}
 
-\item{x:}{A NumericVector.}
+\item{x:}{A NumericVector}
+}
+\value{
+a new matrix where vector x is bound as the bottom row of A
 }
 \description{
 fill_row function
 takes a NumericVector and adds it as a new row on the bottom of a matrix
+}
+\examples{
+fill_row(A,x)
 }
