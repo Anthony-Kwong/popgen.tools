@@ -45,12 +45,12 @@ sum_stats<-function(sim,win_split,ID){
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
-  # Haplotype stats (h1,h2,h12)----
+  # Haplotype stats (h1,h2,h12,h123)----
   h_values<-lapply(win_list,h_stats) 
   names(h_values)<-string_labels("sim",length(h_values))
   h_df<- h_values %>% tibble::as_tibble()
   h_df<-h_df %>% as.matrix() %>% t()
-  colnames(h_df)<-c("h1","h2","h12")
+  colnames(h_df)<-c("h1","h2","h12","h123")
   h_df<-h_df %>% tibble::as_tibble()
   
   #Classify position of subwindows----
