@@ -1,3 +1,18 @@
+#create(h1,h2,h12,h123)
+R_hstats<-function(G){
+  H<-unique(G)
+  freq<-rep(NA,nrow(H))
+  
+  freq<-freq*nrow(G)
+  
+  #compute h stats
+  h1<-sum(freq*freq)
+  h12<-h12+2*freq[1]*freq[2]
+  h123<-h
+}
+#c1 <- which(M[, 1] == v[1])
+
+
 test_that("h_stats computed correctly",{
   set.seed(1989)
   SNP=4
