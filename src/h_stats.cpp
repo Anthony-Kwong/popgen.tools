@@ -25,32 +25,24 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 NumericVector h_stats(NumericMatrix G) {
+  
+  //compute haplotype frequencies and store them in vector p
   NumericVector haplo_counts=unique_rows(G);
   int num_haplotypes=haplo_counts.size();
   int nsam=G.nrow();
-  //Rcout<<haplo_counts<<std::endl;
-  //Rcout<<p<<" Before"<<std::endl;
-  //
+  NumericVector p=haplo_counts*(1.0/nsam);
+  Rcout<<"Before "<<p<<std::endl;
+  p=vec_sort(p);
+  Rcout<<"Sorted "<<p<<std::endl;
+
   
-  //double vector to store the frequencies of each haplotype
-  double p [num_haplotypes];
-  //Rcout<<p<<std::endl;
-  
-  //flag for change. unique_rows should give frequencies already.
-  
-  //convert counts to frequencies. I used NumericVector before because of functional support
-  //and ease of debugging. 
-  for(int i=0; i<num_haplotypes;i++){
-    p[i]=haplo_counts[i]*(1.0/nsam);
-    //Rcout<<p[i]<<std::endl;
-  }
   
   //compute h1
   double h1=0;
   for(int i=0; i<num_haplotypes; i++){
     h1=h1+p[i]*p[i];
   }
-  //Rcout<<"h1 "<<h1<<std::endl;
+  Rcout<<"h1 "<<h1<<std::endl;
   
   //find the frequencies of 1st, 2nd, 3rd most common haplotypes
   // NumericVector top_hap=three_top(haplo_counts);
