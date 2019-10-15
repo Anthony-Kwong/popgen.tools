@@ -43,23 +43,29 @@ int count(NumericVector vec,int target){
 // [[Rcpp::export]]
 double theta_h(NumericMatrix G){
   NumericVector column_sum=colSums(G);
-  int N=G.nrow();
-  //Rcout<<"N is "<<N<<std::endl;
-  
-  IntegerVector S_i(N-1);
-  
-  for(int i=0;i<N;i++){
-    S_i[i]=count(column_sum,i+1);
+  int max_derived=max(column_sum);
+//  Rcout<<"N is "<<N<<std::endl;
+//  Rcout<<"Colsums "<<column_sum<<std::endl;
+
+  NumericVector S_i(max_derived + 1);
+
+  for(int i=1;i<=max_derived;i++){
+    S_i[i]=count(column_sum,i);
   }
   
-  //Rcout<<column_sum<<std::endl;
-  //Rcout<<"Si is "<<S_i<<std::endl;
+//  Rcout<<"colsum "<<column_sum<<std::endl;
+//  Rcout<<"Si is "<<S_i<<std::endl;
   
   double top=0;
+  int N=G.nrow();
+//  Rcout<<"N "<<N<<std::endl;
   
-  for(int i=0;i<S_i.size();i++){
-    top=top+2*S_i[i]*(i+1)*(i+1);
-    //Rcout<<"Calc top "<<top<<std::endl;
+  for(int i=1;i<N;i++){
+//    Rcout<<"loop "<<i<<std::endl;
+    double add=2*S_i[i]*i*i;
+    top=top+ 2*S_i[i]*i*i;
+//    Rcout<<add<<std::endl;
+//    Rcout<<"Calc top "<<top<<std::endl;
   }
   
   //Rcout<<"top is "<<top<<std::endl;
@@ -80,7 +86,7 @@ double theta_h(NumericMatrix G){
 //' @export
 // [[Rcpp::export]]
 double fwh(double t_w,double t_h) {
-  double stat=abs(t_w-t_h);
+  double stat=t_w-t_h;
   return stat;
 }
 
