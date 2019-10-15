@@ -30,6 +30,7 @@ NumericVector h_stats(NumericMatrix G) {
   int nsam=G.nrow();
   //Rcout<<haplo_counts<<std::endl;
   //Rcout<<p<<" Before"<<std::endl;
+  //
   
   //double vector to store the frequencies of each haplotype
   double p [num_haplotypes];
