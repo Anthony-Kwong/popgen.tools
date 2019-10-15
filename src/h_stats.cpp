@@ -31,9 +31,9 @@ NumericVector h_stats(NumericMatrix G) {
   int num_haplotypes=haplo_counts.size();
   int nsam=G.nrow();
   NumericVector p=haplo_counts*(1.0/nsam);
-  Rcout<<"Before "<<p<<std::endl;
+//  Rcout<<"Before "<<p<<std::endl;
   p=vec_sort(p);
-  Rcout<<"Sorted "<<p<<std::endl;
+//  Rcout<<"Sorted "<<p<<std::endl;
 
   
   
@@ -42,25 +42,27 @@ NumericVector h_stats(NumericMatrix G) {
   for(int i=0; i<num_haplotypes; i++){
     h1=h1+p[i]*p[i];
   }
-  Rcout<<"h1 " << h1<<std::endl;
+//  Rcout<<"h1 " << h1<<std::endl;
   
    
   //the h12 stat combines the frequencies of the top 2 most common haplotypes into one haplotype. We use a shortcut to compute it. 
   double h12=h1+2*p[0]*p[1];
-  Rcout<<"h12 "<<h12<<std::endl;
+//  Rcout<<"h12 "<<h12<<std::endl;
 
   //h3 stat is like h2 but takes top 3
   double h123=h12+2*p[0]*p[2]+2*p[1]*p[2];
-  Rcout<<"h123 "<<h123<<std::endl;
+//  Rcout<<"h123 "<<h123<<std::endl;
 
   //h2. This is like h1 but removes the first haplotype.
   double h2=h1-p[0]*p[0];
-  Rcout<<"h2 "<<h2<<std::endl;
+//  Rcout<<"h2 "<<h2<<std::endl;
 
-   // NumericVector h_stats=NumericVector::create(h1,h2,h3);
-   //Rcout<<h_stats<<std::endl;
+  //Putting everything together
   
-   return 0;
+  NumericVector h_stats=NumericVector::create(h1,h2,h12,h123);
+
+  
+  return h_stats;
 }
 
 

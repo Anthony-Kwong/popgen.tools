@@ -26,10 +26,12 @@ test_that("h_stats computed correctly",{
   freq=sort(freq,decreasing = TRUE)
   
   h1=freq %*% freq
-  h2=h1+2*freq[1]*freq[2]
-  h3=h2+2*freq[1]*freq[3]+2*freq[2]*freq[3]
+  h2=h1-freq[1]^2
+  h12=h1+2*freq[1]*freq[2]
+  h123=h12+2*freq[1]*freq[3]+2*freq[2]*freq[3]
   
-  h=c(h1,h2,h3)
+  
+  h=c(h1,h2,h12,h123)
   output<-h_stats(seq)
   
   expect_equal(output,h)
@@ -63,10 +65,12 @@ test_that("h_stats computed correctly",{
   freq=sort(freq,decreasing = TRUE)
   
   h1=freq %*% freq
-  h2=h1+2*freq[1]*freq[2]
-  h3=h2+2*freq[1]*freq[3]+2*freq[2]*freq[3]
+  h2=h1-freq[1]^2
+  h12=h1+2*freq[1]*freq[2]
+  h123=h12+2*freq[1]*freq[3]+2*freq[2]*freq[3]
   
-  h=c(h1,h2,h3)
+  
+  h=c(h1,h2,h12,h123)
   output<-h_stats(seq)
   
   expect_equal(output,h)
