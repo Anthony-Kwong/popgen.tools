@@ -49,7 +49,7 @@ sum_stats<-function(sim,win_split,ID){
   
   # Haplotype stats (h1,h2,h12,h123)----
   h_values<-lapply(win_list,h_stats) 
-  names(h_values)<-string_labels("sim",length(h_values))
+  names(h_values)<-string_labels("subwindow_",length(h_values))
   h_df<- h_values %>% tibble::as_tibble()
   h_df<-h_df %>% as.matrix() %>% t()
   colnames(h_df)<-c("h1","h2","h12","h123")
@@ -115,9 +115,9 @@ sum_stats<-function(sim,win_split,ID){
 
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- data<-readRDS("~/work/MPhil/data/hard.rds")
- sim<-data[[1]]
- test<-generate_df(df,2)
+ # data<-readRDS("~/work/MPhil/data/hard.rds")
+ # sim<-data[[1]]
+ # test<-generate_df(df,2)
 
  # generate_df(data,10)
  # 
