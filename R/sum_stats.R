@@ -55,6 +55,14 @@ sum_stats<-function(sim,win_split,ID){
   colnames(h_df)<-c("h1","h2","h12","h123")
   h_df<-h_df %>% tibble::as_tibble()
   
+  #compute distance----
+  #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
+  
+  #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
+  mutation_pos<-0.5
+  win_pos<-sim$pos %>% as.matrix()
+  #use a fct that can break vectors into equal chunks
+  
   #Classify position of subwindows----
   
   #The subwindow with the mutation is "mut". Immediately adjacent subwindows are "close". Otherwise "far". 
