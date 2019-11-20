@@ -17,6 +17,13 @@ sum_stats<-function(sim,win_split,ID){
   #Quick way to see where the simulations are up to. 
   print(ID)
   
+  #reject cases where there are more subwindows than SNPs. 
+  if(win_split>sim$num_seg){
+    txt<-paste("reject ",ID)
+    print(txt)
+    return (NULL)
+  }
+  
   # #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.
   # if(win_split>=(sim$num_seg-1)){
   #   txt<-paste("reject",ID)
@@ -24,15 +31,10 @@ sum_stats<-function(sim,win_split,ID){
   #   return(NULL)
   # }
   
+  #split genome matrix into equal sized windows and store as a list
   win_list<-sub_win(sim$genomes,win_split)
   
-  #for cases where there are more subwindows than SNPs
-  if(length(win_list)==0){
-    txt<-paste("reject ",ID)
-    print(txt)
-    return (NULL)
-  }
-  
+  #list of basic summary statistics functions to use on the windows.These form the basis for other summary stats. 
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
@@ -113,11 +115,11 @@ sum_stats<-function(sim,win_split,ID){
 
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- # data<-readRDS("~/work/MPhil/data/toy_set.rds")
- # df<-data[1:414]
- # test<-generate_df(df,2)
- # 
- #  generate_df(data,10)
+ data<-readRDS("~/work/MPhil/data/hard.rds")
+ sim<-data[[1]]
+ test<-generate_df(df,2)
+
+ # generate_df(data,10)
  # 
  #  sim<-data[[213]]
  #  win_split=10
