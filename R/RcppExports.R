@@ -205,6 +205,13 @@ vec_equal <- function(x, y) {
     .Call('_popgen_tools_vec_equal', PACKAGE = 'popgen.tools', x, y)
 }
 
+#' vec_split function
+#' 
+#' Breaks a vector into n equal sized chunks. If elements in not divisible by n, we put extra elements into the last chunk.
+timesTwo <- function(x) {
+    .Call('_popgen_tools_timesTwo', PACKAGE = 'popgen.tools', x)
+}
+
 #' w_max function
 #' 
 #' Computes w_max for a binary, genome matrix. Each column is a SNP, each row is a sample. 
