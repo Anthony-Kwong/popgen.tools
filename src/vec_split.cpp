@@ -13,9 +13,15 @@ using namespace Rcpp;
 
 //' vec_split function
 //' 
-//' Breaks a vector into n equal sized chunks. If elements in not divisible by n, we put extra elements into the last chunk.
+//' Breaks a vector x into n equal sized blocks. If the dimension of x is not divisible by n, we put the remaining elements into the last block. 
+//' 
+//' @param x: vector to split
+//' @param n: number of blocks to split a vector into. 
+//' @return a list of vectors
+//' @examples vec_split(seq(10),3)
+//' @export
 // [[Rcpp::export]]
-NumericVector timesTwo(NumericVector x) {
+NumericVector vec_split(NumericVector x) {
   return x * 2;
 }
 
@@ -26,5 +32,5 @@ NumericVector timesTwo(NumericVector x) {
 //
 
 /*** R
-timesTwo(42)
+
 */
