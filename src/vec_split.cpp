@@ -21,8 +21,31 @@ using namespace Rcpp;
 //' @examples vec_split(seq(10),3)
 //' @export
 // [[Rcpp::export]]
-NumericVector vec_split(NumericVector x) {
-  return x * 2;
+Rcpp::List vec_split(NumericVector x, int n) {
+  int dim=x.length();
+  double len=1.0*dim/n;
+  int width=len;
+  len=round(len);
+  List vec_blocks(len);
+  
+  //add start and end indices
+  
+  for(int i=0;i<len;i++){
+    vec_blocks[i]=x[Rcpp::Range(i*width,(i+1)*width)];
+  }
+  
+  //for debugging purposes. 
+  
+  Rcout<<width<<std::endl;
+  Rcout<< round(len)<<std::endl;
+
+  for(int i=0;i<len;i++){
+    //Rcout<<vec_blocks[i]<<std::end;
+    Rf_PrintValue(vec_blocks[i]);
+  }
+  
+  
+  return NULL;
 }
 
 
@@ -32,5 +55,6 @@ NumericVector vec_split(NumericVector x) {
 //
 
 /*** R
-
+x<-seq(20)
+vec_split(x,5)
 */
