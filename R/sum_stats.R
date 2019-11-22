@@ -12,7 +12,7 @@
 #' @return list of summary stats for the input genome matrix
 #' @export
 #' @examples sum_stats(win_list)
-#' This is meant to be a hidden function.
+#' This is meant to be a hidden function. Hide in final version. 
 sum_stats<-function(sim,win_split,ID){
   #Quick way to see where the simulations are up to. 
   print(ID)
@@ -57,6 +57,7 @@ sum_stats<-function(sim,win_split,ID){
   
   #compute distance----
   #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
+  snp_pos<-vec_split(sim$pos,win_split)
   
   #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
   mutation_pos<-0.5
