@@ -25,21 +25,37 @@ Rcpp::List vec_split(NumericVector x, int n) {
   int dim=x.length();
   double len=1.0*dim/n;
   int width=len;
-  len=round(len);
-  List vec_blocks(len);
+  
+  //len=round(len);
+  List vec_blocks(n);
   
   //add start and end indices
-  
-  for(int i=0;i<len;i++){
-    vec_blocks[i]=x[Rcpp::Range(i*width,(i+1)*width)];
+  int start=0;
+  int end=width-1;
+    
+  for(int i=0;i<n;i++){
+    if(i<n-1){
+      //standard filling of blocks
+      vec_blocks[i]=x[Rcpp::Range(start,end)];
+      start=end+1;
+      end=end+width;
+    } else {
+      //putting remainder elements into the last block
+      Rcout<<"trigger"<<std::endl;
+      Rcout<<"last start "<<x[start]<<std::endl;
+      Rcout<<"last one "<<x[dim-1]<<std::endl;
+      vec_blocks[i]=x[Rcpp::Range(start,dim-1)];
+    }
+
   }
   
   //for debugging purposes. 
   
-  Rcout<<width<<std::endl;
-  Rcout<< round(len)<<std::endl;
+  Rcout<<"width is "<<width<<std::endl;
+  Rcout<<"list has "<< n<<" elements"<<std::endl;
+  Rcout<<"dim of vector is "<<dim<<std::endl;
 
-  for(int i=0;i<len;i++){
+  for(int i=0;i<n;i++){
     //Rcout<<vec_blocks[i]<<std::end;
     Rf_PrintValue(vec_blocks[i]);
   }
@@ -57,4 +73,7 @@ Rcpp::List vec_split(NumericVector x, int n) {
 /*** R
 x<-seq(20)
 vec_split(x,5)
+
+x<-seq(7)
+vec_split(x,2)
 */
