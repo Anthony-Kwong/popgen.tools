@@ -41,27 +41,27 @@ Rcpp::List vec_split(NumericVector x, int n) {
       end=end+width;
     } else {
       //putting remainder elements into the last block
-      Rcout<<"trigger"<<std::endl;
-      Rcout<<"last start "<<x[start]<<std::endl;
-      Rcout<<"last one "<<x[dim-1]<<std::endl;
+//      Rcout<<"trigger"<<std::endl;
+//      Rcout<<"last start "<<x[start]<<std::endl;
+//      Rcout<<"last one "<<x[dim-1]<<std::endl;
       vec_blocks[i]=x[Rcpp::Range(start,dim-1)];
     }
-
   }
+  
   
   //for debugging purposes. 
   
-  Rcout<<"width is "<<width<<std::endl;
-  Rcout<<"list has "<< n<<" elements"<<std::endl;
-  Rcout<<"dim of vector is "<<dim<<std::endl;
-
-  for(int i=0;i<n;i++){
-    //Rcout<<vec_blocks[i]<<std::end;
-    Rf_PrintValue(vec_blocks[i]);
-  }
+  // Rcout<<"width is "<<width<<std::endl;
+  // Rcout<<"list has "<< n<<" elements"<<std::endl;
+  // Rcout<<"dim of vector is "<<dim<<std::endl;
+  // 
+  // for(int i=0;i<n;i++){
+  //   //Rcout<<vec_blocks[i]<<std::end;
+  //   Rf_PrintValue(vec_blocks[i]);
+  // }
   
   
-  return NULL;
+  return vec_blocks;
 }
 
 

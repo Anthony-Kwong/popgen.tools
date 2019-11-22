@@ -214,8 +214,8 @@ vec_equal <- function(x, y) {
 #' @return a list of vectors
 #' @examples vec_split(seq(10),3)
 #' @export
-vec_split <- function(x) {
-    .Call('_popgen_tools_vec_split', PACKAGE = 'popgen.tools', x)
+vec_split <- function(x, n) {
+    .Call('_popgen_tools_vec_split', PACKAGE = 'popgen.tools', x, n)
 }
 
 #' w_max function

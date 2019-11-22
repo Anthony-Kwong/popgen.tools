@@ -273,13 +273,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // vec_split
-NumericVector vec_split(NumericVector x);
-RcppExport SEXP _popgen_tools_vec_split(SEXP xSEXP) {
+Rcpp::List vec_split(NumericVector x, int n);
+RcppExport SEXP _popgen_tools_vec_split(SEXP xSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(vec_split(x));
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(vec_split(x, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -319,7 +320,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_unique_rows", (DL_FUNC) &_popgen_tools_unique_rows, 1},
     {"_popgen_tools_vec_sort", (DL_FUNC) &_popgen_tools_vec_sort, 1},
     {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},
-    {"_popgen_tools_vec_split", (DL_FUNC) &_popgen_tools_vec_split, 1},
+    {"_popgen_tools_vec_split", (DL_FUNC) &_popgen_tools_vec_split, 2},
     {"_popgen_tools_w_max", (DL_FUNC) &_popgen_tools_w_max, 1},
     {NULL, NULL, 0}
 };

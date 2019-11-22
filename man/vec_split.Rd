@@ -4,7 +4,7 @@
 \alias{vec_split}
 \title{vec_split function}
 \usage{
-vec_split(x)
+vec_split(x, n)
 }
 \arguments{
 \item{x:}{vector to split}
