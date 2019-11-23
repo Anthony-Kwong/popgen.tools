@@ -21,5 +21,5 @@ Turns a simulation object into a data frame. The genome matrix is partitioned in
 }
 \examples{
 sum_stats(win_list)
-This is meant to be a hidden function.
+This is meant to be a hidden function. Hide in final version. 
 }

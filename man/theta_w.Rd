@@ -13,7 +13,7 @@ theta_w(G)
 scalar value opf theta_w
 }
 \description{
-Computes the average number of pairwise differences.
+Computes the average number of pairwise differences, assuming neutrality.
 }
 \examples{
 theta_w(G)

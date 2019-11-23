@@ -7,7 +7,7 @@
 #' @import magrittr
 #' @export
 #' 
-#' @examples 
+#' @examples snp_count(sim_list)
 snp_count<-function(sim_list){
   
   obs<-length(sim_list)

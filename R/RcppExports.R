@@ -112,10 +112,10 @@ theta_t <- function(G) {
 
 #'theta_w function
 #'
-#' Computes the average number of pairwise differences. 
+#' Computes the average number of pairwise differences, assuming neutrality.
 #' 
 #' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
-#' @return scalar value opf theta_w
+#' @return scalar value of theta_w
 #' @examples theta_w(G)
 #' @export
 theta_w <- function(G) {
