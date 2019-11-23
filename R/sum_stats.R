@@ -5,7 +5,7 @@
 #' @param sim: a simulation object
 #' @param win_split: number of subwindows to split each genome matrix within the simulation.
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
-#' @importFrom tibble enframe as_tibble
+#' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
 #' @import magrittr
@@ -56,49 +56,22 @@ sum_stats<-function(sim,win_split,ID){
   h_df<-h_df %>% tibble::as_tibble()
   
   #compute distance----
+  
   #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
   snp_pos<-vec_split(sim$pos,win_split)
-  
   #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
   mutation_pos<-0.5
-  win_pos<-sim$pos %>% as.matrix()
-  #use a fct that can break vectors into equal chunks
   
-  #Classify position of subwindows----
+  #preallocate memory
+  dist<-rep(NA,win_split)
   
-  #The subwindow with the mutation is "mut". Immediately adjacent subwindows are "close". Otherwise "far". 
-  pos<-sim$pos
-  #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
-  mutation_pos<-0.5
-  sweep_pos<-which.min(abs(pos-mutation_pos))
-  
-  #initialise position vector
-  position<-rep("far",win_split)
-  
-  #finding which subwindow the mutation lies in. 
-  whole_win_width<-length(pos)
-  width<-floor(whole_win_width/win_split)
-  mut_index<-ceiling(sweep_pos/width)
-  
-  #account for mutation occuring on the last sub_window. If SNPs cannot be completely equally divided between the subwindows, the remainder goes to the last subwindow. 
-  if(mut_index>win_split){
-    mut_index=win_split
+  for(i in 1:win_split){
+    sub_win_mid<-snp_pos[i] %>% unlist() %>% median()
+    dist[i]<-abs(sub_win_mid-mutation_pos)
   }
   
-  #updating position vector
-  position[mut_index]<-"mut"
-  
-  if((mut_index-1)>0){
-    position[mut_index-1]="close"
-  }
-  
-  if((mut_index+1)<win_split){
-    position[mut_index+1]="close"
-  }
-  
-  #position<-position %>% tibble::tibble()
-  #names(position)<-"position"
-  #position$position<- position$position %>% as.factor()
+#  dist<-dist %>% tibble::tibble()
+#  names(dist)<-"dist"
   
   #Various extra details about the simulation
   snp<-sim$num_seg
@@ -112,13 +85,13 @@ sum_stats<-function(sim,win_split,ID){
   #tying everything back together. ----
   #Tibble is great in giving neat names without the $. 
   pi_est<-basic_values$theta_t
-  df<-tibble::tibble(sweep,ID,snp,position,D,H,pi_est)
-  df<-dplyr::bind_cols(df,h_df)
-  
+  df<-tibble::tibble(sweep,ID,snp,dist,D,H,pi_est) %>% tibble::as_tibble()
+  final_df<-dplyr::bind_cols(df,h_df)
+
   #change sweep and position into factors.
   #df[,c("sweep","position")]<-lapply(df[,c("sweep","position")],as.factor)
 
-  return(df)
+  return(final_df)
 }
 
 
@@ -127,7 +100,7 @@ sum_stats<-function(sim,win_split,ID){
  # data<-readRDS("~/work/MPhil/data/hard.rds")
  # sim<-data[[1]]
  # test<-generate_df(df,2)
-
+ # 
  # generate_df(data,10)
  # 
  #  sim<-data[[213]]
