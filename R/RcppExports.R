@@ -17,7 +17,7 @@ count <- function(vec, target) {
 #' Computes theta_h for a genome matrix
 #' 
 #' @param G: Binary genome matrix with 0's and 1's. Each column is a SNP, each row is an individual.
-#' @return scalar value of theta_h for that sampled population
+#' @return scalar value of theta_h for that sampled population. 
 #' @examples theta_h(G)
 #' @export
 theta_h <- function(G) {
@@ -26,7 +26,7 @@ theta_h <- function(G) {
 
 #' fwh function
 #' 
-#' Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality.
+#' Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality. See doi: 10.1534/genetics.106.061432.
 #' 
 #' @param t_w: theta_w for genome matrix G. Use theta_w(). Also called theta_pi in literature, 
 #' @param t_h: theta_h for genome matrix G. Use theta_h().

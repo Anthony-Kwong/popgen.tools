@@ -10,7 +10,7 @@ theta_w(G)
 \item{G:}{Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.}
 }
 \value{
-scalar value opf theta_w
+scalar value of theta_w
 }
 \description{
 Computes the average number of pairwise differences, assuming neutrality.

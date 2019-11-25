@@ -12,10 +12,10 @@ R_theta_h<-function(M){
   top=0
   
   for(i in 1:(N-1)){
-    top=top+2*Si[i]*(i^2)
+    top=top+Si[i]*(i^2)
   }
   
-  return (top/(N*(N-1)))
+  return (top/(N*(N-1)/2))
 }
 
 test_that("Fay and Wu's H computed correctly",{
@@ -43,7 +43,7 @@ test_that("Fay and Wu's H computed correctly",{
   #fwh function
   a=14
   b=19
-  expect_equal(fwh(a,b),abs(a-b))
+  expect_equal(fwh(a,b),a-b)
   
 })
 

@@ -15,7 +15,7 @@ fwh(t_w, t_h)
 scalar value of Fay and Wu's H for that sampled population.
 }
 \description{
-Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality.
+Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality. See doi: 10.1534/genetics.106.061432.
 }
 \examples{
 fwh(theta_w(G),theta_h(G))

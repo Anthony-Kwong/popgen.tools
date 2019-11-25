@@ -10,7 +10,7 @@ theta_h(G)
 \item{G:}{Binary genome matrix with 0's and 1's. Each column is a SNP, each row is an individual.}
 }
 \value{
-scalar value of theta_h for that sampled population
+scalar value of theta_h for that sampled population.
 }
 \description{
 Computes theta_h for a genome matrix

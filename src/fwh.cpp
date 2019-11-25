@@ -37,47 +37,53 @@ int count(NumericVector vec,int target){
 //' Computes theta_h for a genome matrix
 //' 
 //' @param G: Binary genome matrix with 0's and 1's. Each column is a SNP, each row is an individual.
-//' @return scalar value of theta_h for that sampled population
+//' @return scalar value of theta_h for that sampled population. 
 //' @examples theta_h(G)
 //' @export
 // [[Rcpp::export]]
 double theta_h(NumericMatrix G){
+  
+  //compute the frequency of each SNP/mutation
   NumericVector column_sum=colSums(G);
+  
+  //take the max frequency to make sum efficient
   int max_derived=max(column_sum);
-//  Rcout<<"N is "<<N<<std::endl;
-//  Rcout<<"Colsums "<<column_sum<<std::endl;
 
+  //S_i is the number of mutations with frequency i among the sampled sequences. 
+  //Preallocate memory for max+1 since cpp indices start at zero. The S_i[0]=0 and won't get used in the sum. 
   NumericVector S_i(max_derived + 1);
 
   for(int i=1;i<=max_derived;i++){
     S_i[i]=count(column_sum,i);
   }
   
-//  Rcout<<"colsum "<<column_sum<<std::endl;
-//  Rcout<<"Si is "<<S_i<<std::endl;
+ // Rcout<<"colsum "<<column_sum<<std::endl;
+ // Rcout<<"Si is "<<S_i<<std::endl;
+ // Rcout<<"max derived "<<max_derived<<std::endl;
+ 
+ //compute the sum term
   
-  double top=0;
+  double sum_term=0;
   int N=G.nrow();
 //  Rcout<<"N "<<N<<std::endl;
   
   for(int i=1;i<N;i++){
-//    Rcout<<"loop "<<i<<std::endl;
-    double add=2*S_i[i]*i*i;
-    top=top+ 2*S_i[i]*i*i;
-//    Rcout<<add<<std::endl;
-//    Rcout<<"Calc top "<<top<<std::endl;
+//   Rcout<<"loop "<<i<<std::endl;
+   double temp=S_i[i]*i*i;
+   sum_term=sum_term+temp;
+//    Rcout<<"Calc top "<< sum_term<<std::endl;
   }
   
-  //Rcout<<"top is "<<top<<std::endl;
+//  Rcout<<"sum term is "<< sum_term<<std::endl;
   
-  double H=top/(N*(N-1));
+  double H=sum_term/(N*(N-1)/2);
   
   return H;
 }
 
 //' fwh function
 //' 
-//' Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality.
+//' Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality. See doi: 10.1534/genetics.106.061432.
 //' 
 //' @param t_w: theta_w for genome matrix G. Use theta_w(). Also called theta_pi in literature, 
 //' @param t_h: theta_h for genome matrix G. Use theta_h().
