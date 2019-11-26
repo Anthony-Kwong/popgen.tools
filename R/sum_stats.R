@@ -44,7 +44,7 @@ sum_stats<-function(sim,win_split,ID,snp){
     center<-which.min(snp_dist)
     
     #take the k/2 snps on the left and right of the center
-    win_list<-sub_win(sim$genomes[,(center-snp):(center+snp)],win_split)
+    win_list<-sub_win(sim$genomes[,(center-snp/2):(center+snp/2)],win_split)
   } else {
     win_list<-sub_win(sim$genomes,win_split)
   }
@@ -56,10 +56,12 @@ sum_stats<-function(sim,win_split,ID,snp){
   
   #Fay and Wu H, fwh(t_w,t_h)----
   H<-purrr::map2(basic_values$theta_w,basic_values$theta_h,fwh) %>% unlist()
+  H<-norm_vec(H)
   #H<-H %>% tibble::enframe(name=NULL,value="FW_H") 
   
   #Tajima'D taj_D(t_t, t_w, var_taj)----
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
+  D<-norm_vec(D)
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
   # Haplotype stats (h1,h2,h12,h123)----
@@ -69,6 +71,9 @@ sum_stats<-function(sim,win_split,ID,snp){
   h_df<-h_df %>% as.matrix() %>% t()
   colnames(h_df)<-c("h1","h2","h12","h123")
   h_df<-h_df %>% tibble::as_tibble()
+  
+  #normalisation step
+  h_df<-apply(h_df,2,norm_vec)
   
   #compute distance----
   
@@ -107,12 +112,10 @@ sum_stats<-function(sim,win_split,ID,snp){
   return(final_df)
 }
 
-
-
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- data<-readRDS("~/work/MPhil/data/hard.rds")
- sim<-data[[1]]
- test<-generate_df(df,2)
+ # data<-readRDS("~/work/MPhil/data/hard.rds")
+ # sim<-data[[1]]
+ # test<-generate_df(df,2)
  # 
  # generate_df(data,10)
  # 
