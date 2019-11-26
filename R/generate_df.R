@@ -14,9 +14,12 @@
 generate_df<-function(sim_list,win_split,snp){
   num_sim<-length(sim_list)
   
+  #extend arguments into vectors for pmap
   #generate IDs for each simulation
   id<-(1:num_sim)
   split<-rep(win_split,num_sim)
+  snp<-rep(snp,num_sim)
+  
   df_list<-purrr::pmap(list(sim_list,split,id,snp),sum_stats)
   df<-dplyr::bind_rows(df_list)
   

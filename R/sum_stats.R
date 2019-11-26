@@ -70,10 +70,11 @@ sum_stats<-function(sim,win_split,ID,snp){
   h_df<- h_values %>% tibble::as_tibble()
   h_df<-h_df %>% as.matrix() %>% t()
   colnames(h_df)<-c("h1","h2","h12","h123")
-  h_df<-h_df %>% tibble::as_tibble()
-  
   #normalisation step
   h_df<-apply(h_df,2,norm_vec)
+  h_df<-h_df %>% tibble::as_tibble()
+  
+
   
   #compute distance----
   
@@ -92,10 +93,16 @@ sum_stats<-function(sim,win_split,ID,snp){
 #  names(dist)<-"dist"
   
   #Various extra details about the simulation
-  snp<-sim$num_seg
-  snp<-rep(snp,win_split)
   
-  sweep<-sim$sweep
+  #if selection coefficient s=0, it is a neutral simulation
+  s_coef<-sim$s
+  if(s_coef==0){
+    sweep<-"neutral"
+  } else {
+    sweep<-sim$sweep
+  }
+  
+  s<-rep(s_coef,win_split)
   sweep<-rep(sweep,win_split)
   
   ID<-rep(ID,win_split)
@@ -103,7 +110,7 @@ sum_stats<-function(sim,win_split,ID,snp){
   #tying everything back together. ----
   #Tibble is great in giving neat names without the $. 
   pi_est<-basic_values$theta_t
-  df<-tibble::tibble(sweep,ID,snp,dist,D,H,pi_est) %>% tibble::as_tibble()
+  df<-tibble::tibble(sweep,ID,s,dist,D,H,pi_est) %>% tibble::as_tibble()
   final_df<-dplyr::bind_cols(df,h_df)
 
   #change sweep and position into factors.
