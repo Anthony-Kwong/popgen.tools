@@ -44,7 +44,13 @@ sum_stats<-function(sim,win_split,ID,snp){
     center<-which.min(snp_dist)
     
     #take the k/2 snps on the left and right of the center
-    win_list<-sub_win(sim$genomes[,(center-snp/2):(center+snp/2)],win_split)
+    lower_cutoff=round(center-(snp/2))
+    upper_cutoff=round(center+(snp/2))
+      
+    start=max(0,lower_cutoff)
+    end=min(sim$num_seg,upper_cutoff)
+    
+    win_list<-sub_win(sim$genomes[,start:end],win_split)
   } else {
     win_list<-sub_win(sim$genomes,win_split)
   }
@@ -120,8 +126,8 @@ sum_stats<-function(sim,win_split,ID,snp){
 }
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- # data<-readRDS("~/work/MPhil/data/hard.rds")
- # sim<-data[[1]]
+ # data<-readRDS("~/work/MPhil/data/toy_data.rds")
+ # sim<-data[[30]]
  # test<-generate_df(df,2)
  # 
  # generate_df(data,10)
