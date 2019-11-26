@@ -5,6 +5,7 @@
 #' @param sim: a simulation object
 #' @param win_split: number of subwindows to split each genome matrix within the simulation.
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
+#' @param snp: number of snps to include per simulation
 #' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -13,7 +14,7 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,win_split,ID){
+sum_stats<-function(sim,win_split,ID,snp){
   #Quick way to see where the simulations are up to. 
   print(ID)
   
@@ -31,9 +32,23 @@ sum_stats<-function(sim,win_split,ID){
   #   return(NULL)
   # }
   
-  #split genome matrix into equal sized windows and store as a list
-  win_list<-sub_win(sim$genomes,win_split)
+  #split genome matrix into equal sized windows and store as a list.
+  #to equalise the number of SNPs across the simulations, we keep the central k SNPs around the selected mutation.
   
+  #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
+  mutation_pos<-0.5
+  
+  if(sim$num_seg>snp){
+    #find closest SNP to the selected mutation
+    snp_dist<-abs(sim$pos-mutation_pos)
+    center<-which.min(snp_dist)
+    
+    #take the k/2 snps on the left and right of the center
+    win_list<-sub_win(sim$genomes[,(center-snp):(center+snp)],win_split)
+  } else {
+    win_list<-sub_win(sim$genomes,win_split)
+  }
+
   #list of basic summary statistics functions to use on the windows.These form the basis for other summary stats. 
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
@@ -59,8 +74,6 @@ sum_stats<-function(sim,win_split,ID){
   
   #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
   snp_pos<-vec_split(sim$pos,win_split)
-  #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
-  mutation_pos<-0.5
   
   #preallocate memory
   dist<-rep(NA,win_split)
@@ -97,9 +110,9 @@ sum_stats<-function(sim,win_split,ID){
 
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- # data<-readRDS("~/work/MPhil/data/hard.rds")
- # sim<-data[[1]]
- # test<-generate_df(df,2)
+ data<-readRDS("~/work/MPhil/data/hard.rds")
+ sim<-data[[1]]
+ test<-generate_df(df,2)
  # 
  # generate_df(data,10)
  # 
