@@ -6,6 +6,7 @@
 #' @param win_split: number of subwindows to split each genome matrix within the simulation.
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
+#' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
 #' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -14,7 +15,7 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,win_split,ID,snp){
+sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   #Quick way to see where the simulations are up to. 
   print(ID)
   
@@ -24,15 +25,9 @@ sum_stats<-function(sim,win_split,ID,snp){
     print(txt)
     return (NULL)
   }
+
+  #Split genome matrix into subwindows----
   
-  # #if the number of win_split>=num_seg-1, we discard it. One column subwindows aren't useful.
-  # if(win_split>=(sim$num_seg-1)){
-  #   txt<-paste("reject",ID)
-  #   print(txt)
-  #   return(NULL)
-  # }
-  
-  #split genome matrix into equal sized windows and store as a list.
   #to equalise the number of SNPs across the simulations, we keep the central k SNPs around the selected mutation.
   
   #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
@@ -54,6 +49,8 @@ sum_stats<-function(sim,win_split,ID,snp){
   } else {
     win_list<-sub_win(sim$genomes,win_split)
   }
+  
+  #Compute SS on subwindows----
 
   #list of basic summary statistics functions to use on the windows.These form the basis for other summary stats. 
   ss<-list(theta_h,theta_t,theta_w,var_taj)
@@ -80,26 +77,6 @@ sum_stats<-function(sim,win_split,ID,snp){
   h_df<-apply(h_df,2,norm_vec)
   h_df<-h_df %>% tibble::as_tibble()
   
-
-  
-  #compute distance----
-  
-  #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
-  snp_pos<-vec_split(sim$pos,win_split)
-  
-  #preallocate memory
-  dist<-rep(NA,win_split)
-  
-  for(i in 1:win_split){
-    sub_win_mid<-snp_pos[i] %>% unlist() %>% median()
-    dist[i]<-abs(sub_win_mid-mutation_pos)
-  }
-  
-#  dist<-dist %>% tibble::tibble()
-#  names(dist)<-"dist"
-  
-  #Various extra details about the simulation
-  
   #if selection coefficient s=0, it is a neutral simulation
   s_coef<-sim$s
   if(s_coef==0){
@@ -108,25 +85,44 @@ sum_stats<-function(sim,win_split,ID,snp){
     sweep<-sim$sweep
   }
   
-  s<-rep(s_coef,win_split)
-  sweep<-rep(sweep,win_split)
+  #tall form computation----
   
-  ID<-rep(ID,win_split)
   
-  #tying everything back together. ----
-  #Tibble is great in giving neat names without the $. 
-  pi_est<-basic_values$theta_t
-  df<-tibble::tibble(sweep,ID,s,dist,D,H,pi_est) %>% tibble::as_tibble()
-  final_df<-dplyr::bind_cols(df,h_df)
-
+  if(form=="tall"){
+    #Compute distances
+    
+    #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
+    snp_pos<-vec_split(sim$pos,win_split)
+    
+    #preallocate memory
+    dist<-rep(NA,win_split)
+    
+    #store distances between each subwindow and the selected mutation
+    for(i in 1:win_split){
+      sub_win_mid<-snp_pos[i] %>% unlist() %>% median()
+      dist[i]<-abs(sub_win_mid-mutation_pos)
+    }
+    
+    s<-rep(s_coef,win_split)
+    sweep<-rep(sweep,win_split)
+    
+    ID<-rep(ID,win_split)
+    
+    #tying everything back together. ----
+    #Tibble is great in giving neat names without the $. 
+    pi_est<-basic_values$theta_t
+    df<-tibble::tibble(sweep,ID,s,dist,D,H,pi_est) %>% tibble::as_tibble()
+    tall_df<-dplyr::bind_cols(df,h_df)
+    return(tall_df)
+  }
+  
   #change sweep and position into factors.
   #df[,c("sweep","position")]<-lapply(df[,c("sweep","position")],as.factor)
 
-  return(final_df)
 }
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- # data<-readRDS("~/work/MPhil/data/toy_data.rds")
+ # data<-readRDS("~/work/MPhil/data/hard.rds")
  # sim<-data[[30]]
  # test<-generate_df(df,2)
  # 
