@@ -59,23 +59,45 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   
   #Fay and Wu H, fwh(t_w,t_h)----
   H<-purrr::map2(basic_values$theta_w,basic_values$theta_h,fwh) %>% unlist()
-  H<-norm_vec(H)
   #H<-H %>% tibble::enframe(name=NULL,value="FW_H") 
   
   #Tajima'D taj_D(t_t, t_w, var_taj)----
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
-  D<-norm_vec(D)
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
+  
+  #collect stats and normalise
+  win_stats<-list(H,D)
+  win_stats<-lapply(win_stats,norm_vec)
+  
   
   # Haplotype stats (h1,h2,h12,h123)----
   h_values<-lapply(win_list,h_stats) 
   names(h_values)<-string_labels("subwindow_",length(h_values))
-  h_df<- h_values %>% tibble::as_tibble()
-  h_df<-h_df %>% as.matrix() %>% t()
-  colnames(h_df)<-c("h1","h2","h12","h123")
-  #normalisation step
-  h_df<-apply(h_df,2,norm_vec)
-  h_df<-h_df %>% tibble::as_tibble()
+
+  #tying everything together into a wide dataframe
+  
+  if(form=="wide"){
+    
+    #h_list stores the h_stats for each subwindow. It stores 4 vectors for the statistics h1,h2,h12,h123.
+    x<-rep(NA,win_split)
+    h_list<-list(x,x,x,x)
+    num_hstat<-length(h_values[[1]])
+    
+    for(i in 1:num_hstat){
+      for(j in 1:win_split){
+        h_list[[i]][[j]]<-h_values[[j]][[i]]
+      }
+    }
+    
+    #normalise the haplotype statistics
+    normed_h_list<-lapply(h_list,norm_vec)
+    
+    #collect all the summary stats into a single list 
+    final_stats<-list(win_stats,normed_h_list) %>% unlist(recursive = FALSE)
+
+    
+  }
+  
   
   #if selection coefficient s=0, it is a neutral simulation
   s_coef<-sim$s
@@ -84,6 +106,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   } else {
     sweep<-sim$sweep
   }
+  
+  
   
   #tall form computation----
   
@@ -108,8 +132,17 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
     
     ID<-rep(ID,win_split)
     
+    #getting h_stats into the right form
+    h_df<-h_df %>% as.matrix() %>% t()
+    colnames(h_df)<-c("h1","h2","h12","h123")
+    #normalisation step
+    h_df<-apply(h_df,2,norm_vec)
+    h_df<-h_df %>% tibble::as_tibble()
+    
     #tying everything back together. ----
     #Tibble is great in giving neat names without the $. 
+    # D<-norm_vec(D)
+    # H<-norm_vec(H)
     pi_est<-basic_values$theta_t
     df<-tibble::tibble(sweep,ID,s,dist,D,H,pi_est) %>% tibble::as_tibble()
     tall_df<-dplyr::bind_cols(df,h_df)
@@ -122,8 +155,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 }
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- # data<-readRDS("~/work/MPhil/data/hard.rds")
- # sim<-data[[30]]
+ data<-readRDS("~/work/MPhil/data/hard.rds")
+ sim<-data[[30]]
  # test<-generate_df(df,2)
  # 
  # generate_df(data,10)
