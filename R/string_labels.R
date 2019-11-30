@@ -9,7 +9,8 @@
 #' @export
 #' @examples string_labels("Echo",5)
 string_labels<-function(f,it){
-  string_vec<-str_c(f,1:it)
+  string_vec<-stringr::str_c(f,1:it,sep="_")
   return(string_vec)
 }
+
 

@@ -4,7 +4,7 @@
 \alias{sum_stats}
 \title{sum_stats function}
 \usage{
-sum_stats(sim, win_split, ID, snp)
+sum_stats(sim, win_split, ID, snp, form = "wide")
 }
 \arguments{
 \item{sim:}{a simulation object}
@@ -14,6 +14,8 @@ sum_stats(sim, win_split, ID, snp)
 \item{ID:}{an ID value to group subwindows under the simulation it came from.}
 
 \item{snp:}{number of snps to include per simulation}
+
+\item{form:}{output data frame in "wide" or "tall" form. This is an optional argument with default="wide".}
 }
 \value{
 list of summary stats for the input genome matrix

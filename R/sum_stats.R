@@ -25,6 +25,16 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
     print(txt)
     return (NULL)
   }
+  
+  #useful information from the simulation
+  
+  #if selection coefficient s=0, it is a neutral simulation
+  s_coef<-sim$s
+  if(s_coef==0){
+    sweep<-"neutral"
+  } else {
+    sweep<-sim$sweep
+  }
 
   #Split genome matrix into subwindows----
   
@@ -66,7 +76,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
   #collect stats and normalise
-  win_stats<-list(H,D)
+  win_stats<-list("H"=H,"D"=D)
   win_stats<-lapply(win_stats,norm_vec)
   
   
@@ -80,7 +90,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
     
     #h_list stores the h_stats for each subwindow. It stores 4 vectors for the statistics h1,h2,h12,h123.
     x<-rep(NA,win_split)
-    h_list<-list(x,x,x,x)
+    h_list<-list("h1"=x,"h2"=x,"h12"=x,"h123"=x)
     num_hstat<-length(h_values[[1]])
     
     for(i in 1:num_hstat){
@@ -95,16 +105,27 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
     #collect all the summary stats into a single list 
     final_stats<-list(win_stats,normed_h_list) %>% unlist(recursive = FALSE)
 
+    df<-lapply(final_stats,c) %>% unlist()
     
-  }
-  
-  
-  #if selection coefficient s=0, it is a neutral simulation
-  s_coef<-sim$s
-  if(s_coef==0){
-    sweep<-"neutral"
-  } else {
-    sweep<-sim$sweep
+    #changing the column names
+    index=which(names(df)=="h11")
+    
+    names(df)[index:(index+win_split-1)]<-string_labels("h1",win_split)
+    
+    index=which(names(df)=="h21")
+    names(df)[index:(index+win_split-1)]<-string_labels("h2",win_split)
+    
+    index=which(names(df)=="h121")
+    names(df)[index:(index+win_split-1)]<-string_labels("h12",win_split)
+    
+    index=which(names(df)=="h1231")
+    names(df)[index:(index+win_split-1)]<-string_labels("h123",win_split)
+    
+    stats<-as.data.frame(t(df)) 
+    temp<-tibble::tibble(sweep,ID,s_coef)
+    wide_df<-cbind(temp,stats)
+
+    return(wide_df)
   }
   
   
@@ -155,8 +176,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 }
 
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
- data<-readRDS("~/work/MPhil/data/hard.rds")
- sim<-data[[30]]
+ # data<-readRDS("~/work/MPhil/data/hard.rds")
+ # sim<-data[[30]]
  # test<-generate_df(df,2)
  # 
  # generate_df(data,10)
