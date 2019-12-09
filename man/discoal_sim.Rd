@@ -4,8 +4,18 @@
 \alias{discoal_sim}
 \title{discoal_sim function}
 \usage{
-discoal_sim(mu, recomb_rate, Ne, genome_length, samplesize, s = 0,
-  discoal_path, fix_generation, seed, sweep)
+discoal_sim(
+  mu,
+  recomb_rate,
+  Ne,
+  genome_length,
+  samplesize,
+  s = 0,
+  discoal_path,
+  fix_generation,
+  seed,
+  sweep
+)
 }
 \arguments{
 \item{mu}{mutation rate per base per generation. Warning! Check this again later in the discoal manual!}
