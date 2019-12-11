@@ -26,6 +26,7 @@ snp_count<-function(sim_list){
   #change predictors to be the correct form
   s<-as.numeric(s)
   SNP<-as.numeric(SNP)
+  sweep_type<-as.character(sweep_type)
   sweep_type<-as.factor(sweep_type)
   
   #tying everything together
@@ -36,4 +37,4 @@ snp_count<-function(sim_list){
 
 #inserted for building purposes only. Comment out before building package. 
 
-#data<-readRDS("~/work/MPhil/data/hard.rds")
+#data<-readRDS("~/work/MPhil/data/toy_data.rds")
