@@ -77,12 +77,14 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   
   #collect stats and normalise
   win_stats<-list("H"=H,"D"=D)
-  win_stats<-lapply(win_stats,norm_vec)
+  
+  #output raw values
+  #win_stats<-lapply(win_stats,norm_vec)
   
   
   # Haplotype stats (h1,h2,h12,h123)----
   h_values<-lapply(win_list,h_stats) 
-  names(h_values)<-string_labels("subwindow_",length(h_values))
+  names(h_values)<-string_labels("subwindow",length(h_values))
 
   #tying everything together into a wide dataframe
   
@@ -99,11 +101,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
       }
     }
     
-    #normalise the haplotype statistics
-    normed_h_list<-lapply(h_list,norm_vec)
-    
     #collect all the summary stats into a single list 
-    final_stats<-list(win_stats,normed_h_list) %>% unlist(recursive = FALSE)
+    final_stats<-list(win_stats,h_list) %>% unlist(recursive = FALSE)
 
     df<-lapply(final_stats,c) %>% unlist()
     
@@ -178,7 +177,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 #inserting for building purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/hard.rds")
  # sim<-data[[30]]
- # test<-generate_df(df,2)
+ #test<-generate_df(df,2)
  # 
  # generate_df(data,10)
  # 
