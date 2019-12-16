@@ -75,7 +75,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
-  #collect stats and normalise
+  #collect stats
   win_stats<-list("H"=H,"D"=D)
   
   #output raw values
@@ -106,7 +106,13 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 
     df<-lapply(final_stats,c) %>% unlist()
     
-    #changing the column names
+    #changing the column names. We find where each summary stat starts.  
+    index=which(names(df)=="H1")
+    names(df)[index:(index+win_split-1)]<-string_labels("H",win_split)
+
+    index=which(names(df)=="D1")
+    names(df)[index:(index+win_split-1)]<-string_labels("D",win_split)    
+        
     index=which(names(df)=="h11")
     
     names(df)[index:(index+win_split-1)]<-string_labels("h1",win_split)
@@ -174,9 +180,9 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 
 }
 
-#inserting for building purposes. Will remove. This bit causes trouble if left in. 
+#inserting for testing purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/hard.rds")
- # sim<-data[[30]]
+ # sim<-data[[31]]
  #test<-generate_df(df,2)
  # 
  # generate_df(data,10)
