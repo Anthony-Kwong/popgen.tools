@@ -182,7 +182,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 
 #inserting for testing purposes. Will remove. This bit causes trouble if left in. 
  # data<-readRDS("~/work/MPhil/data/hard.rds")
- # sim<-data[[31]]
+ # sim<-data[[70]]
+ # df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
  #test<-generate_df(df,2)
  # 
  # generate_df(data,10)

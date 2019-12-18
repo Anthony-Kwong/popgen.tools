@@ -5,10 +5,10 @@
 #' @param Ne The effective population size
 #' @param genome_length The number of bases to simulate for each sample. 
 #' @param samplesize Number of samples to take from the population
-#' @param s selection coefficient for the selected mutation
+#' @param s selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0. 
 #' @param discoal_path path to your discoal program
 #' @param fix_generation number of generations ago when the selected mutation was fixed
-#' @param sweep the kind of selective sweep. Input "hard" or "neutral"
+#' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #'
 #'
@@ -55,6 +55,14 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   
   #====================================================================================
 
+  #check that s is 0 for neutral simulations
+  if((sweep=="neutral"||sweep=="neutral_fixation")&&s!=0){
+    # print(sweep)
+    # print("error")
+    return("Error: selection coefficient must be 0 for neutral simulations.")
+  }
+  
+  
   #setting up params for discoal command. Discoals has to scale mutation, recombination rates and selection coefficient by Ne.
   #source: Kern 2017 "discoal-a coalescent simulator with selection"
 
@@ -96,7 +104,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
               theta, "-r", rho,"-d", no_scientific(seed[1]), no_scientific(seed[2]))
   }
 
-  #continue fixing this bit
+  #continue fixing this bit, check all cmds are added correctly. Fix soft sweep functionality. 
   if (sweep=="hard"){
     cmd=paste(cmd,"-a", alpha,"-ws", tau)
   }
