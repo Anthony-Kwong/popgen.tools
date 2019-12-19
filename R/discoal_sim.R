@@ -10,7 +10,7 @@
 #' @param fix_generation number of generations ago when the selected mutation was fixed
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
-#'
+#' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
 #'
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
@@ -25,7 +25,7 @@
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation,seed,sweep){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation,seed,sweep,start_freq=0){
   
   #====================================================================================
   
@@ -117,8 +117,12 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     cmd=paste(cmd,"-a", alpha,"-ws", tau)
   }
 
-  if(sweep=="neutral"){
+  if(sweep=="neutral_fixation"){
     cmd=paste(cmd,"-wn", tau)
+  }
+  
+  if(sweep=="soft"){
+    cmd=paste(cmd,"-a", alpha,"-ws", tau, "-f", start_freq)
   }
 
 

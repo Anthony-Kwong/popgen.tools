@@ -4,18 +4,8 @@
 \alias{discoal_sim}
 \title{discoal_sim function}
 \usage{
-discoal_sim(
-  mu,
-  recomb_rate,
-  Ne,
-  genome_length,
-  samplesize,
-  s = 0,
-  discoal_path,
-  fix_generation,
-  seed,
-  sweep
-)
+discoal_sim(mu, recomb_rate, Ne, genome_length, samplesize, s = 0,
+  discoal_path, fix_generation, seed, sweep, start_freq = 0)
 }
 \arguments{
 \item{mu}{mutation rate per base per generation. Warning! Check this again later in the discoal manual!}
@@ -28,7 +18,7 @@ discoal_sim(
 
 \item{samplesize}{Number of samples to take from the population}
 
-\item{s}{selection coefficient for the selected mutation}
+\item{s}{selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0.}
 
 \item{discoal_path}{path to your discoal program}
 
@@ -36,7 +26,9 @@ discoal_sim(
 
 \item{seed}{vector of 2 numbers used for the simulations}
 
-\item{sweep}{the kind of selective sweep. Input "hard" or "neutral"}
+\item{sweep}{the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation".}
+
+\item{start_freq}{Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency.}
 }
 \value{
 an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.

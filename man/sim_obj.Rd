@@ -4,16 +4,8 @@
 \alias{sim_obj}
 \title{sim_obj function}
 \usage{
-sim_obj(
-  cmd,
-  seeds,
-  segsites,
-  positions,
-  genome_matrix,
-  sweep,
-  select_coeff,
-  fix_generation
-)
+sim_obj(cmd, seeds, segsites, positions, genome_matrix, sweep,
+  select_coeff, fix_generation)
 }
 \arguments{
 \item{cmd}{the command used to generate the simulation}
