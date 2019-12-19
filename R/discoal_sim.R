@@ -55,11 +55,19 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   
   #====================================================================================
 
+  #Check that parameters have been entered correctly
+  
   #check that s is 0 for neutral simulations
   if((sweep=="neutral"||sweep=="neutral_fixation")&&s!=0){
-    # print(sweep)
-    # print("error")
-    return("Error: selection coefficient must be 0 for neutral simulations.")
+    msg=paste("Selection coefficient must be 0 for neutral simulations. You have input s =",s, " and sweep=",sweep)
+    stop(msg)
+  }
+  
+  #check that a valid sweep type has been entered
+  valid_sweeps=c("hard","soft","neutral","neutral_fixation")
+  if((sweep %in% valid_sweeps)==F){
+    msg=paste("Invalid sweep parameter. You entered sweep =",sweep," See documentation on discoal_sim.")
+    stop(msg)
   }
   
   
