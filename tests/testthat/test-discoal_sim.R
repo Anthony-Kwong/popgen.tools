@@ -1,6 +1,6 @@
 library(stringr)
 
-test_that("Command entered correctly", {
+test_that("Discoal command entered correctly", {
 
   #input parameters
   mu=1e-8
@@ -31,10 +31,25 @@ test_that("Command entered correctly", {
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,"-d", seeds[1],seeds[2],
                  "-a", alpha, "-ws", tau)
   expect_equal(cmd,test_cmd)
+  
+  #test hard sweep command
+  sweep="hard"
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+  input_cmd=sim$cmd
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
+                 "a", alpha, "-ws", tau)
+  
+  #test soft sweep
+  sweep="soft"
+  start_freq=0.2
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep,start_freq=start_freq)
+  input_cmd=sim$cmd
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
+                 "a", alpha, "-ws", tau, "-f", start_freq)
 
   #testing the neutral sweep command
 
-  sweep="neutral"
+  sweep="neutral_fixation"
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
@@ -59,6 +74,12 @@ test_that("Seed extraction successful",{
   sweep="hard"
 
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  used_seed<-sim$seeds
+  expect_equal(used_seed,seeds)
+  
+  sweep="soft"
+  start_freq=0.2
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep,start_freq = start_freq)
   used_seed<-sim$seeds
   expect_equal(used_seed,seeds)
 })

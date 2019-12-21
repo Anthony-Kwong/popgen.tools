@@ -25,7 +25,7 @@
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation,seed,sweep,start_freq=0){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation,seed,sweep,start_freq=NA){
   
   #====================================================================================
   
@@ -63,6 +63,11 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     stop(msg)
   }
   
+  if(sweep=="soft" && is.na(start_freq)){
+    msg=paste("start_freq must be specified for soft sweeps")
+    stop(msg)
+  }
+  
   #check that a valid sweep type has been entered
   valid_sweeps=c("hard","soft","neutral","neutral_fixation")
   if((sweep %in% valid_sweeps)==F){
@@ -70,6 +75,13 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     stop(msg)
   }
   
+  #check that starting frequency is between 0 and 1, should it be entered.
+  if(is.na(start_freq)==F){
+    if(start_freq<0 || start_freq>1){
+      msg=paste("start_freq must be between 0 and 1")
+      stop(msg)
+    }
+  }
   
   #setting up params for discoal command. Discoals has to scale mutation, recombination rates and selection coefficient by Ne.
   #source: Kern 2017 "discoal-a coalescent simulator with selection"
@@ -111,6 +123,9 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     cmd=paste(discoal_path, no_scientific(samplesize), nrep,no_scientific(max_breakpoint),"-t",
               theta, "-r", rho,"-d", no_scientific(seed[1]), no_scientific(seed[2]))
   }
+  
+  #additional arguments for hard, soft and neutral_fixation
+  #ordinary neutral coalescent simulations don't require further arguments. 
 
   #continue fixing this bit, check all cmds are added correctly. Fix soft sweep functionality. 
   if (sweep=="hard"){
@@ -124,7 +139,6 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   if(sweep=="soft"){
     cmd=paste(cmd,"-a", alpha,"-ws", tau, "-f", start_freq)
   }
-
 
 
   #run discoal command and save output
