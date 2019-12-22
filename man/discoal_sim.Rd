@@ -4,8 +4,19 @@
 \alias{discoal_sim}
 \title{discoal_sim function}
 \usage{
-discoal_sim(mu, recomb_rate, Ne, genome_length, samplesize, s = 0,
-  discoal_path, fix_generation, seed, sweep, start_freq = 0)
+discoal_sim(
+  mu,
+  recomb_rate,
+  Ne,
+  genome_length,
+  samplesize,
+  s = 0,
+  discoal_path,
+  fix_generation = NA,
+  seed,
+  sweep,
+  start_freq = NA
+)
 }
 \arguments{
 \item{mu}{mutation rate per base per generation. Warning! Check this again later in the discoal manual!}
@@ -22,7 +33,7 @@ discoal_sim(mu, recomb_rate, Ne, genome_length, samplesize, s = 0,
 
 \item{discoal_path}{path to your discoal program}
 
-\item{fix_generation}{number of generations ago when the selected mutation was fixed}
+\item{fix_generation}{number of generations ago when the selected mutation was fixed. Default value is 0.}
 
 \item{seed}{vector of 2 numbers used for the simulations}
 

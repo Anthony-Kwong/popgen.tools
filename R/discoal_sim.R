@@ -7,7 +7,7 @@
 #' @param samplesize Number of samples to take from the population
 #' @param s selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0. 
 #' @param discoal_path path to your discoal program
-#' @param fix_generation number of generations ago when the selected mutation was fixed
+#' @param fix_generation number of generations ago when the selected mutation was fixed. Default value is 0. 
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
@@ -25,7 +25,7 @@
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation,seed,sweep,start_freq=NA){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation=NA,seed,sweep,start_freq=NA){
   
   #====================================================================================
   
@@ -83,6 +83,15 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     }
   }
   
+  #fix_generation is not needed for neutral simulations
+  if(is.na(fix_generation)==F && sweep=="neutral"){
+    msg=paste("fix_generation is not used for neutral simulations.Consider simulating under neutral_fixation to condition under a mutation getting fixed at a particular timepoint")
+    stop(msg)
+  }
+  
+  #warning when s is unspecified for selective sweeps
+  
+  
   #setting up params for discoal command. Discoals has to scale mutation, recombination rates and selection coefficient by Ne.
   #source: Kern 2017 "discoal-a coalescent simulator with selection"
 
@@ -94,8 +103,11 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   
   #Scaled time of fixation. 
   #The time is defined by the number of coalescent units and only scales with pop size.
-  tau= (fix_generation/(4*Ne)) %>% no_scientific() 
   
+  if(is.na(fix_generation)==F){
+    tau= (fix_generation/(4*Ne)) %>% no_scientific() 
+  }
+
   #These params are scaled by the number of sites. 
   #Consider that both mutation rates and recombination rates are defined as P(event)/base.
   
@@ -127,7 +139,6 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   #additional arguments for hard, soft and neutral_fixation
   #ordinary neutral coalescent simulations don't require further arguments. 
 
-  #continue fixing this bit, check all cmds are added correctly. Fix soft sweep functionality. 
   if (sweep=="hard"){
     cmd=paste(cmd,"-a", alpha,"-ws", tau)
   }
@@ -140,6 +151,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     cmd=paste(cmd,"-a", alpha,"-ws", tau, "-f", start_freq)
   }
 
+  #print(cmd)
 
   #run discoal command and save output
   #discoal has the same output format as Hudson's ms. https://snoweye.github.io/phyclust/document/msdoc.pdf.
@@ -182,7 +194,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   #each individual as a row
   genome_matrix<-t(sapply(sim[start:end],string_grab,USE.NAMES = FALSE))
   
-  if(sweep=="neutral"){
+  if(sweep=="neutral" || sweep=="neutral_fixation"){
     #select coeff is 0 for neutral case
     obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,0,fix_generation)
     return(obj)
