@@ -1,7 +1,23 @@
-#pacman::p_load(testthat,popgen.tools)
-
 #If you ever get Error in .Call(<pointer: 0x0>, N) : NULL value passed as symbol address.
 #Try clearing your environment and rebuilding. 
+
+#This function was written to test the theta_t function. 
+
+#Count the number of pair wise differences between rows of a numeric matrix, normalised 
+#by the number of pairs available. 
+
+#input: Binary matrix G consisting of 1's and 0's. 
+#output: Number of pairwise differences normalised by the number of pairs. 
+
+test_theta_t<-function(G){
+  
+  pair_diff=dist(G,method="manhattan")
+  total_diff=sum(pair_diff)
+  nsam=nrow(G)
+  total_pairs=choose(nsam,2)
+  
+  return(total_diff/total_pairs)
+}
 
 
 test_that("Tajima's D computed correctly", {
