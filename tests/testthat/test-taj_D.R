@@ -20,14 +20,14 @@ test_theta_t<-function(G){
 }
 
 
-test_that("Tajima's D computed correctly", {
+test_that("Tajima's D variance subfunctions computed correctly", {
 
   #a1f
   N=4
   expect_equal(a1f(N),1+1/2+1/3)
   
   #a2f
-  test=1+1/2^2+1/3^2
+  test=1+1/(2^2)+1/(3^2)
   expect_equal(a2f(N),test)
   
   #b1f
