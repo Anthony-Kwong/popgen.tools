@@ -58,25 +58,25 @@ double theta_h(NumericMatrix G){
     S_i[i]=count(column_sum,i);
   }
   
-  Rcout<<"colsum "<<column_sum<<std::endl;
-  Rcout<<"Si is "<<S_i<<std::endl;
-  Rcout<<"max derived "<<max_derived<<std::endl;
+  // Rcout<<"colsum "<<column_sum<<std::endl;
+  // Rcout<<"Si is "<<S_i<<std::endl;
+  // Rcout<<"max derived "<<max_derived<<std::endl;
  
  //compute the sum term. 
   
   double sum_term=0;
   
   for(int i=1;i<=max_derived;i++){
-   Rcout<<"loop "<<i<<std::endl;
+   // Rcout<<"loop "<<i<<std::endl;
    double temp=S_i[i]*i*i;
    sum_term=sum_term+temp;
 //    Rcout<<"Calc top "<< sum_term<<std::endl;
   }
   
-  Rcout<<"sum term is "<< sum_term<<std::endl;
+  // Rcout<<"sum term is "<< sum_term<<std::endl;
   
   int N=G.nrow();
-  Rcout<<"N is "<<N<<std::endl;
+  // Rcout<<"N is "<<N<<std::endl;
   double H=sum_term/(N*(N-1)/2);
   
   
