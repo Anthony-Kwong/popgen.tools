@@ -67,8 +67,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
   basic_values<-lapply(ss, function(f) sapply(win_list, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
-  #Fay and Wu H, fwh(t_w,t_h)----
-  H<-purrr::map2(basic_values$theta_w,basic_values$theta_h,fwh) %>% unlist()
+  #Fay and Wu H, fwh(t_t,t_h)----
+  H<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
   #H<-H %>% tibble::enframe(name=NULL,value="FW_H") 
   
   #Tajima'D taj_D(t_t, t_w, var_taj)----

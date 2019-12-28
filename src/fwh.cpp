@@ -52,31 +52,33 @@ double theta_h(NumericMatrix G){
   //S_i is the number of mutations with frequency i among the sampled sequences. 
   //Preallocate memory for max+1 since cpp indices start at zero. The S_i[0]=0 and won't get used in the sum. 
   NumericVector S_i(max_derived + 1);
+  S_i[0]=0;
 
   for(int i=1;i<=max_derived;i++){
     S_i[i]=count(column_sum,i);
   }
   
- // Rcout<<"colsum "<<column_sum<<std::endl;
- // Rcout<<"Si is "<<S_i<<std::endl;
- // Rcout<<"max derived "<<max_derived<<std::endl;
+  Rcout<<"colsum "<<column_sum<<std::endl;
+  Rcout<<"Si is "<<S_i<<std::endl;
+  Rcout<<"max derived "<<max_derived<<std::endl;
  
- //compute the sum term
+ //compute the sum term. 
   
   double sum_term=0;
-  int N=G.nrow();
-//  Rcout<<"N "<<N<<std::endl;
   
-  for(int i=1;i<N;i++){
-//   Rcout<<"loop "<<i<<std::endl;
+  for(int i=1;i<=max_derived;i++){
+   Rcout<<"loop "<<i<<std::endl;
    double temp=S_i[i]*i*i;
    sum_term=sum_term+temp;
 //    Rcout<<"Calc top "<< sum_term<<std::endl;
   }
   
-//  Rcout<<"sum term is "<< sum_term<<std::endl;
+  Rcout<<"sum term is "<< sum_term<<std::endl;
   
+  int N=G.nrow();
+  Rcout<<"N is "<<N<<std::endl;
   double H=sum_term/(N*(N-1)/2);
+  
   
   return H;
 }
@@ -85,10 +87,10 @@ double theta_h(NumericMatrix G){
 //' 
 //' Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality. See doi: 10.1534/genetics.106.061432.
 //' 
-//' @param t_w: theta_w for genome matrix G. Use theta_w(). Also called theta_pi in literature, 
+//' @param t_t: theta_t for genome matrix G. Use theta_t(). Also called theta_pi in literature, 
 //' @param t_h: theta_h for genome matrix G. Use theta_h().
 //' @return scalar value of Fay and Wu's H for that sampled population.  
-//' @examples fwh(theta_w(G),theta_h(G))
+//' @examples fwh(theta_t(G),theta_h(G))
 //' @export
 // [[Rcpp::export]]
 double fwh(double t_w,double t_h) {

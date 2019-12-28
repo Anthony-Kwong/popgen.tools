@@ -9,13 +9,13 @@ R_theta_h<-function(M){
     Si[i]=count(x,i)
   }
   
-  top=0
+  sum_term=0
   
   for(i in 1:(N-1)){
-    top=top+Si[i]*(i^2)
+    sum_term=sum_term+Si[i]*(i^2)
   }
   
-  return (top/(N*(N-1)/2))
+  return (sum_term/choose(N,2))
 }
 
 test_that("Fay and Wu's H computed correctly",{
@@ -30,14 +30,23 @@ test_that("Fay and Wu's H computed correctly",{
   
   #theta_h function
   
+  #when inputing sample matrices, make sure that you don't get entire columns of 1's. This does not happen in actual genome simulations.
+  
   set.seed(2018)
   SNP=4
   seq <-matrix(sample(0:1, size = SNP*3, replace = TRUE), nc = SNP)
   expect_equal(R_theta_h(seq),theta_h(seq))
 
-  set.seed(12344)
+  set.seed(123)
   SNP=50
-  seq <-matrix(sample(0:1, size = SNP*3, replace = TRUE), nc = SNP)
+  seq <-matrix(sample(0:1, size = SNP*5, replace = TRUE), nc = SNP)
+  expect_equal(R_theta_h(seq),theta_h(seq))
+  
+  set.seed(1234)
+  SNP=500
+  seq <-matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP)
+  #Just checking that we don't have any columns with just 1's. 
+  #colSums(seq) %>% max()
   expect_equal(R_theta_h(seq),theta_h(seq))
   
   #fwh function

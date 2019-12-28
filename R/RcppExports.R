@@ -28,10 +28,10 @@ theta_h <- function(G) {
 #' 
 #' Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality. See doi: 10.1534/genetics.106.061432.
 #' 
-#' @param t_w: theta_w for genome matrix G. Use theta_w(). Also called theta_pi in literature, 
+#' @param t_t: theta_t for genome matrix G. Use theta_t(). Also called theta_pi in literature, 
 #' @param t_h: theta_h for genome matrix G. Use theta_h().
 #' @return scalar value of Fay and Wu's H for that sampled population.  
-#' @examples fwh(theta_w(G),theta_h(G))
+#' @examples fwh(theta_t(G),theta_h(G))
 #' @export
 fwh <- function(t_w, t_h) {
     .Call('_popgen_tools_fwh', PACKAGE = 'popgen.tools', t_w, t_h)
