@@ -6,7 +6,7 @@
 #Count the number of pair wise differences between rows of a numeric matrix, normalised 
 #by the number of pairs available. 
 
-#input: Binary matrix G consisting of 1's and 0's. 
+#input: Binary matrix G consisting of 1's and 0's. Each column is a SNP, each row is a sample. 
 #output: Number of pairwise differences normalised by the number of pairs. 
 
 test_theta_t<-function(G){
@@ -17,6 +17,21 @@ test_theta_t<-function(G){
   total_pairs=choose(nsam,2)
   
   return(total_diff/total_pairs)
+}
+
+#This function was written to test the theta_w function. 
+
+#input: Binary matrix G consisting of 1's and 0's. Each column is a SNP, each row is a sample. 
+test_theta_w<-function(G){
+  seg=ncol(G)
+  nsam=nrow(G)
+  
+  sum_term=0
+  for(i in 1:(nsam-1)){
+    sum_term=sum_term+1/i
+  }
+  
+  return(seg/sum_term)
 }
 
 
@@ -85,7 +100,7 @@ test_that("Tajima variance term computer correctly",{
   expect_equal(var,var_taj(seq))
 })
 
-test_that("theta_t function work correctly",{
+test_that("Taj_D: theta_t function work correctly",{
   set.seed(2019)
   seq <-matrix(sample(0:1, size = 9, replace = TRUE), nc = 3) 
   #4 pairwise diff
@@ -96,6 +111,23 @@ test_that("theta_t function work correctly",{
   seq <-matrix(sample(0:1, size = SNP*8, replace = TRUE), nc = SNP) 
   expect_equal(theta_t(seq),test_theta_t(seq))
   
+  set.seed(1611)
+  SNP=200
+  seq <-matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP) 
+  expect_equal(theta_t(seq),test_theta_t(seq))
+})
+
+test_that("Taj_D:theta_w computed correctly",{
+  
+  set.seed(1700)
+  SNP=20
+  seq <-matrix(sample(0:1, size = SNP*8, replace = TRUE), nc = SNP) 
+  expect_equal(theta_w(seq),test_theta_w(seq))
+  
+  set.seed(1688)
+  SNP=200
+  seq <-matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP) 
+  expect_equal(theta_w(seq),test_theta_w(seq))
   
 })
 
