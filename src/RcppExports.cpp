@@ -226,15 +226,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// present_row
-int present_row(NumericMatrix A, NumericVector x);
-RcppExport SEXP _popgen_tools_present_row(SEXP ASEXP, SEXP xSEXP) {
+// row_count
+int row_count(NumericMatrix A, NumericVector x);
+RcppExport SEXP _popgen_tools_row_count(SEXP ASEXP, SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type A(ASEXP);
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(present_row(A, x));
+    rcpp_result_gen = Rcpp::wrap(row_count(A, x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -316,7 +316,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_var_taj", (DL_FUNC) &_popgen_tools_var_taj, 1},
     {"_popgen_tools_taj_D", (DL_FUNC) &_popgen_tools_taj_D, 3},
     {"_popgen_tools_fill_row", (DL_FUNC) &_popgen_tools_fill_row, 2},
-    {"_popgen_tools_present_row", (DL_FUNC) &_popgen_tools_present_row, 2},
+    {"_popgen_tools_row_count", (DL_FUNC) &_popgen_tools_row_count, 2},
     {"_popgen_tools_unique_rows", (DL_FUNC) &_popgen_tools_unique_rows, 1},
     {"_popgen_tools_vec_sort", (DL_FUNC) &_popgen_tools_vec_sort, 1},
     {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},

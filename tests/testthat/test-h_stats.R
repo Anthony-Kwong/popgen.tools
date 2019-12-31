@@ -1,8 +1,17 @@
 #create(h1,h2,h12,h123)
+
+#Test function to compute haplotype statistics in R
+
+#input: Binary matrix G consisting of 1's and 0's. Each column is a SNP, each row is a sample. 
+#output: A vector containing h_stats (h1,h2,h12,h123)
+
 R_hstats<-function(G){
-  H<-unique(G)
-  freq<-rep(NA,nrow(H))
   
+  #obtain all the unique rows of G
+  H<-unique(G)
+  
+  #freq vector stores the frequency of each row
+  freq<-rep(NA,nrow(H))
   freq<-freq*nrow(G)
   
   #compute h stats

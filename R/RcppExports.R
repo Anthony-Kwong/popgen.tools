@@ -159,16 +159,16 @@ fill_row <- function(A, x) {
     .Call('_popgen_tools_fill_row', PACKAGE = 'popgen.tools', A, x)
 }
 
-#' present_row function
+#' row_count function
 #' 
-#' checks if a vector is present as a row in the input matrix
+#' Counts how many times a vector is present as a row in a NumericMatrix.
 #' 
 #' @param A: NumericMatrix
 #' @param x: NumericVector
 #' @return integer recording how many times the vector is present as a row in the matrix
 #' @export
-present_row <- function(A, x) {
-    .Call('_popgen_tools_present_row', PACKAGE = 'popgen.tools', A, x)
+row_count <- function(A, x) {
+    .Call('_popgen_tools_row_count', PACKAGE = 'popgen.tools', A, x)
 }
 
 #' unique_rows function
@@ -176,7 +176,7 @@ present_row <- function(A, x) {
 #' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
 #' 
 #' @param A: A general matrix of real values.
-#' @return A NumericVector. i'th element is the frequency of the i'th unique row.
+#' @return A NumericMatrix containing all the unique rows of A. 
 #' @examples unique_rows(A)
 #' @export
 unique_rows <- function(A) {

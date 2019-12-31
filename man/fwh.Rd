@@ -7,7 +7,7 @@
 fwh(t_w, t_h)
 }
 \arguments{
-\item{t_w:}{theta_w for genome matrix G. Use theta_w(). Also called theta_pi in literature,}
+\item{t_t:}{theta_t for genome matrix G. Use theta_t(). Also called theta_pi in literature,}
 
 \item{t_h:}{theta_h for genome matrix G. Use theta_h().}
 }
@@ -18,5 +18,5 @@ scalar value of Fay and Wu's H for that sampled population.
 Computes Fay and Wu's H for a genome matrix. Strength of H indicates magnitude of selective sweep. H=0 indicates there is no evidence of deviation from neutrality. See doi: 10.1534/genetics.106.061432.
 }
 \examples{
-fwh(theta_w(G),theta_h(G))
+fwh(theta_t(G),theta_h(G))
 }

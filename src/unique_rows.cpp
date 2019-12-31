@@ -49,47 +49,44 @@ NumericMatrix fill_row(NumericMatrix A, NumericVector x){
   return B;
 }
 
-//make a check function. takes a vector and checks if it is a row in a Matrix
 
-//' present_row function
+//' row_count function
 //' 
-//' checks if a vector is present as a row in the input matrix
+//' Counts how many times a vector is present as a row in a NumericMatrix.
 //' 
 //' @param A: NumericMatrix
 //' @param x: NumericVector
 //' @return integer recording how many times the vector is present as a row in the matrix
 //' @export
 // [[Rcpp::export]]
-int present_row(NumericMatrix A, NumericVector x){
+int row_count(NumericMatrix A, NumericVector x){
   int ncols=A.ncol();
   
+  //check that the number of columns is the same as the dimension of the input vector x
   if(ncols!=x.size()){
-    //error message
     try{
       throw 1;
     }
     catch(int e){
-      Rcout<<"present_row error. Exception "<<e<<std::endl;
+      Rcout<<"row_count error. Exception "<<e<<std::endl;
       Rcout<<"Error: Dimensions of vector x must match the number of columns in matrix A"<<std::endl;
       return 0;
     }
   }
   
-  //record frequency
-  int freq=0;
-  
-//  Rcout<<A.nrow()<<std::endl;
+  int count=0;
   int num_rows=A.nrow();
+  
   for(int i=0;i<num_rows;i++){
     NumericVector row=A(i,_);
 //    Rcout<<i<<std::endl;
 //    Rcout<<row<<std::endl;
     if(vec_equal(row,x)==TRUE){
-//      Rcout<<"We found one folks!"<<std::endl;
-        freq+=1;
+        count=count+1;
     }
   }
-  return freq;
+  
+  return count;
 }
 
 //' unique_rows function
@@ -97,7 +94,7 @@ int present_row(NumericMatrix A, NumericVector x){
 //' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
 //' 
 //' @param A: A general matrix of real values.
-//' @return A NumericVector. i'th element is the frequency of the i'th unique row.
+//' @return A NumericMatrix containing all the unique rows of A. 
 //' @examples unique_rows(A)
 //' @export
 // [[Rcpp::export]]
@@ -125,11 +122,11 @@ NumericVector unique_rows(NumericMatrix A) {
   //loop across all rows
   for(int i=0; i<A.nrow(); i++){
     NumericVector row=A(i,_);
-    int frequency=present_row(B,row);
+    int frequency=row_count(B,row);
     
     if(frequency==0){
       B(index,_)=row;
-      freq(index)=present_row(A,row);
+      freq(index)=row_count(A,row);
       // Rcout<<"hit"<<std::endl;
       // Rcout<<row<<std::endl;
       // Rcout<<B<<std::endl;
