@@ -91,63 +91,77 @@ int row_count(NumericMatrix A, NumericVector x){
 
 //' unique_rows function
 //' 
-//' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
+//' Takes a NumericMatrix and returns all the unique rows as a NumericVector. The rows appear in the order they were in A. 
 //' 
 //' @param A: A general matrix of real values.
 //' @return A NumericMatrix containing all the unique rows of A. 
 //' @examples unique_rows(A)
 //' @export
 // [[Rcpp::export]]
-NumericVector unique_rows(NumericMatrix A) {
+NumericMatrix unique_rows(NumericMatrix A) {
   
-  //intialise matrix with dim nrow*nncol
+  //intialise matrix B with the same dimensions as the input matrix. 
   NumericMatrix B(A.nrow(),A.ncol());
   std::fill( B.begin(), B.end(), NumericVector::get_na());
   //Rcout<<B<<std::endl;
-  //Rcout<<"Passed 1"<<std::endl;
-  
-  //keep track of the count of each haplotype row
-  NumericVector freq(A.nrow());
-  std::fill( freq.begin(), freq.end(), NumericVector::get_na());
-  //Rcout<<"Passed 2"<<std::endl;
-  //Rcout<<freq<<std::endl;
-  
-//  Rcout<<freq<<std::endl;
-  
-//  Rcout<<B<<std::endl;
-  
+
   //index keeps track of how many rows we have copied over. 
   int index=0;
   
-  //loop across all rows
+  //loop through the rows of A. 
   for(int i=0; i<A.nrow(); i++){
     NumericVector row=A(i,_);
-    int frequency=row_count(B,row);
     
-    if(frequency==0){
+    //if the row is not yet present in B, copy it over
+    if(row_count(B,row)==0){
       B(index,_)=row;
-      freq(index)=row_count(A,row);
-      // Rcout<<"hit"<<std::endl;
-      // Rcout<<row<<std::endl;
-      // Rcout<<B<<std::endl;
-      index+=1; 
+      index=index+1;
     }
   }
-//  Rcout<<"Passed 3"<<std::endl;
-//  Rcout<<B<<std::endl;
-
-  //Here's the matrix with all the unique rows for testing purposes. 
-  //NumericMatrix C= B(Range(0,index-1),Range(0,B.ncol()-1));
-  //Rcout<<C<<std::endl;
   
-  //remove the NA's from freq
-  //freq=freq(Range(0,index-1));
-  //NumericVector test=freq(0,2);
-  //Rcout<<test<<std::endl;
-  NumericVector row_frequencies=na_omit(freq);
-  //Rcout<<freq<<std::endl;
-  //Rcout<<freq<<std::endl;
-  return row_frequencies;
+ // Rcout<<B<<std::endl;
+  
+  //remove all potential NAs
+  NumericMatrix C=B(Range(0,index-1),Range(0,B.ncol()-1));
+  
+  //Rcout<<C<<std::endl;
+  return C;
+}
+
+
+//' row_freq function
+//' 
+//' Takes a NumericMatrix and returns the frequency of each unique row
+//' 
+//' @param NumericMatrix A
+//' @return A NumericVector containing the frequency of each unique row in A. The order of this vector is the order by which the unique rows appear in A. 
+//' @examples row_freq(A)
+//' @export
+// [[Rcpp::export]]
+NumericVector row_freq(NumericMatrix A){
+  //find all the unique rows in matrix A
+  NumericMatrix B=unique_rows(A);
+//  Rcout<<B<<std::endl;
+  
+  //initialise vector to store frequencies of each row
+  int num_rows=B.nrow();
+  NumericVector freq(num_rows);
+  std::fill( freq.begin(), freq.end(), NumericVector::get_na());
+//  Rcout<<freq<<std::endl;
+  
+  //compute the counts of each row
+  for(int i=0;i<num_rows;i++){
+//    NumericVector temp=B(i,_);
+//    Rcout<<temp<<std::endl;
+    freq[i]=row_count(A,B(i,_));
+  }
+//  Rcout<<freq<<std::endl;
+  
+  //convert counts into frequency
+  int nhap=A.nrow();
+  freq=freq/nhap;
+  
+  return freq;
 }
 
 //' vec_sort function

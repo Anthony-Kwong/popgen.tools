@@ -173,7 +173,7 @@ row_count <- function(A, x) {
 
 #' unique_rows function
 #' 
-#' Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
+#' Takes a NumericMatrix and returns all the unique rows as a NumericVector. The rows appear in the order they were in A. 
 #' 
 #' @param A: A general matrix of real values.
 #' @return A NumericMatrix containing all the unique rows of A. 
@@ -181,6 +181,18 @@ row_count <- function(A, x) {
 #' @export
 unique_rows <- function(A) {
     .Call('_popgen_tools_unique_rows', PACKAGE = 'popgen.tools', A)
+}
+
+#' row_freq function
+#' 
+#' Takes a NumericMatrix and returns the frequency of each unique row
+#' 
+#' @param NumericMatrix A
+#' @return A NumericVector containing the frequency of each unique row in A. The order of this vector is the order by which the unique rows appear in A. 
+#' @examples row_freq(A)
+#' @export
+row_freq <- function(A) {
+    .Call('_popgen_tools_row_freq', PACKAGE = 'popgen.tools', A)
 }
 
 #' vec_sort function

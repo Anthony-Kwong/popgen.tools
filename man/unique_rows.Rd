@@ -10,10 +10,10 @@ unique_rows(A)
 \item{A:}{A general matrix of real values.}
 }
 \value{
-A NumericVector. i'th element is the frequency of the i'th unique row.
+A NumericMatrix containing all the unique rows of A.
 }
 \description{
-Takes a NumericMatrix and returns the frequency of all the unique rows as a NumericVectior.
+Takes a NumericMatrix and returns all the unique rows as a NumericVector. The rows appear in the order they were in A.
 }
 \examples{
 unique_rows(A)

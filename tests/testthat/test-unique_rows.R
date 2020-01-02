@@ -70,15 +70,67 @@ test_that("unique_rows works",{
   seq <-matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
   for(i in 1:6){seq<-rbind(seq,seq[4,])}
   for(j in 1:3){seq<-rbind(seq,seq[3,])}
+  expect_equal(unique_rows(seq),unique(seq))
+  
+  set.seed(1836)
+  SNP=100
+  nsam=20
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  for(i in 1:10){seq<-rbind(seq,seq[2,])}
+  for(j in 1:5){seq<-rbind(seq,seq[18,])}
+  expect_equal(unique_rows(seq),unique(seq))
+  
+  # set.seed(800)
+  # seq <-matrix(sample(0:1, size = 16, replace = TRUE), nc = 4)
+  # seq<-rbind(seq,seq[2,])
+  # seq<-rbind(seq,seq[4,])
+  # seq<-rbind(seq,seq[3,])
+  # expect_equal(unique_rows(seq),c(1,2,2,2))
+})
 
+#Test function for row_freq
+
+#Finds the frequencies of each unique row in a given matrix
+
+#input: NumericMatrix A
+#return: a vector of the frequencies of each unique row
+
+test_row_freq<-function(A){
+  B<-unique(A)
+  num_hap=nrow(B)
+  freq=rep(NA,num_hap)
   
-  expect_equal(unique_rows(seq),c(1,1,2,3))
+  for(i in 1:num_hap){
+    freq[i]=row_count(A,B[i,])
+  }
   
-  set.seed(800)
-  seq <-matrix(sample(0:1, size = 16, replace = TRUE), nc = 4)
-  seq<-rbind(seq,seq[2,])
-  seq<-rbind(seq,seq[4,])
-  seq<-rbind(seq,seq[3,])
-  expect_equal(unique_rows(seq),c(1,2,2,2))
+  freq=freq/nrow(A)
+  
+  return(freq)
+}
+
+test_that("row_freq function works",{
+  set.seed(1836)
+  SNP=5
+  nsam=5
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  for(i in 1:3){seq<-rbind(seq,seq[1,])}
+  expect_equal(row_freq(seq),test_row_freq(seq))
+  
+  set.seed(1066)
+  SNP=500
+  nsam=50
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  for(i in 1:10){seq<-rbind(seq,seq[7,])}
+  expect_equal(row_freq(seq),test_row_freq(seq))
+})
+
+test_that("vec_sort works",{
+  set.seed(1187)
+  x<- sample(1:35, 10, replace=FALSE)
+  expect_equal(sort(x,decreasing = T),vec_sort(x))
+  
+  y<-runif(n=50,min=0,max=1)
+  expect_equal(sort(y,decreasing = T),vec_sort(y))
 })
 
