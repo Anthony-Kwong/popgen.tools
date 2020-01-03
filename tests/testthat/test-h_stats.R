@@ -1,5 +1,3 @@
-#create(h1,h2,h12,h123)
-
 #Test function to compute haplotype statistics in R
 
 #input: Binary matrix G consisting of 1's and 0's. Each column is a SNP, each row is a sample. 
@@ -37,6 +35,22 @@ test_that("hstats computed correctly",{
   ans<-c(h1,h2,h12,h123)
   expect_equal(ans,R_hstats(seq))
   expect_equal(ans,h_stats(seq))
+  
+  set.seed(473)
+  SNP=800
+  nsam=20
+  #default, this generates 4 unique rows
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  for(i in 1:7){seq<-rbind(seq,seq[20,])}
+  expect_equal(R_hstats(seq),h_stats(seq))
+  
+  set.seed(1688)
+  SNP=1000
+  nsam=30
+  #default, this generates 4 unique rows
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  for(i in 1:7){seq<-rbind(seq[1,],seq)}
+  expect_equal(R_hstats(seq),h_stats(seq))
   
   set.seed(476)
   SNP=500
