@@ -14,26 +14,39 @@ R_hstats<-function(G){
   h12<-h1+2*freq[1]*freq[2]
   h123<-h12+2*freq[1]*freq[3]+2*freq[2]*freq[3]
   h2<-h1-freq[1]*freq[1]
-  h_stats<-c(h1,h12,h123,h2)
+  h_stats<-c(h1,h2,h12,h123)
   
   return(h_stats)
 }
 
 
-test_that("R_hstats computed correctly",{
+test_that("hstats computed correctly",{
   set.seed(1989)
   SNP=5
   nsam=5
   #default, this generates 4 unique rows
   seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
   for(i in 1:3){seq<-rbind(seq,seq[4,])}
+  indices<-sample(nrow(seq))
+  seq<-seq[indices, ]
   p<-c(4/8,2/8,1/8,1/8)
   h1<-sum(p*p)
   h12<-h1+2*p[1]*p[2]
   h123<-h12+2*p[1]*p[3]+2*p[2]*p[3]
   h2<-h1-p[1]^2
-  ans<-c(h1,h12,h123,h2)
+  ans<-c(h1,h2,h12,h123)
   expect_equal(ans,R_hstats(seq))
-
+  expect_equal(ans,h_stats(seq))
+  
+  set.seed(476)
+  SNP=500
+  nsam=30
+  #default, this generates 4 unique rows
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  for(i in 1:7){seq<-rbind(seq,seq[29,])}
+  for(i in 1:14){seq<-rbind(seq,seq[17,])}
+  indices<-sample(nrow(seq))
+  seq<-seq[indices, ]
+  expect_equal(R_hstats(seq),h_stats(seq))
   })
 
