@@ -306,6 +306,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// window_trim
+NumericMatrix window_trim(NumericMatrix G, int cen, int k);
+RcppExport SEXP _popgen_tools_window_trim(SEXP GSEXP, SEXP cenSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    Rcpp::traits::input_parameter< int >::type cen(cenSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(window_trim(G, cen, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_count", (DL_FUNC) &_popgen_tools_count, 2},
@@ -334,6 +347,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},
     {"_popgen_tools_vec_split", (DL_FUNC) &_popgen_tools_vec_split, 2},
     {"_popgen_tools_w_max", (DL_FUNC) &_popgen_tools_w_max, 1},
+    {"_popgen_tools_window_trim", (DL_FUNC) &_popgen_tools_window_trim, 3},
     {NULL, NULL, 0}
 };
 

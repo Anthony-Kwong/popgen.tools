@@ -242,3 +242,17 @@ w_max <- function(x) {
     .Call('_popgen_tools_w_max', PACKAGE = 'popgen.tools', x)
 }
 
+#' window_trim function
+#' 
+#' Trims the outer columns of a matrix. 
+#' 
+#' @param G: NumericMatrix
+#' @param cen: An integer designating a column index. This will be the center column of the ouput matrix.
+#' @param k: An integer for the number of columns to include from either side of the center column. 
+#' @return A NumericMatrix with the outer columns of G removed. 
+#' @examples window_trim(G,1,5)
+#' @export
+window_trim <- function(G, cen, k) {
+    .Call('_popgen_tools_window_trim', PACKAGE = 'popgen.tools', G, cen, k)
+}
+

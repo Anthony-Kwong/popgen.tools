@@ -7,6 +7,7 @@
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
+#' @param norm: option to apply a function over the ss across a simulation. Default is none. 
 #' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -15,7 +16,7 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,win_split,ID,snp,form="wide"){
+sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
   #Quick way to see where the simulations are up to. 
   print(ID)
   
@@ -48,15 +49,12 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
     snp_dist<-abs(sim$pos-mutation_pos)
     center<-which.min(snp_dist)
     
-    #take the k/2 snps on the left and right of the center
-    lower_cutoff=round(center-(snp/2))
-    upper_cutoff=round(center+(snp/2))
-      
-    start=max(0,lower_cutoff)
-    end=min(sim$num_seg,upper_cutoff)
+    #trim the genome matrix
+    G<-window_trim(sim$genomes,cen=center,k=floor(snp/2))
     
-    win_list<-sub_win(sim$genomes[,start:end],win_split)
+    win_list<-sub_win(G,win_split)
   } else {
+    #no trimming
     win_list<-sub_win(sim$genomes,win_split)
   }
   
@@ -181,8 +179,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide"){
 }
 
 #inserting for testing purposes. Will remove. This bit causes trouble if left in. 
- # data<-readRDS("~/work/MPhil/data/hard.rds")
- # sim<-data[[70]]
+ data<-readRDS("~/work/MPhil/data/hard.rds")
+ sim<-data[[70]]
  # df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
  #test<-generate_df(df,2)
  # 
