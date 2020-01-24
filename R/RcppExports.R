@@ -249,7 +249,7 @@ w_max <- function(x) {
 #' @param G: NumericMatrix
 #' @param cen: An integer designating a column index. This will be the center column of the ouput matrix.
 #' @param k: An integer for the number of columns to include from either side of the center column. 
-#' @return A NumericMatrix with the outer columns of G removed. 
+#' @return A NumericMatrix with the outer columns of G removed. Up to k/2 columns to either side of the center column from the original matrix is kept.
 #' @examples window_trim(G,1,5)
 #' @export
 window_trim <- function(G, cen, k) {

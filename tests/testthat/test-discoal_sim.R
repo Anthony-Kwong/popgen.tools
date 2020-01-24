@@ -1,5 +1,3 @@
-library(stringr)
-
 test_that("Discoal command entered correctly", {
 
   #input parameters

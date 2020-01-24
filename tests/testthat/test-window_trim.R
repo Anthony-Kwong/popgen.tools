@@ -9,8 +9,8 @@
 R_window_trim<-function(G,cen,width){
   
   #take the k/2 snps on the left and right of the center
-  start=cen-width
-  end=cen+width
+  start=max(cen-width,0)
+  end=min(cen+width,ncol(G))
   
   G2<-G[,(start:end)]
   return(G2)
@@ -33,6 +33,7 @@ test_that("window_trim working",{
   expect_equal(output,real)
   expect_equal(R_window_trim(seq,cen,k),real)
   
+  #larger case checked using function in R
   set.seed(800)
   SNP=20
   nsam=6
@@ -55,4 +56,27 @@ test_that("window_trim working",{
   output<-window_trim(seq,cen,k)
   real<-R_window_trim(seq,cen,k)
   expect_equal(output,real)
+  
+  #case for when there are insufficient columns on the left
+  set.seed(1531)
+  SNP=100
+  nsam=20
+  cen=49
+  k=100
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  output<-window_trim(seq,cen,k)
+  real<-R_window_trim(seq,cen,k)
+  expect_equal(output,real)
+  
+  #case when insufficient columns on the right
+  set.seed(1530)
+  SNP=100
+  nsam=20
+  cen=70
+  k=100
+  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  output<-window_trim(seq,cen,k)
+  real<-R_window_trim(seq,cen,k)
+  expect_equal(output,real)
+  
 })

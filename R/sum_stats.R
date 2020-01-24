@@ -24,7 +24,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
   if(win_split>sim$num_seg){
     txt<-paste("reject ",ID)
     print(txt)
-    return (NULL)
+    stop("Insufficient SNPs.",win_split, " subwindows requested and the simulation had ", sim$num_seg, " SNPs.")
   }
   
   #useful information from the simulation
@@ -32,6 +32,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
   #if selection coefficient s=0, it is a neutral simulation
   s_coef<-sim$s
   if(s_coef==0){
+    warning("Simulation ", ID, " had s=0. Converted sweep_type to neutral.")
     sweep<-"neutral"
   } else {
     sweep<-sim$sweep
