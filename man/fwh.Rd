@@ -4,7 +4,7 @@
 \alias{fwh}
 \title{fwh function}
 \usage{
-fwh(t_w, t_h)
+fwh(t_t, t_h)
 }
 \arguments{
 \item{t_t:}{theta_t for genome matrix G. Use theta_t(). Also called theta_pi in literature,}

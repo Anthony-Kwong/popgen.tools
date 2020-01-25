@@ -14,7 +14,7 @@ window_trim(G, cen, k)
 \item{k:}{An integer for the number of columns to include from either side of the center column.}
 }
 \value{
-A NumericMatrix with the outer columns of G removed.
+A NumericMatrix with the outer columns of G removed. Up to k/2 columns to either side of the center column from the original matrix is kept.
 }
 \description{
 Trims the outer columns of a matrix.
