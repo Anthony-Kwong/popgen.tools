@@ -68,6 +68,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     stop(msg)
   }
   
+  
   #check that a valid sweep type has been entered
   valid_sweeps=c("hard","soft","neutral","neutral_fixation")
   if((sweep %in% valid_sweeps)==F){
@@ -87,6 +88,13 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   if(is.na(fix_generation)==F && sweep=="neutral"){
     msg=paste("fix_generation is not used for neutral simulations.Consider simulating under neutral_fixation to condition under a mutation getting fixed at a particular timepoint")
     stop(msg)
+  }
+  
+  #change sweep type to neutral if selection coefficient is 0
+  if(s==0 && (sweep!="neutral") && (sweep!="neutral_fixation")){
+    msg=paste("Selection coefficient is 0. Converted sweep_type to neutral")
+    warning(msg)
+    sweep="neutral"
   }
   
   #warning when s is unspecified for selective sweeps

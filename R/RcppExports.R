@@ -33,8 +33,8 @@ theta_h <- function(G) {
 #' @return scalar value of Fay and Wu's H for that sampled population.  
 #' @examples fwh(theta_t(G),theta_h(G))
 #' @export
-fwh <- function(t_w, t_h) {
-    .Call('_popgen_tools_fwh', PACKAGE = 'popgen.tools', t_w, t_h)
+fwh <- function(t_t, t_h) {
+    .Call('_popgen_tools_fwh', PACKAGE = 'popgen.tools', t_t, t_h)
 }
 
 #' h_stats function

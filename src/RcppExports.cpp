@@ -29,14 +29,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // fwh
-double fwh(double t_w, double t_h);
-RcppExport SEXP _popgen_tools_fwh(SEXP t_wSEXP, SEXP t_hSEXP) {
+double fwh(double t_t, double t_h);
+RcppExport SEXP _popgen_tools_fwh(SEXP t_tSEXP, SEXP t_hSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type t_w(t_wSEXP);
+    Rcpp::traits::input_parameter< double >::type t_t(t_tSEXP);
     Rcpp::traits::input_parameter< double >::type t_h(t_hSEXP);
-    rcpp_result_gen = Rcpp::wrap(fwh(t_w, t_h));
+    rcpp_result_gen = Rcpp::wrap(fwh(t_t, t_h));
     return rcpp_result_gen;
 END_RCPP
 }

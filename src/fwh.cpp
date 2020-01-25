@@ -93,8 +93,8 @@ double theta_h(NumericMatrix G){
 //' @examples fwh(theta_t(G),theta_h(G))
 //' @export
 // [[Rcpp::export]]
-double fwh(double t_w,double t_h) {
-  double stat=t_w-t_h;
+double fwh(double t_t,double t_h) {
+  double stat=t_t-t_h;
   return stat;
 }
 

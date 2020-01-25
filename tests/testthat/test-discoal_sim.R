@@ -32,7 +32,7 @@ test_that("Discoal command entered correctly", {
   
   #test hard sweep command
   sweep="hard"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep,s=0.2)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "a", alpha, "-ws", tau)
@@ -40,7 +40,7 @@ test_that("Discoal command entered correctly", {
   #test soft sweep
   sweep="soft"
   start_freq=0.2
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep,start_freq=start_freq)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep,start_freq=start_freq,s=0.1)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "a", alpha, "-ws", tau, "-f", start_freq)
