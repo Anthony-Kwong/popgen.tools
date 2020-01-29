@@ -70,6 +70,7 @@ test_that("sum_stat works",{
   nwins=10
   id=1
   temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,sweep=sweep_type)
+  #This was meant to produce a warning. 
   expect_equal("neutral",temp$sweep)
 })
 
