@@ -57,6 +57,7 @@ test_that("sum_stats works",{
 })
 
 test_that("sum_stat works",{
+  
   #test if sweep is converted to neutral if s=0 
   mu=2e-8
   recomb_rate=1e-9

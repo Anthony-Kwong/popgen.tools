@@ -31,12 +31,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
   
   #if selection coefficient s=0, it is a neutral simulation
   s_coef<-sim$s
-  if(s_coef==0){
-    warning("Simulation ", ID, " had s=0. Converted sweep_type to neutral.")
-    sweep<-"neutral"
-  } else {
-    sweep<-sim$sweep
-  }
+  sweep<-sim$sweep
 
   #Split genome matrix into subwindows----
   

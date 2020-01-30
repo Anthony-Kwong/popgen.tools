@@ -21,6 +21,7 @@ test_that("generate_df works",{
   }
   
   snp_include=50
+  nwins=5
   
   df<-generate_df(l_sim,win_split = nwins,snp = snp_include)
   

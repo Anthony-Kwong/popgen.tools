@@ -1,9 +1,9 @@
 test_that("Discoal command entered correctly", {
 
   #input parameters
-  mu=1e-8
+  mu=1e-7
   recomb_rate=1e-9
-  Ne=1000000
+  Ne=100000
   genome_length=1e5
   samplesize=20
   s=0.1
