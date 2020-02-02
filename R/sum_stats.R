@@ -7,7 +7,7 @@
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
-#' @param norm: option to apply a function over the ss across a simulation. Default is none. 
+#' @param fun: option to apply a function over the ss across a simulation. Default is \"none\". The haplotype h_stats don't get transformed. Options include "norm"
 #' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -16,7 +16,56 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
+sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
+  #ensure arguments are entered correctly
+  
+  #sim
+  if(class(sim)!="sim_obj"){
+    stop("Argument sim is not of the class sim_obj")
+  }
+  
+  #win_split
+  if(class(win_split)!="numeric"){
+    stop("Argument win_split must be a numeric")
+  }
+  if(floor(win_split)!=win_split){
+    stop("Argument win_split must be an integer")
+  }
+  if(win_split<1){
+    stop("Argument win_split must be a positive integer")
+  }
+  
+  #ID
+  if(floor(ID)!=ID){
+    stop("ID must be an integer")
+  }
+  if(is.numeric(ID)==F){
+    stop("ID must be numeric yada")
+  }
+  
+  #snp
+  if(floor(snp)!=snp){
+    stop("ID must be an integer")
+  }
+  if(class(snp)!="numeric"){
+    stop("ID must be numeric")
+  }
+  
+  #form
+  if(form!="tall" && form!="wide"){
+    stop("Invalid argument:form. form must be \"wide\" or \"tall\"")
+  }
+  
+  #fun
+  if(fun!="none" && fun!="norm"){
+    stop("Invalid argument:fun. See documentation for valid options")
+  }
+  
+  
+    
+    
+  
+  
   #Quick way to see where the simulations are up to. 
   print(ID)
   
@@ -27,7 +76,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
     stop("Insufficient SNPs.",win_split, " subwindows requested and the simulation had ", sim$num_seg, " SNPs.")
   }
   
-  #useful information from the simulation
+  #extract useful information from the simulation
   
   #if selection coefficient s=0, it is a neutral simulation
   s_coef<-sim$s
@@ -79,6 +128,12 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
   # Haplotype stats (h1,h2,h12,h123)----
   h_values<-lapply(win_list,h_stats) 
   names(h_values)<-string_labels("subwindow",length(h_values))
+  
+  #apply function over stats, note that h_stats are not transformed
+  if(fun=="norm"){
+    win_stats<-lapply(win_stats,norm_vec)
+  }
+
 
   #tying everything together into a wide dataframe
   
@@ -121,7 +176,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
     names(df)[index:(index+win_split-1)]<-string_labels("h123",win_split)
     
     stats<-as.data.frame(t(df)) 
-    temp<-tibble::tibble(sweep,ID,s_coef)
+    temp<-tibble::tibble(ID,sweep,s_coef)
     wide_df<-cbind(temp,stats)
 
     return(wide_df)
@@ -175,8 +230,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",norm=NA){
 }
 
 #inserting for testing purposes. Will remove. This bit causes trouble if left in. 
- data<-readRDS("~/work/MPhil/data/hard.rds")
- sim<-data[[70]]
+ # data<-readRDS("~/work/MPhil/data/hard.rds")
+ # sim<-data[[70]]
  # df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
  #test<-generate_df(df,2)
  # 

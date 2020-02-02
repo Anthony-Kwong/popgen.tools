@@ -4,7 +4,7 @@
 \alias{sum_stats}
 \title{sum_stats function}
 \usage{
-sum_stats(sim, win_split, ID, snp, form = "wide", norm = NA)
+sum_stats(sim, win_split, ID, snp, form = "wide", fun = "none")
 }
 \arguments{
 \item{sim:}{a simulation object}
@@ -17,7 +17,7 @@ sum_stats(sim, win_split, ID, snp, form = "wide", norm = NA)
 
 \item{form:}{output data frame in "wide" or "tall" form. This is an optional argument with default="wide".}
 
-\item{norm:}{option to apply a function over the ss across a simulation. Default is none.}
+\item{fun:}{option to apply a function over the ss across a simulation. Default is \"none\". The haplotype h_stats don't get transformed. Options include "norm"}
 }
 \value{
 list of summary stats for the input genome matrix
