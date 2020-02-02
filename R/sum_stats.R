@@ -7,7 +7,7 @@
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
-#' @param fun: option to apply a function over the ss across a simulation. Default is \"none\". The haplotype h_stats don't get transformed. Options include "norm"
+#' @param fun: option to apply a function over the ss across a simulation. Default is "none". The haplotype statistics (h_stats) don't get transformed. Options include "norm"
 #' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
