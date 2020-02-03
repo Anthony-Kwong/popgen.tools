@@ -13,7 +13,7 @@ norm_vec(vec)
 a normalised numeric vector
 }
 \description{
-Normalizes a numeric vector by dividing it by the sum of all its elements.
+Normalizes a numeric vector by taking away the mean and dividing by the standard deviation, for each element.
 }
 \examples{
 x<-rep(1:10)

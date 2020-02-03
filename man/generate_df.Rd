@@ -4,7 +4,7 @@
 \alias{generate_df}
 \title{generate_df function}
 \usage{
-generate_df(sim_list, win_split, snp, form, fun)
+generate_df(sim_list, win_split, snp, form = "wide", fun = "none")
 }
 \arguments{
 \item{sim_list}{list of simulation objects}
