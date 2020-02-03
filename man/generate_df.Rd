@@ -4,7 +4,7 @@
 \alias{generate_df}
 \title{generate_df function}
 \usage{
-generate_df(sim_list, win_split, snp)
+generate_df(sim_list, win_split, snp, form, fun)
 }
 \arguments{
 \item{sim_list}{list of simulation objects}
@@ -12,6 +12,10 @@ generate_df(sim_list, win_split, snp)
 \item{win_split}{number of subwindows desired to split each genome matrix per simulation}
 
 \item{snp:}{number of snps to include per simulation}
+
+\item{form:}{Option for dataframe to be in "tall" or "wide" form.}
+
+\item{fun:}{function to apply over summary statistics (haplotype stats excluded). See sum_stats documentation for details.}
 }
 \value{
 dataframe containing summary statistics of all the subwindows across all the simulations.
