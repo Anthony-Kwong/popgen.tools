@@ -299,7 +299,7 @@ window_trim <- function(G, cen, k) {
 #' pos<-runif(0,1,n=5) %>% sort()
 #' winsplit_length(seq,pos,5)
 #' @export
-winsplit_base <- function(x) {
-    .Call('_popgen_tools_winsplit_base', PACKAGE = 'popgen.tools', x)
+winsplit_base <- function(G, pos, n) {
+    .Call('_popgen_tools_winsplit_base', PACKAGE = 'popgen.tools', G, pos, n)
 }
 

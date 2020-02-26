@@ -27,8 +27,13 @@ using namespace Rcpp;
 //' winsplit_length(seq,pos,5)
 //' @export
 // [[Rcpp::export]]
-NumericVector winsplit_base(NumericVector x) {
-  Rcout<<find_index(x,0.2)<<std::endl;
+NumericVector winsplit_base(NumericMatrix G, NumericVector pos, int n) {
+  //check inputs
+  if(any_sug(pos<0) || any_sug(pos>1)){
+    stop("Elements of pos must be between 0,1.");
+  }
+  
+  Rcout<<find_index(pos,0.2)<<std::endl;
   return 0;
 }
 
@@ -39,6 +44,7 @@ NumericVector winsplit_base(NumericVector x) {
 //
 
 /*** R
-x<-c(0,0.19,0.200000001,0.5,0.9,1)
-winsplit_base(x)
+seq <-matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
+pos<-c(0,0.19,0.200000001,0.5,0.9,2)
+winsplit_base(seq,pos,n=3)
 */
