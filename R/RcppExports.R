@@ -9,8 +9,7 @@
 #' @param x: A NumericVector with the elements are arranged in ascending order. 
 #' @param target: a double
 #' @return An integer for the index of the closest element in NumericVector x
-#' @examples x<-runif(0,1,n=5) %>% sort()
-#' target=0.2
+#' @examples x<-runif(0,1,n=5) %>% sort(), target=0.2, find_index(x,target)
 #' @export
 find_index <- function(x, target) {
     .Call('_popgen_tools_find_index', PACKAGE = 'popgen.tools', x, target)

@@ -19,6 +19,5 @@ Searches a NumericVector for the element that is closest to a target value.
 Returns the corresponding index.
 }
 \examples{
-x<-runif(0,1,n=5) \%>\% sort()
-target=0.2
+x<-runif(0,1,n=5) \%>\% sort(), target=0.2, find_index(x,target)
 }

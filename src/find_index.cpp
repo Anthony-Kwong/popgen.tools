@@ -9,8 +9,7 @@ using namespace Rcpp;
 //' @param x: A NumericVector with the elements are arranged in ascending order. 
 //' @param target: a double
 //' @return An integer for the index of the closest element in NumericVector x
-//' @examples x<-runif(0,1,n=5) %>% sort()
-//' target=0.2
+//' @examples x<-runif(0,1,n=5) %>% sort(), target=0.2, find_index(x,target)
 //' @export
 // [[Rcpp::export]]
 int find_index(NumericVector x,double target) {
