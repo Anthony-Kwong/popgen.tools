@@ -7,7 +7,7 @@
 h_stats(G)
 }
 \arguments{
-\item{G:}{A binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual.}
+\item{G:}{A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual.}
 }
 \value{
 A numeric vector of h stats. (h1,h2,h12,h123)
