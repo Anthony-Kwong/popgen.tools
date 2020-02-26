@@ -331,19 +331,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// winsplit_length
-List winsplit_length(NumericMatrix G, NumericVector pos, int n);
-RcppExport SEXP _popgen_tools_winsplit_length(SEXP GSEXP, SEXP posSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
-    Rcpp::traits::input_parameter< NumericVector >::type pos(posSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(winsplit_length(G, pos, n));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_find_index", (DL_FUNC) &_popgen_tools_find_index, 2},
@@ -374,7 +361,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_vec_split", (DL_FUNC) &_popgen_tools_vec_split, 2},
     {"_popgen_tools_w_max", (DL_FUNC) &_popgen_tools_w_max, 1},
     {"_popgen_tools_window_trim", (DL_FUNC) &_popgen_tools_window_trim, 3},
-    {"_popgen_tools_winsplit_length", (DL_FUNC) &_popgen_tools_winsplit_length, 3},
     {NULL, NULL, 0}
 };
 

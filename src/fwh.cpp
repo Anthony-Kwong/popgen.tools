@@ -13,6 +13,7 @@ using namespace Rcpp;
 //
 
 //' count function
+//' 
 //' counts the number of times a value appears in an IntegerVector
 //' @param vec: a NumericVector
 //' @param target: input integer value to find

@@ -3,6 +3,7 @@
 export(count)
 export(discoal_sim)
 export(fill_row)
+export(find_index)
 export(fwh)
 export(generate_df)
 export(h_stats)

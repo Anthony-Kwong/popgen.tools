@@ -5,19 +5,19 @@
 #' 
 #' Searches a NumericVector for the element that is closest to a target value. 
 #' Returns the corresponding index. 
+#' 
 #' @param x: A NumericVector with the elements are arranged in ascending order. 
 #' @param target: a double
 #' @return An integer for the index of the closest element in NumericVector x
-#' @examples
-#' x<-runif(0,1,n=5) %>% sort()
+#' @examples x<-runif(0,1,n=5) %>% sort()
 #' target=0.2
-NULL
-
+#' @export
 find_index <- function(x, target) {
     .Call('_popgen_tools_find_index', PACKAGE = 'popgen.tools', x, target)
 }
 
 #' count function
+#' 
 #' counts the number of times a value appears in an IntegerVector
 #' @param vec: a NumericVector
 #' @param target: input integer value to find
@@ -270,23 +270,5 @@ w_max <- function(x) {
 #' @export
 window_trim <- function(G, cen, k) {
     .Call('_popgen_tools_window_trim', PACKAGE = 'popgen.tools', G, cen, k)
-}
-
-#' winsplit_length function
-#' 
-#' Splits a genome matrix into equally sized windows as determined by the number of bases. 
-#' The windows can differ in their number of columns when SNPs are not uniformly distributed
-#' across the region. 
-#' 
-#' @param G: A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual. 
-#' @param pos: A NumericVector consisting of values between 0,1. The ith element is the position of the ith SNP in G. 
-#' @param n: integer for the number of desired windows in output list. 
-#' @return A NumericMatrix list of the windows
-#' @examples  
-#' seq <-matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
-#' pos<-runif(0,1,n=5) %>% sort()
-#' winsplit_length(seq,pos)
-winsplit_length <- function(G, pos, n) {
-    .Call('_popgen_tools_winsplit_length', PACKAGE = 'popgen.tools', G, pos, n)
 }
 

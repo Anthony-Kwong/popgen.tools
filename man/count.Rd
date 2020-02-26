@@ -2,8 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{count}
 \alias{count}
-\title{count function
-counts the number of times a value appears in an IntegerVector}
+\title{count function}
 \usage{
 count(vec, target)
 }
@@ -16,7 +15,6 @@ count(vec, target)
 scalar value of the number of times the target appears in vec
 }
 \description{
-count function
 counts the number of times a value appears in an IntegerVector
 }
 \examples{

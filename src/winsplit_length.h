@@ -1,0 +1,1 @@
+int find_index(NumericVector x, double target);

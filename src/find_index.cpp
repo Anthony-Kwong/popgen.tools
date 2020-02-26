@@ -5,13 +5,13 @@ using namespace Rcpp;
 //' 
 //' Searches a NumericVector for the element that is closest to a target value. 
 //' Returns the corresponding index. 
+//' 
 //' @param x: A NumericVector with the elements are arranged in ascending order. 
 //' @param target: a double
 //' @return An integer for the index of the closest element in NumericVector x
-//' @examples
-//' x<-runif(0,1,n=5) %>% sort()
+//' @examples x<-runif(0,1,n=5) %>% sort()
 //' target=0.2
-
+//' @export
 // [[Rcpp::export]]
 int find_index(NumericVector x,double target) {
   NumericVector y=x-target;
