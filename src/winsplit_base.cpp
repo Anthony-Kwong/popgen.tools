@@ -29,12 +29,12 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
   
-  int nsam=G.ncol();
+  int SNP=G.ncol();
   //check inputs
   if(any_sug(pos<0) || any_sug(pos>1)){
     stop("Elements of pos must be between 0,1.");
   }
-  if(nsam!=pos.size()){
+  if(SNP!=pos.size()){
     stop("Dimensions of pos must be the same as the number of columns in G");
   }
   
@@ -42,18 +42,29 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
   NumericVector start_indices(n+1);
   
   for(int i=1;i<(n+1);i++){
-    Rcout<<i<<std::endl;
+//    Rcout<<i<<std::endl;
     start_indices[i] = find_index(pos,i*len);
   }
   
-  Rcout<<start_indices<<std::endl;
+//  Rcout<<start_indices<<std::endl;
   
   List windows(n);
+  int start=start_indices[0];
+  int nsam=G.nrow();
   
   for(int i=0;i<n;i++){
-    int start=start_indices[i];
     int end=start_indices[i+1];
+    Rcout<<"start is"<<start<<std::endl;
+    Rcout<<"end is"<<end<<std::endl;
+    //if start=end. There are no SNPs in that genome window.
+    if(end==start_indices[i]){
+      warning("No SNPs found within a window. Setting window to NULL");
+      windows[i]=NULL;
+      break;
+    }
     windows[i]=G(Range(0,nsam-1),Range(start,end));
+    start=end+1;
+   // Rcout<<start<<std::endl;
   }
   
   return windows;
