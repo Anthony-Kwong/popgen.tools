@@ -343,7 +343,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // winsplit_base
-NumericVector winsplit_base(NumericMatrix G, NumericVector pos, int n);
+List winsplit_base(NumericMatrix G, NumericVector pos, int n);
 RcppExport SEXP _popgen_tools_winsplit_base(SEXP GSEXP, SEXP posSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

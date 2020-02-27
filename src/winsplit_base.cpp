@@ -27,14 +27,36 @@ using namespace Rcpp;
 //' winsplit_length(seq,pos,5)
 //' @export
 // [[Rcpp::export]]
-NumericVector winsplit_base(NumericMatrix G, NumericVector pos, int n) {
+List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
+  
+  int nsam=G.ncol();
   //check inputs
   if(any_sug(pos<0) || any_sug(pos>1)){
     stop("Elements of pos must be between 0,1.");
   }
+  if(nsam!=pos.size()){
+    stop("Dimensions of pos must be the same as the number of columns in G");
+  }
   
-  Rcout<<find_index(pos,0.2)<<std::endl;
-  return 0;
+  double len = 1.0/n;
+  NumericVector start_indices(n+1);
+  
+  for(int i=1;i<(n+1);i++){
+    Rcout<<i<<std::endl;
+    start_indices[i] = find_index(pos,i*len);
+  }
+  
+  Rcout<<start_indices<<std::endl;
+  
+  List windows(n);
+  
+  for(int i=0;i<n;i++){
+    int start=start_indices[i];
+    int end=start_indices[i+1];
+    windows[i]=G(Range(0,nsam-1),Range(start,end));
+  }
+  
+  return windows;
 }
 
 
@@ -45,6 +67,6 @@ NumericVector winsplit_base(NumericMatrix G, NumericVector pos, int n) {
 
 /*** R
 seq <-matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
-pos<-c(0,0.19,0.200000001,0.5,0.9,2)
-winsplit_base(seq,pos,n=3)
+pos<-seq(0,1,by=0.2)
+winsplit_base(seq,pos,n=4)
 */
