@@ -23,14 +23,14 @@ test_that("generate_df works",{
   snp_include=50
   nwins=3
   
-  df<-generate_df(l_sim,win_split = nwins,snp = snp_include,form="wide",fun="norm")
+  df<-generate_df(l_sim, nwins = nwins,split_type="mut",snp = snp_include,form="wide",fun="norm")
   
   #check row 3 numbers
   
   for(index in 1:nsim){
     batch_ans<-df[index,] 
     batch_ans<-as.numeric(batch_ans)
-    single_ans<-sum_stats(l_sim[[index]],win_split = nwins, ID=index, snp=snp_include,fun="norm")
+    single_ans<-sum_stats(l_sim[[index]],split_type="mut",nwins = nwins, ID=index, snp=snp_include,fun="norm")
     single_ans$sweep<-as.factor(single_ans$sweep)
     single_ans<-as.numeric(single_ans)
     expect_equal(batch_ans,single_ans)
@@ -57,12 +57,12 @@ test_that("generate_df works",{
   snp_include=100
   nwins=4
   
-  df<-generate_df(l_sim,win_split = nwins,snp = snp_include)
+  df<-generate_df(l_sim,nwins = nwins,split_type="mut",snp = snp_include)
   
   for(index in 1:nsim){
     batch_ans<-df[index,] 
     batch_ans<-as.numeric(batch_ans)
-    single_ans<-sum_stats(l_sim[[index]],win_split = nwins, ID=index, snp=snp_include)
+    single_ans<-sum_stats(l_sim[[index]],split_type="mut",nwins = nwins, ID=index, snp=snp_include)
     single_ans$sweep<-as.factor(single_ans$sweep)
     single_ans<-as.numeric(single_ans)
     expect_equal(batch_ans,single_ans)
@@ -93,14 +93,14 @@ test_that("generate_df works",{
   snp_include=50
   nwins=5
   
-  df<-generate_df(l_sim,win_split = nwins,snp = snp_include,form="wide")
+  df<-generate_df(l_sim,nwins = nwins,split_type="mut",snp = snp_include,form="wide")
   
   #check row 3 numbers
   
   for(index in 1:nsim){
     batch_ans<-df[index,] 
     batch_ans<-as.numeric(batch_ans)
-    single_ans<-sum_stats(l_sim[[index]],win_split = nwins, ID=index, snp=snp_include)
+    single_ans<-sum_stats(l_sim[[index]],split_type="mut",nwins = nwins, ID=index, snp=snp_include)
     single_ans$sweep<-as.factor(single_ans$sweep)
     single_ans<-as.numeric(single_ans)
     expect_equal(batch_ans,single_ans)

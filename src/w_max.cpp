@@ -21,6 +21,7 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 NumericVector w_max(NumericVector x) {
+  //not done
   return x * 2;
 }
 

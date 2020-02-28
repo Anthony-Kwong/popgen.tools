@@ -3,7 +3,8 @@
 #' Turns a simulation object into a data frame. The genome matrix is partitioned into subwindows and summary statistics are computed. Each subwindow is a row on the output tibble. 
 #'
 #' @param sim: a simulation object
-#' @param win_split: number of subwindows to split each genome matrix within the simulation.
+#' @param nwins: number of subwindows to split each genome matrix within the simulation.
+#' @param split_type: Method of splitting the genome matrix. Valid options are "base" and "mut".
 #' @param ID: an ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
@@ -16,23 +17,31 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
-  #ensure arguments are entered correctly
+sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
+  
+  # ensure arguments are entered correctly ----
   
   #sim
   if(class(sim)!="sim_obj"){
     stop("Argument sim is not of the class sim_obj")
   }
   
-  #win_split
-  if(class(win_split)!="numeric"){
-    stop("Argument win_split must be a numeric")
+  #nwins
+  if(class(nwins)!="numeric"){
+    stop("Argument nwins must be a numeric")
   }
-  if(floor(win_split)!=win_split){
-    stop("Argument win_split must be an integer")
+  if(floor(nwins)!=nwins){
+    stop("Argument nwins must be an integer")
   }
-  if(win_split<1){
-    stop("Argument win_split must be a positive integer")
+  if(nwins<1){
+    stop("Argument nwins must be a positive integer")
+  }
+  
+  #split_type
+  valid_splits=c("base","mut")
+  check=split_type %in% valid_splits
+  if(check!=T){
+    stop("Invalid argument for split_type. Options are \"base\" or \"mut\" ")
   }
   
   #ID
@@ -62,25 +71,24 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
   }
   
   
-    
-    
-  
-  
   #Quick way to see where the simulations are up to. 
   print(ID)
   
   #reject cases where there are more subwindows than SNPs. 
-  if(win_split>sim$num_seg){
+  if(nwins>sim$num_seg){
     txt<-paste("reject ",ID)
     print(txt)
-    stop("Insufficient SNPs.",win_split, " subwindows requested and the simulation had ", sim$num_seg, " SNPs.")
+    stop("Insufficient SNPs.",nwins, " subwindows requested and the simulation had ", sim$num_seg, " SNPs.")
   }
+
+
   
-  #extract useful information from the simulation
+  #extract useful information from the simulation ----
   
   #if selection coefficient s=0, it is a neutral simulation
-  s_coef<-sim$s
-  sweep<-sim$sweep
+  s_coef <- sim$s
+  sweep <- sim$sweep
+  pos_vec <- sim$pos
 
   #Split genome matrix into subwindows----
   
@@ -91,17 +99,25 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
   
   if(sim$num_seg>snp){
     #find closest SNP to the selected mutation
-    snp_dist<-abs(sim$pos-mutation_pos)
+    snp_dist<-abs(pos_vec-mutation_pos)
     center<-which.min(snp_dist)
     
     #trim the genome matrix
     G<-window_trim(sim$genomes,cen=center,k=floor(snp/2))
     
-    win_list<-sub_win(G,win_split)
   } else {
     #no trimming
-    win_list<-sub_win(sim$genomes,win_split)
+    G<-sim$genomes
   }
+  
+  if(split_type=="base"){
+    win_list=winsplit_base(G,pos_vec,nwins)
+  } else if (split_type=="mut"){
+    win_list= sub_win(G,nwins)
+  } else {
+    stop("Invalid argument for split_type. Valid options are \"base\" and \"mut\".")
+  }
+  
   
   #Compute SS on subwindows----
 
@@ -140,12 +156,12 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
   if(form=="wide"){
     
     #h_list stores the h_stats for each subwindow. It stores 4 vectors for the statistics h1,h2,h12,h123.
-    x<-rep(NA,win_split)
+    x<-rep(NA,nwins)
     h_list<-list("h1"=x,"h2"=x,"h12"=x,"h123"=x)
     num_hstat<-length(h_values[[1]])
     
     for(i in 1:num_hstat){
-      for(j in 1:win_split){
+      for(j in 1:nwins){
         h_list[[i]][[j]]<-h_values[[j]][[i]]
       }
     }
@@ -157,23 +173,23 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
     
     #changing the column names. We find where each summary stat starts.  
     index=which(names(df)=="H1")
-    names(df)[index:(index+win_split-1)]<-string_labels("H",win_split)
+    names(df)[index:(index+nwins-1)]<-string_labels("H",nwins)
 
     index=which(names(df)=="D1")
-    names(df)[index:(index+win_split-1)]<-string_labels("D",win_split)    
+    names(df)[index:(index+nwins-1)]<-string_labels("D",nwins)    
         
     index=which(names(df)=="h11")
     
-    names(df)[index:(index+win_split-1)]<-string_labels("h1",win_split)
+    names(df)[index:(index+nwins-1)]<-string_labels("h1",nwins)
     
     index=which(names(df)=="h21")
-    names(df)[index:(index+win_split-1)]<-string_labels("h2",win_split)
+    names(df)[index:(index+nwins-1)]<-string_labels("h2",nwins)
     
     index=which(names(df)=="h121")
-    names(df)[index:(index+win_split-1)]<-string_labels("h12",win_split)
+    names(df)[index:(index+nwins-1)]<-string_labels("h12",nwins)
     
     index=which(names(df)=="h1231")
-    names(df)[index:(index+win_split-1)]<-string_labels("h123",win_split)
+    names(df)[index:(index+nwins-1)]<-string_labels("h123",nwins)
     
     stats<-as.data.frame(t(df)) 
     temp<-tibble::tibble(ID,sweep,s_coef)
@@ -191,21 +207,21 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
     #Compute distances
     
     #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
-    snp_pos<-vec_split(sim$pos,win_split)
+    snp_pos<-vec_split(sim$pos,nwins)
     
     #preallocate memory
-    dist<-rep(NA,win_split)
+    dist<-rep(NA,nwins)
     
     #store distances between each subwindow and the selected mutation
-    for(i in 1:win_split){
+    for(i in 1:nwins){
       sub_win_mid<-snp_pos[i] %>% unlist() %>% median()
       dist[i]<-abs(sub_win_mid-mutation_pos)
     }
     
-    s<-rep(s_coef,win_split)
-    sweep<-rep(sweep,win_split)
+    s<-rep(s_coef,nwins)
+    sweep<-rep(sweep,nwins)
     
-    ID<-rep(ID,win_split)
+    ID<-rep(ID,nwins)
     
     #getting h_stats into the right form
     h_df<-h_df %>% as.matrix() %>% t()
@@ -229,7 +245,7 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
 
 }
 
-#inserting for testing purposes. Will remove. This bit causes trouble if left in. 
+#inserting for testing purposes. Will remove. This bit causes trouble if left in when building. 
  # data<-readRDS("~/work/MPhil/data/hard.rds")
  # sim<-data[[70]]
  # df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
@@ -238,8 +254,8 @@ sum_stats<-function(sim,win_split,ID,snp,form="wide",fun="none"){
  # generate_df(data,10)
  # 
  #  sim<-data[[213]]
- #  win_split=10
- #  test1<-sum_stats(sim,win_split,100)
+ #  nwins=10
+ #  test1<-sum_stats(sim,nwins,100)
 
 ##### This version works hurray!
 
