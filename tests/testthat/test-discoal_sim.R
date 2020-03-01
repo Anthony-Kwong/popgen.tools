@@ -216,23 +216,24 @@ test_that("Genome matrix extraction successful",{
   expect_equal(actual,extract)
 })
 
-test_that("sum_stat works",{
-  
-  #test if sweep is converted to neutral if s=0 
-  mu=2e-8
-  recomb_rate=1e-9
-  Ne=1000
-  nBases=1e6
-  samplesize=50
-  s=0
-  fix=4
-  discoal_path="~/work/programs/discoal/discoal"
-  sweep_type="hard"
-  nwins=10
-  id=1
-  temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,sweep=sweep_type)
-  #This was meant to produce a warning. 
-  expect_equal("neutral",temp$sweep)
-})
+#run this if you want to check s=0 convert to neutral warning
 
-
+# test_that("sum_stat works",{
+#   
+#   #test if sweep is converted to neutral if s=0 
+#   mu=2e-8
+#   recomb_rate=1e-9
+#   Ne=1000
+#   nBases=1e6
+#   samplesize=50
+#   s=0
+#   fix=4
+#   discoal_path="~/work/programs/discoal/discoal"
+#   sweep_type="hard"
+#   nwins=10
+#   id=1
+#   temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,sweep=sweep_type)
+#   #This was meant to produce a warning. 
+#   expect_equal("neutral",temp$sweep)
+# })
+ 

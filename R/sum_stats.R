@@ -88,7 +88,6 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   #if selection coefficient s=0, it is a neutral simulation
   s_coef <- sim$s
   sweep <- sim$sweep
-  pos_vec <- sim$pos
 
   #Split genome matrix into subwindows----
   
@@ -99,15 +98,19 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   
   if(sim$num_seg>snp){
     #find closest SNP to the selected mutation
-    snp_dist<-abs(pos_vec-mutation_pos)
+    raw_pos<-sim$pos
+    snp_dist<-abs(raw_pos-mutation_pos)
     center<-which.min(snp_dist)
     
-    #trim the genome matrix
+    #trim the genome matrix and pos vector
     G<-window_trim(sim$genomes,cen=center,k=floor(snp/2))
+    #C indices start at 0
+    pos_vec<-vector_trim(raw_pos, cen=center+1, k=floor(snp/2)) 
     
   } else {
-    #no trimming
+    #no trimming of genome matrix and pos vector
     G<-sim$genomes
+    pos_vec <- sim$pos
   }
   
   if(split_type=="base"){

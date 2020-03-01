@@ -259,6 +259,22 @@ vec_split <- function(x, n) {
     .Call('_popgen_tools_vec_split', PACKAGE = 'popgen.tools', x, n)
 }
 
+#' vector_trim function
+#' 
+#' Trims outer elements of a vector based on some provided central index. 
+#' 
+#' @param x: NumericVector to trim
+#' @param cen: Integer index for central element
+#' @param k: Number of elements to retain from both sides of the center.
+#' @return A NumericVector with outer elements removed. Up to k elements can be 
+#' retained from both sides of the center. 
+#' @examples x<-seq(1,5,by=1)
+#' vector_trim(x,cen=3,k=1)
+#' @export
+vector_trim <- function(x, cen, k) {
+    .Call('_popgen_tools_vector_trim', PACKAGE = 'popgen.tools', x, cen, k)
+}
+
 #' w_max function
 #' 
 #' Computes w_max for a binary, genome matrix. Each column is a SNP, each row is a sample. 
@@ -277,8 +293,8 @@ w_max <- function(x) {
 #' 
 #' @param G: NumericMatrix
 #' @param cen: An integer designating a column index. This will be the center column of the ouput matrix.
-#' @param k: An integer for the number of columns to include from either side of the center column. 
-#' @return A NumericMatrix with the outer columns of G removed. Up to k/2 columns to either side of the center column from the original matrix is kept.
+#' @param k: An integer for the number of columns to include on either side of the output matrix. 
+#' @return A NumericMatrix with the outer columns of G removed. Up to k columns to either side of the center column from the original matrix is kept.
 #' @examples window_trim(G,1,5)
 #' @export
 window_trim <- function(G, cen, k) {

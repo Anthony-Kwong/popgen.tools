@@ -4,7 +4,7 @@
 \alias{winsplit_base}
 \title{winsplit_base function}
 \usage{
-winsplit_base(x)
+winsplit_base(G, pos, n)
 }
 \arguments{
 \item{G:}{A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual.}

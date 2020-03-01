@@ -4,12 +4,21 @@
 \alias{generate_df}
 \title{generate_df function}
 \usage{
-generate_df(sim_list, win_split, snp, form = "wide", fun = "none")
+generate_df(
+  sim_list,
+  nwins,
+  split_type = "base",
+  snp,
+  form = "wide",
+  fun = "none"
+)
 }
 \arguments{
-\item{sim_list}{list of simulation objects}
+\item{sim_list:}{list of simulation objects}
 
-\item{win_split}{number of subwindows desired to split each genome matrix per simulation}
+\item{nwins:}{number of subwindows desired to split each genome matrix per simulation}
+
+\item{split_type:}{Method of splitting the genome matrix. Valid options are "base" and "mut". Default "base".}
 
 \item{snp:}{number of snps to include per simulation}
 

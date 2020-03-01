@@ -17,8 +17,8 @@ using namespace Rcpp;
 //' 
 //' @param G: NumericMatrix
 //' @param cen: An integer designating a column index. This will be the center column of the ouput matrix.
-//' @param k: An integer for the number of columns to include from either side of the center column. 
-//' @return A NumericMatrix with the outer columns of G removed. Up to k/2 columns to either side of the center column from the original matrix is kept.
+//' @param k: An integer for the number of columns to include on either side of the output matrix. 
+//' @return A NumericMatrix with the outer columns of G removed. Up to k columns to either side of the center column from the original matrix is kept.
 //' @examples window_trim(G,1,5)
 //' @export
 // [[Rcpp::export]]
@@ -36,6 +36,7 @@ NumericMatrix window_trim(NumericMatrix G,int cen,int k) {
   int start=std::max(cen-k,0);
   int end=std::min(cen+k,cols-1);
   
+  //ensure valid column indices
   if(start<0){
     stop("window_trim: Trying to include too many columns to the left of center.");
   }

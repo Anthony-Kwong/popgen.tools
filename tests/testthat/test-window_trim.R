@@ -79,4 +79,14 @@ test_that("window_trim working",{
   real<-R_window_trim(seq,cen,k)
   expect_equal(output,real)
   
+  #test with vector
+  
+  # set.seed(1187)
+  # cen=5
+  # k=2
+  # pos<-runif(0,1,n=10) %>% sort()
+  # temp = as.matrix(pos) %>% t()
+  # window_trim(pos,cen,k)
+  
 })
+
