@@ -26,10 +26,11 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericVector vector_trim(NumericVector x, int cen, int k) {
   //c indices start at 0
-  int len=x.size()-1; 
   cen = cen-1;
+  int last_index=x.length()-1; 
+  
   int start = std::max(0 , cen-k);
-  int end = std::min(len , cen+k); 
+  int end = std::min(last_index , cen+k); 
   NumericVector out = x[Rcpp::Range(start,end)];
   
   return out;

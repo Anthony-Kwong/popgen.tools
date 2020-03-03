@@ -19,33 +19,30 @@ test_that("vector_trim works",{
   #manually checked result
   x = seq(1,10,by=1)
   #remember C++ indices start at 0
-  expect_equal(x[2:6] ,vector_trim(x, cen = (4-1), k = 2))
+  expect_equal(x[2:6] ,vector_trim(x, cen = 4, k = 2))
   expect_equal(x[2:6], R_vector_trim(x, cen = 4, k = 2))
   
   #auto checks below
   set.seed(15)
   y = runif(0,1,n=50) %>% sort()
   cen = 23
-  C_cen = cen-1
   span = 10
   expect_equal(R_vector_trim(y, cen=cen , k=span), 
-               vector_trim (y, cen=C_cen , k=span) )
+               vector_trim (y, cen=cen , k=span) )
   
   #insufficient elements on left
   set.seed(13)
   y = runif(0,1,n=100) %>% sort()
   cen = 20
-  C_cen = cen-1
   span = 30
   expect_equal(R_vector_trim(y, cen=cen , k=span), 
-               vector_trim (y, cen=C_cen , k=span) )
+               vector_trim (y, cen=cen , k=span) )
   
   #insufficient elements on right
   set.seed(13)
   y = runif(0,1,n=100) %>% sort()
   cen = 85
-  C_cen = cen-1
   span = 30
   expect_equal(R_vector_trim(y, cen=cen , k=span), 
-               vector_trim (y, cen=C_cen , k=span) )
+               vector_trim (y, cen=cen , k=span) )
 })
