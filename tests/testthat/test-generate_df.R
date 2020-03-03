@@ -111,6 +111,8 @@ test_that("generate_df works",{
 test_that("generate_df works",{
   #These are tests for split_type=base
   
+  #test only works sometimes. Investigating. 
+  
   ## neutral test
   
   #input parameters

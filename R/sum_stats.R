@@ -104,9 +104,7 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
     
     #trim the genome matrix and pos vector
     G<-window_trim(sim$genomes,cen=center,k=floor(snp/2))
-    #C indices start at 0. Note that window_trim and vector_trim were built differently. Hence the difference. 
-    #Reminder to change in the final version. 
-    pos_vec<-vector_trim(raw_pos, cen=center+1, k=floor(snp/2)) 
+    pos_vec<-vector_trim(raw_pos, cen=center, k=floor(snp/2)) 
     
   } else {
     #no trimming of genome matrix and pos vector
