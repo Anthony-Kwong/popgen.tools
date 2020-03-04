@@ -11,6 +11,8 @@
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
+#' @param num_popsize_change Number of population size changes to occur in a simulation. Default is 0. 
+#' @param times_popsize_change A vector of times for when the population size changed. Times are in generations from the root of tree. 
 #'
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
@@ -25,7 +27,7 @@
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation=NA,seed,sweep,start_freq=NA){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation=NA,seed,sweep,start_freq=NA,num_popsize_change=0,times_popsize_change=NA){
   
   #====================================================================================
   
