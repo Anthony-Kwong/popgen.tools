@@ -44,25 +44,25 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
   double len = full_len/n;
   NumericVector start_indices(n+1);
   double start_pos = pos[0];
-  Rcout<<"start_pos "<<start_pos<<std::endl;
+ // Rcout<<"start_pos "<<start_pos<<std::endl;
   
   for(int i=1;i<(n+1);i++){
     double target=start_pos+i*len;
-    Rcout<< "finding nearest index for " << target <<std::endl; 
+//    Rcout<< "finding nearest index for " << target <<std::endl; 
     start_indices[i] = find_index(pos,target);
   }
   
-  Rcout<<start_indices<<std::endl;
+//  Rcout<<start_indices<<std::endl;
   
   List windows(n);
   int start=start_indices[0];
   int nsam=G.nrow();
   
   for(int i=0;i<n;i++){
-    Rcout<<"i is "<<i<<std::endl;
+//    Rcout<<"i is "<<i<<std::endl;
     int end=start_indices[i+1];
-    Rcout<<"start is"<<start<<std::endl;
-    Rcout<<"end is"<<end<<std::endl;
+    // Rcout<<"start is"<<start<<std::endl;
+    // Rcout<<"end is"<<end<<std::endl;
     //if start=end. There are no SNPs in that genome window.
     if(end==start_indices[i]){
       warning("No SNPs found within a window. Setting window to NULL");

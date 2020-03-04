@@ -20,3 +20,7 @@ retained from both sides of the center.
 \description{
 Trims outer elements of a vector based on some provided central index.
 }
+\examples{
+x<-seq(1,5,by=1)
+vector_trim(x,cen=3,k=1)
+}

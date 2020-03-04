@@ -204,9 +204,8 @@ test_that("sum_stats works",{
   #trim matrix
   snp_dist<-abs(temp$pos-0.5)
   center<-which.min(snp_dist)
-  G<-temp$genomes
   G<-window_trim(temp$genomes,cen=center,k=floor(snp_inc/2))
-  positions = vector_trim(temp$pos,center+1,k=floor(snp_inc/2))
+  positions = vector_trim(temp$pos,center,k=floor(snp_inc/2))
   G_wins<-winsplit_base(G,pos=positions,nwins)
 
   expect_equal(sweep_type,output$sweep)

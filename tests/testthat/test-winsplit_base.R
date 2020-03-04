@@ -61,7 +61,7 @@ test_that("winsplit_base works",{
     expect_equal(check,T)
   }
   
-  #autocheck
+  #autocheck, untrimmed
   
   set.seed(21)
   SNP=250
@@ -90,10 +90,11 @@ test_that("winsplit_base works",{
   pos_trim = vector_trim(pos, cen, k)
   C_says = winsplit_base(G, pos_trim, nwins)
   R_says = R_winsplit_base( G, pos_trim, nwins)
+  R_says[[2]] = R_says[[2]] %>% as.matrix()
   
   ans = list()
-  ans[[1]] = G[,1:4]
-  ans[[2]] = G[,5:6]
+  ans[[1]] = G[,1:5]
+  ans[[2]] = G[,6] %>% as.matrix()
   ans[[3]] = G[,7:11]
   
   for(i in 1:nwins){
