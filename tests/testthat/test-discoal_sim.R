@@ -1,4 +1,6 @@
 test_that("Discoal command entered correctly", {
+  
+  ##tests for constant population size models
 
   #input parameters
   mu=1e-7
@@ -54,10 +56,29 @@ test_that("Discoal command entered correctly", {
                  "-wn", tau)
   expect_equal(input_cmd,test_cmd)
   
+  #testing the neutral simulation command
   sweep="neutral"
   sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,sweep=sweep)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho)
+  expect_equal(input_cmd,test_cmd)
+  
+  ## testing command for bottleneck scenarios
+  size=c(0.5,1)
+  time=c(10,50)
+  pop_changes = tibble::tibble(size,time)
+  sweep="neutral"
+  
+  sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,
+                    genome_length=genome_length,samplesize=samplesize,
+                    discoal_path=discoal_path,sweep=sweep,
+                    popsize_changes = pop_changes )
+  input_cmd = sim$cmd
+  scaled_times = time/(4*Ne)
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,
+                 no_scientific(200000),"-t",theta,"-r", rho, "-en",
+                 no_scientific(scaled_times[1]), 0, size[1], 
+                 "-en", no_scientific(scaled_times[2]),0, size[2])
   expect_equal(input_cmd,test_cmd)
 })
 
@@ -179,6 +200,7 @@ test_that("Postions extraction successful",{
 test_that("Genome matrix extraction successful",{
   #fix. Code acts funny when there is only one segsite
   
+  #Hard sweep test
   #input parameters
   mu=2e-7
   recomb_rate=1e-8
@@ -198,7 +220,7 @@ test_that("Genome matrix extraction successful",{
   extract=matrix(unlist(sim$genomes),nrow=samplesize)
   expect_equal(actual,extract)
   
-  
+  #Soft sweep test
   #input parameters
   mu=2e-7
   recomb_rate=1e-8

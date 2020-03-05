@@ -15,7 +15,8 @@ discoal_sim(
   fix_generation = NA,
   seed,
   sweep,
-  start_freq = NA
+  start_freq = NA,
+  popsize_changes = NULL
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ discoal_sim(
 \item{sweep}{the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation".}
 
 \item{start_freq}{Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency.}
+
+\item{popsize_changes}{A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
+of the change in generations.}
 }
 \value{
 an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.

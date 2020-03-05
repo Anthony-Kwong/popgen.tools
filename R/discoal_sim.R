@@ -11,9 +11,8 @@
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
-#' @param num_popsize_change Number of population size changes to occur in a simulation. Default is 0. 
-#' @param times_popsize_change A vector of times for when the population size changed. Times are in generations from the root of tree. 
-#'
+#' @param popsize_changes A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
+#' of the change in generations. 
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
 #' sweep: the kind of selective sweep modelled. s: the selection coefficient
@@ -27,7 +26,7 @@
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation=NA,seed,sweep,start_freq=NA,num_popsize_change=0,times_popsize_change=NA){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation=NA,seed,sweep,start_freq=NA,popsize_changes=NULL){
   
   #====================================================================================
   
@@ -160,8 +159,25 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   if(sweep=="soft"){
     cmd=paste(cmd,"-a", alpha,"-ws", tau, "-f", start_freq)
   }
+  
+  #current implementation works with single population only. 
+  pop_index=0
+  
+  size_cmd = NULL
+  # add popsize changes
+  if(is.null(popsize_changes)==F){
+    nevents = ncol(popsize_changes)
 
-  #print(cmd)
+    #scale times,times in discoal are in units of 4Ne, where Ne is the popsize of the reference pop.
+    #Documentation calls this No.
+    popsize_changes$time = no_scientific(popsize_changes$time/(4*Ne))
+
+    for(i in 1:nevents){
+      size_cmd = paste (size_cmd,"-en", popsize_changes$time[i], pop_index, popsize_changes$size[i])
+    }
+    cmd=paste(cmd,size_cmd,sep="")
+  }
+  
 
   #run discoal command and save output
   #discoal has the same output format as Hudson's ms. https://snoweye.github.io/phyclust/document/msdoc.pdf.
