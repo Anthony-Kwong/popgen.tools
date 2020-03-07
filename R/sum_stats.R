@@ -86,8 +86,13 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   #extract useful information from the simulation ----
   
   #if selection coefficient s=0, it is a neutral simulation
-  s_coef <- sim$s
   sweep <- sim$sweep
+  s_coef <- sim$s
+  bottle_time1 <- sim$bottle_time1
+  bottle_time2 <- sim$bottle_time2
+  bottle_size1 <- sim$bottle_size1
+  bottle_size2 <- sim$bottle_size2
+  
 
   #Split genome matrix into subwindows----
   
@@ -194,7 +199,8 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
     names(df)[index:(index+nwins-1)]<-string_labels("h123",nwins)
     
     stats<-as.data.frame(t(df)) 
-    temp<-tibble::tibble(ID,sweep,s_coef)
+    temp<-tibble::tibble(ID,sweep,s_coef,bottle_time1,bottle_size1,
+                         bottle_time2,bottle_size2)
     wide_df<-cbind(temp,stats)
 
     return(wide_df)
@@ -204,46 +210,50 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   
   #tall form computation----
   
+  #This tall form implementation is outdated!
+  
   
   if(form=="tall"){
     #Compute distances
     
-    #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
-    snp_pos<-vec_split(sim$pos,nwins)
+    # #Quantify distance between each subwindow and the selected mutation. Take the chromosome distance between middle of subwindow and mutation. 
+    # snp_pos<-vec_split(sim$pos,nwins)
+    # 
+    # #preallocate memory
+    # dist<-rep(NA,nwins)
+    # 
+    # #store distances between each subwindow and the selected mutation
+    # for(i in 1:nwins){
+    #   sub_win_mid<-snp_pos[i] %>% unlist() %>% median()
+    #   dist[i]<-abs(sub_win_mid-mutation_pos)
+    # }
+    # 
+    # s<-rep(s_coef,nwins)
+    # sweep<-rep(sweep,nwins)
+    # 
+    # ID<-rep(ID,nwins)
+    # 
+    # #getting h_stats into the right form
+    # h_df<-h_df %>% as.matrix() %>% t()
+    # colnames(h_df)<-c("h1","h2","h12","h123")
+    # #normalisation step
+    # h_df<-apply(h_df,2,norm_vec)
+    # h_df<-h_df %>% tibble::as_tibble()
+    # 
+    # #tying everything back together. ----
+    # #Tibble is great in giving neat names without the $. 
+    # # D<-norm_vec(D)
+    # # H<-norm_vec(H)
+    # pi_est<-basic_values$theta_t
+    # df<-tibble::tibble(sweep,ID,s,dist,D,H,pi_est) %>% tibble::as_tibble()
+    # tall_df<-dplyr::bind_cols(df,h_df)
+    # return(tall_df)
     
-    #preallocate memory
-    dist<-rep(NA,nwins)
-    
-    #store distances between each subwindow and the selected mutation
-    for(i in 1:nwins){
-      sub_win_mid<-snp_pos[i] %>% unlist() %>% median()
-      dist[i]<-abs(sub_win_mid-mutation_pos)
-    }
-    
-    s<-rep(s_coef,nwins)
-    sweep<-rep(sweep,nwins)
-    
-    ID<-rep(ID,nwins)
-    
-    #getting h_stats into the right form
-    h_df<-h_df %>% as.matrix() %>% t()
-    colnames(h_df)<-c("h1","h2","h12","h123")
-    #normalisation step
-    h_df<-apply(h_df,2,norm_vec)
-    h_df<-h_df %>% tibble::as_tibble()
-    
-    #tying everything back together. ----
-    #Tibble is great in giving neat names without the $. 
-    # D<-norm_vec(D)
-    # H<-norm_vec(H)
-    pi_est<-basic_values$theta_t
-    df<-tibble::tibble(sweep,ID,s,dist,D,H,pi_est) %>% tibble::as_tibble()
-    tall_df<-dplyr::bind_cols(df,h_df)
-    return(tall_df)
+    stop("tall form implementation is outdated.")
   }
   
-  #change sweep and position into factors.
-  #df[,c("sweep","position")]<-lapply(df[,c("sweep","position")],as.factor)
+  # change sweep and position into factors.
+  # df[,c("sweep","position")]<-lapply(df[,c("sweep","position")],as.factor)
 
 }
 

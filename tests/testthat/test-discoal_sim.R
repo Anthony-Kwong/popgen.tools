@@ -260,8 +260,8 @@ test_that("Bottleneck recorded correctly",{
                    s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,
                    sweep=sweep, popsize_changes = bottleneck)
   
-  expect_equal(sim$bottle_time1, bottleneck$time[1]/(4*Ne))
-  expect_equal(sim$bottle_time2, bottleneck$time[2]/(4*Ne))
+  expect_equal(sim$bottle_time1, bottleneck$time[1])
+  expect_equal(sim$bottle_time2, bottleneck$time[2])
   expect_equal(sim$bottle_size1, bottleneck$size[1])
   expect_equal(sim$bottle_size2, bottleneck$size[2])
   

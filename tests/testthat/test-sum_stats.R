@@ -1,3 +1,5 @@
+# Hard sweep test without window_trim ----
+
 test_that("sum_stats works",{
   
   #hard sweep test, no transformation. num_seg<snp included
@@ -22,6 +24,11 @@ test_that("sum_stats works",{
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
   expect_equal(s,output$s_coef)
+  expect_equal(0,output$bottle_time1)
+  expect_equal(0,output$bottle_time2)
+  expect_equal(1,output$bottle_size1)
+  expect_equal(1,output$bottle_size2)
+  
   
   #check SS were computed correctly
   
@@ -30,17 +37,13 @@ test_that("sum_stats works",{
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
   H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
-  H_output<-output[4:13] 
+  H_output<-output %>% dplyr::select(H_1:H_10)
   H_output<-as.numeric(H_output)
-  
-  expect_equal(H_act,H_output)
   
   D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
   D_act<-unlist(D_act)
-  D_output<-output[14:23]
+  D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
-  
-  expect_equal(D_act,D_output)
   
   h_act<-lapply(G_wins,h_stats) 
   x<-rep(NA,nwins)
@@ -49,13 +52,22 @@ test_that("sum_stats works",{
   for(i in 1:nwins){
     haplo_act[i,]<-h_act[[i]]
   }
+
+  h1_output = output %>% dplyr::select(h1_1:h1_10)
+  h2_output = output %>% dplyr::select(h2_1:h2_10)
+  h12_output = output %>% dplyr::select(h12_1:h12_10)
+  h123_output = output %>% dplyr::select(h123_1:h123_10)
   
-  expect_equal(as.numeric(output[24:33]),haplo_act[,1])
-  expect_equal(as.numeric(output[34:43]),haplo_act[,2])
-  expect_equal(as.numeric(output[44:53]),haplo_act[,3])
-  expect_equal(as.numeric(output[54:63]),haplo_act[,4])
+  expect_equal(H_act,H_output)
+  expect_equal(D_act,D_output)
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
   
 })
+
+## Hard simulation test with window_trim ----
 
 test_that("sum_stats works",{
   
@@ -87,6 +99,10 @@ test_that("sum_stats works",{
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
   expect_equal(s,output$s_coef)
+  expect_equal(0,output$bottle_time1)
+  expect_equal(0,output$bottle_time2)
+  expect_equal(1,output$bottle_size1)
+  expect_equal(1,output$bottle_size2)
   
   #check SS were computed correctly
   
@@ -95,17 +111,13 @@ test_that("sum_stats works",{
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
   H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
-  H_output<-output[4:13] 
+  H_output<-output %>% dplyr::select(H_1:H_10)
   H_output<-as.numeric(H_output)
-  
-  expect_equal(H_act,H_output)
   
   D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
   D_act<-unlist(D_act)
-  D_output<-output[14:23]
+  D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
-  
-  expect_equal(D_act,D_output)
   
   h_act<-lapply(G_wins,h_stats) 
   x<-rep(NA,nwins)
@@ -115,12 +127,21 @@ test_that("sum_stats works",{
     haplo_act[i,]<-h_act[[i]]
   }
   
-  expect_equal(as.numeric(output[24:33]),haplo_act[,1])
-  expect_equal(as.numeric(output[34:43]),haplo_act[,2])
-  expect_equal(as.numeric(output[44:53]),haplo_act[,3])
-  expect_equal(as.numeric(output[54:63]),haplo_act[,4])
+  h1_output = output %>% dplyr::select(h1_1:h1_10)
+  h2_output = output %>% dplyr::select(h2_1:h2_10)
+  h12_output = output %>% dplyr::select(h12_1:h12_10)
+  h123_output = output %>% dplyr::select(h123_1:h123_10)
+  
+  expect_equal(H_act,H_output)
+  expect_equal(D_act,D_output)
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
   
 })
+
+## Norm transformation across window test ---- 
 
 
 test_that("sum_stat works",{
@@ -149,38 +170,50 @@ test_that("sum_stat works",{
   
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
+  expect_equal(0,output$bottle_time1)
+  expect_equal(0,output$bottle_time2)
+  expect_equal(1,output$bottle_size1)
+  expect_equal(1,output$bottle_size2)
 
   #check SS were computed correctly
-
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
-  #normalise across the values of H and compare with output (already normed)
-  H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist() %>% norm_vec()
-  H_output<-output[4:(3+nwins)] %>% as.numeric()
-  expect_equal(H_act,H_output)
-
+  H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
+  H_act <- norm_vec(H_act)
+  H_output<-output %>% dplyr::select(H_1:H_10) 
+  H_output<-as.numeric(H_output)
+  
   D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
-  D_act<-unlist(D_act) %>% norm_vec()
-  D_output<-output[14:23]
+  D_act<-unlist(D_act)
+  D_act<-norm_vec(D_act)
+  D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
-
-  expect_equal(D_act,D_output)
-
-  h_act<-lapply(G_wins,h_stats)
+  
+  h_act<-lapply(G_wins,h_stats) 
   x<-rep(NA,nwins)
   haplo_act<-cbind(x,x,x,x)
-
+  
   for(i in 1:nwins){
     haplo_act[i,]<-h_act[[i]]
   }
+  
+  h1_output = output %>% dplyr::select(h1_1:h1_10)
+  h2_output = output %>% dplyr::select(h2_1:h2_10)
+  h12_output = output %>% dplyr::select(h12_1:h12_10)
+  h123_output = output %>% dplyr::select(h123_1:h123_10)
+  
+  expect_equal(H_act,H_output)
+  expect_equal(D_act,D_output)
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
 
-  expect_equal(as.numeric(output[24:33]),haplo_act[,1])
-  expect_equal(as.numeric(output[34:43]),haplo_act[,2])
-  expect_equal(as.numeric(output[44:53]),haplo_act[,3])
-  expect_equal(as.numeric(output[54:63]),haplo_act[,4])
 })
+
+## Split windows by base test ---- 
 
 test_that("sum_stats works",{
   
@@ -211,38 +244,122 @@ test_that("sum_stats works",{
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
   expect_equal(0,output$s_coef)
+  expect_equal(0,output$bottle_time1)
+  expect_equal(0,output$bottle_time2)
+  expect_equal(1,output$bottle_size1)
+  expect_equal(1,output$bottle_size2)
 
   #check SS were computed correctly
 
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
-
+  
   H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
-  H_output<-output[4:13]
+  H_output<-output %>% dplyr::select(H_1:H_10)
   H_output<-as.numeric(H_output)
-
-  expect_equal(H_act,H_output)
-
+  
   D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
   D_act<-unlist(D_act)
-  D_output<-output[14:23]
+  D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
-
-  expect_equal(D_act,D_output)
-
-  h_act<-lapply(G_wins,h_stats)
+  
+  h_act<-lapply(G_wins,h_stats) 
   x<-rep(NA,nwins)
   haplo_act<-cbind(x,x,x,x)
-
+  
   for(i in 1:nwins){
     haplo_act[i,]<-h_act[[i]]
   }
+  
+  h1_output = output %>% dplyr::select(h1_1:h1_10)
+  h2_output = output %>% dplyr::select(h2_1:h2_10)
+  h12_output = output %>% dplyr::select(h12_1:h12_10)
+  h123_output = output %>% dplyr::select(h123_1:h123_10)
+  
+  expect_equal(H_act,H_output)
+  expect_equal(D_act,D_output)
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
 
-  expect_equal(as.numeric(output[24:33]),haplo_act[,1])
-  expect_equal(as.numeric(output[34:43]),haplo_act[,2])
-  expect_equal(as.numeric(output[44:53]),haplo_act[,3])
-  expect_equal(as.numeric(output[54:63]),haplo_act[,4])
+})
 
+## Bottleneck tests----
+
+test_that("sum_stats works",{
+  
+  #neutral test, split by base
+  mu=2e-8
+  recomb_rate=1e-8
+  Ne=1000
+  nBases=1e6
+  samplesize=250
+  discoal_path="~/work/programs/discoal/discoal"
+  sweep_type="neutral"
+  nwins=10
+  id=2
+  seed=c(15,101)
+  snp_inc=420
+  split_type="base"
+  bottleneck=tibble::tibble(size=c(0.2,1),time=c(5,10))
+  
+  temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,
+                    genome_length=nBases,samplesize=samplesize,
+                    discoal_path=discoal_path,sweep=sweep_type,
+                    seed=seed, popsize_changes = bottleneck)
+  output<-sum_stats(sim=temp,split_type=split_type,nwins = nwins, ID=id, snp=snp_inc,form="wide",fun="none")
+  
+  #trim matrix
+  snp_dist<-abs(temp$pos-0.5)
+  center<-which.min(snp_dist)
+  G<-window_trim(temp$genomes,cen=center,k=floor(snp_inc/2))
+  positions = vector_trim(temp$pos,center,k=floor(snp_inc/2))
+  G_wins<-winsplit_base(G,pos=positions,nwins)
+  
+  expect_equal(sweep_type,output$sweep)
+  expect_equal(id,output$ID)
+  expect_equal(0,output$s_coef)
+  expect_equal(bottleneck$time[1],output$bottle_time1)
+  expect_equal(bottleneck$time[2],output$bottle_time2)
+  expect_equal(bottleneck$size[1],output$bottle_size1)
+  expect_equal(bottleneck$size[2],output$bottle_size2)
+  
+  #check SS were computed correctly
+  
+  ss<-list(theta_h,theta_t,theta_w,var_taj)
+  basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
+  names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
+  
+  H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
+  H_output<-output %>% dplyr::select(H_1:H_10)
+  H_output<-as.numeric(H_output)
+  
+  D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
+  D_act<-unlist(D_act)
+  D_output<-output %>% dplyr::select(D_1:D_10)
+  D_output<-as.numeric(D_output)
+  
+  h_act<-lapply(G_wins,h_stats) 
+  x<-rep(NA,nwins)
+  haplo_act<-cbind(x,x,x,x)
+  
+  for(i in 1:nwins){
+    haplo_act[i,]<-h_act[[i]]
+  }
+  
+  h1_output = output %>% dplyr::select(h1_1:h1_10)
+  h2_output = output %>% dplyr::select(h2_1:h2_10)
+  h12_output = output %>% dplyr::select(h12_1:h12_10)
+  h123_output = output %>% dplyr::select(h123_1:h123_10)
+  
+  expect_equal(H_act,H_output)
+  expect_equal(D_act,D_output)
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
+  
 })
 

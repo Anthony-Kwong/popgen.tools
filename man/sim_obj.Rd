@@ -12,7 +12,7 @@ sim_obj(
   genome_matrix,
   sweep,
   select_coeff,
-  fix_time,
+  fix_time = 0,
   bottle_time1 = 0,
   bottle_size1 = 1,
   bottle_time2 = 0,
@@ -34,7 +34,8 @@ sim_obj(
 
 \item{select_coeff}{S value for the strength of the sweep.}
 
-\item{fix_time}{The time of fixation of the fixed mutation.}
+\item{fix_time}{The time of fixation of the fixed mutation. Not needed for neutral simulations.
+Default is 0, indicating fixation at the time of sampling.}
 
 \item{bottle_time1}{Time (in generations) of the most recent popsize change.}
 

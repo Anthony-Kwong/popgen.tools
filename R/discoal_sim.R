@@ -172,10 +172,10 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
 
     #scale times,times in discoal are in units of 4Ne, where Ne is the popsize of the reference pop.
     #Documentation calls this No.
-    popsize_changes$time = no_scientific(popsize_changes$time/(4*Ne))
+    scaled_times = no_scientific(popsize_changes$time/(4*Ne))
 
     for(i in 1:nevents){
-      size_cmd = paste (size_cmd,"-en", popsize_changes$time[i], pop_index, popsize_changes$size[i])
+      size_cmd = paste (size_cmd,"-en", scaled_times[i], pop_index, popsize_changes$size[i])
     }
     cmd=paste(cmd,size_cmd,sep="")
   }
@@ -230,45 +230,13 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     popsize_changes=tibble::tibble(size,time)
   }
   
+  
   #construct sim object
   obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
               genome_matrix = genome_matrix,sweep = sweep,select_coeff = s,fix_time = fix_time,
               bottle_time1 = popsize_changes$time[1],bottle_size1 = popsize_changes$size[1],
               bottle_time2 = popsize_changes$time[2],bottle_size2 = popsize_changes$size[2])
   return(obj)
-  
-  #construct sim object
-  # if(is.null(popsize_changes)==T){
-  #   if(sweep=="neutral" || sweep=="neutral_fixation"){
-  #     #select coeff is 0 for neutral case
-  #     obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
-  #                  genome_matrix = genome_matrix,sweep = sweep,select_coeff = 0,fix_time = fix_time,
-  #                  bottletime1 = popsize_changes$time[1],bottlesize1 = popsize_changes$size[1],
-  #                  bottletime2 = popsize_changes$time[2],bottlesize2 = popsize_changes$size[2])
-  #     return(obj)
-  #   } else {
-  #     #for soft and hard sweeps, we need to include the selection coefficient
-  #     obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
-  #                  genome_matrix = genome_matrix,sweep = sweep,select_coeff = s,fix_time = fix_time,
-  #                  bottletime1 = popsize_changes$time[1],bottlesize1 = popsize_changes$size[1],
-  #                  bottletime2 = popsize_changes$time[2],bottlesize2 = popsize_changes$size[2])
-  #     return(obj)
-  #   }
-  # }
-  # 
-  # 
-  # #construct sim object for bottleneck case
-  # if(is.null(popsize_changes)==F){
-  #   if(sweep=="neutral" || sweep=="neutral_fixation"){
-  #     #select coeff is 0 for neutral case
-  #     obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,0,fix_time)
-  #     return(obj)
-  #   } else {
-  #     #for soft and hard sweeps, we need to include the selection coefficient
-  #     obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,s,fix_time)
-  #     return(obj)
-  #   }
-  # }
   
 }
 
