@@ -7,7 +7,7 @@
 #' @param samplesize Number of samples to take from the population
 #' @param s selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0. 
 #' @param discoal_path path to your discoal program
-#' @param fix_time number of generations ago when the selected mutation was fixed. Default value is 0. 
+#' @param fix_time number of generations ago when the selected mutation was fixed. 
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
@@ -87,8 +87,15 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   }
   
   #fix_time is not needed for neutral simulations
-  if(is.na(fix_time)==F && sweep=="neutral"){
+  fix_absent = is.na(fix_time)
+  if(fix_absent==F && sweep=="neutral"){
     msg=paste("fix_time is not used for neutral simulations.Consider simulating under neutral_fixation to condition under a mutation getting fixed at a particular timepoint")
+    stop(msg)
+  }
+  
+  #check fit_time is present for sweep simulations
+  if(fix_absent==T && sweep!="neutral"){
+    msg=paste("Must specifcy fix_time for sweep simulations")
     stop(msg)
   }
   

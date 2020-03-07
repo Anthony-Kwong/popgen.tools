@@ -144,3 +144,49 @@ test_that("generate_df works",{
   }
 })
 
+test_that("generate_df works",{
+  
+  #bottleneck simulations
+  #input parameters
+  mu=1e-7
+  recomb_rate=1e-9
+  Ne=10000
+  genome_length=2e5
+  samplesize=100
+  discoal_path="~/work/programs/discoal/discoal"
+  sweep="hard"
+  nsim=5
+  selection=seq(0.01, 0.1, by=0.02)
+  fixation =c(2,5,8,10,12)
+  bottlenecks = list()
+  set.seed(1344)
+  for(i in 1:nsim){
+    bottlenecks[[i]] = tibble::tibble(time=sample.int(50,2,replace=T),
+                                      size = runif(0,1,n=2))
+  }
+  
+  l_sim<-list()
+  
+  for(i in 1:nsim){
+    l_sim[[i]]<-discoal_sim(mu=mu,recomb_rate=recomb_rate,
+                            Ne=Ne,genome_length=genome_length, s = selection[i],
+                            samplesize=samplesize,discoal_path=discoal_path, 
+                            fix_time = fixation[i],sweep=sweep, 
+                            popsize_changes = bottlenecks [[i]])
+  }
+  
+  snp_include=110
+  nwins=11
+  
+  df<-generate_df(l_sim,nwins = nwins,split_type="base",snp = snp_include)
+  
+  for(index in 1:nsim){
+    batch_ans<-df[index,] 
+    batch_ans<-as.numeric(batch_ans)
+    single_ans<-sum_stats(l_sim[[index]],split_type="base",nwins = nwins, ID=index, snp=snp_include)
+    single_ans$sweep<-as.factor(single_ans$sweep)
+    single_ans<-as.numeric(single_ans)
+    expect_equal(batch_ans,single_ans)
+  }
+})
+

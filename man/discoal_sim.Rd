@@ -34,7 +34,7 @@ discoal_sim(
 
 \item{discoal_path}{path to your discoal program}
 
-\item{fix_time}{number of generations ago when the selected mutation was fixed. Default value is 0.}
+\item{fix_time}{number of generations ago when the selected mutation was fixed.}
 
 \item{seed}{vector of 2 numbers used for the simulations}
 
