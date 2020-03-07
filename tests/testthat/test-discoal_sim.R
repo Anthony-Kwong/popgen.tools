@@ -13,7 +13,7 @@ test_that("Discoal command entered correctly", {
   discoal_path="~/work/programs/discoal/discoal"
   sweep="hard"
 
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep)
   cmd<-sim$cmd
 
   alpha=no_scientific(2*Ne*s) #scaled strength of selection
@@ -26,7 +26,7 @@ test_that("Discoal command entered correctly", {
   expect_equal(cmd,test_cmd)
 
   seeds=c(1,2)
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
   cmd<-sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,"-d", seeds[1],seeds[2],
                  "-a", alpha, "-ws", tau)
@@ -34,7 +34,7 @@ test_that("Discoal command entered correctly", {
   
   #test hard sweep command
   sweep="hard"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep,s=0.2)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_time=fix,sweep=sweep,s=0.2)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "a", alpha, "-ws", tau)
@@ -42,7 +42,7 @@ test_that("Discoal command entered correctly", {
   #test soft sweep
   sweep="soft"
   start_freq=0.2
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep,start_freq=start_freq,s=0.1)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_time=fix,sweep=sweep,start_freq=start_freq,s=0.1)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "a", alpha, "-ws", tau, "-f", start_freq)
@@ -50,7 +50,7 @@ test_that("Discoal command entered correctly", {
   #testing the neutral sweep command
 
   sweep="neutral_fixation"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_time=fix,sweep=sweep)
   input_cmd=sim$cmd
   test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho,
                  "-wn", tau)
@@ -104,18 +104,18 @@ test_that("Seed extraction successful",{
   expect_equal(used_seed,seeds)
   
   sweep="neutral_fixation"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
   used_seed<-sim$seeds
   expect_equal(used_seed,seeds)
   
   sweep="hard"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
   used_seed<-sim$seeds
   expect_equal(used_seed,seeds)
   
   sweep="soft"
   start_freq=0.2
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep,start_freq = start_freq)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep,start_freq = start_freq)
   used_seed<-sim$seeds
   expect_equal(used_seed,seeds)
 })
@@ -136,7 +136,7 @@ test_that("Segsites extraction successful",{
   seeds=c(2019,1688)
   sweep="hard"
 
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
   extracted_seg=sim$num_seg
   #print(extracted_seg)
   #Ran in terminal to get this
@@ -145,7 +145,7 @@ test_that("Segsites extraction successful",{
   
   #test case of having no segregating sites
   samplesize=1
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
   expect_equal(sim,"Simulation produced no segregating sites")
 
   #test for neutral simulations
@@ -164,14 +164,14 @@ test_that("Segsites extraction successful",{
   
   #test for neutral fixation
   sweep="neutral_fixation"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,seed=seeds,fix_generation=fix,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,seed=seeds,fix_time=fix,sweep=sweep)
   extracted_seg=sim$num_seg
   actual_seg=277
   expect_equal(extracted_seg,actual_seg)
   
   freq=0.2
   sweep="soft"
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,s=0.2,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,seed=seeds,fix_generation=fix,sweep=sweep,start_freq = freq)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,s=0.2,genome_length=genome_length,samplesize=samplesize,discoal_path=discoal_path,seed=seeds,fix_time=fix,sweep=sweep,start_freq = freq)
   extracted_seg=sim$num_seg
   actual_seg=118
   expect_equal(extracted_seg,actual_seg)
@@ -190,7 +190,7 @@ test_that("Postions extraction successful",{
   seeds=c(1453,1688)
   sweep="hard"
 
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
   extracted_pos=sim$pos
   #Ran the command in terminal to get these numbers
   actual_pos=c(0.575357, 0.592501, 0.677530, 0.991324 )
@@ -213,7 +213,7 @@ test_that("Genome matrix extraction successful",{
   seeds=c(1688,1707)
   sweep="hard"
 
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep)
 
   #Obtained via directly running command in terminal
   actual=cbind(c(1,0,0,0,0),c(0,0,0,1,0),c(0,0,0,1,0),c(1,0,0,0,0),c(0,1,0,0,0))
@@ -232,10 +232,39 @@ test_that("Genome matrix extraction successful",{
   seeds=c(1688,1707)
   sweep="soft"
   freq=0.4
-  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,seed=seeds,sweep=sweep,start_freq = freq)
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,sweep=sweep,start_freq = freq)
   actual=cbind(c(1,0,0,0,0),c(0,0,1,0,0))
   extract=matrix(unlist(sim$genomes),nrow=samplesize)
   expect_equal(actual,extract)
+})
+
+test_that("Bottleneck recorded correctly",{
+  
+  #Hard sweep test, manual
+  
+  mu=2e-7
+  recomb_rate=1e-8
+  Ne=600
+  genome_length=1e5
+  samplesize=20
+  s=0.05
+  fix=1
+  discoal_path="~/work/programs/discoal/discoal"
+  seeds=c(1707,1801)
+  sweep="hard"
+  bottleneck=tibble::tibble(size=c(0.9,1),time=c(5,10))
+  
+  
+  sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,
+                   genome_length=genome_length,samplesize=samplesize,
+                   s=s,discoal_path=discoal_path,fix_time=fix,seed=seeds,
+                   sweep=sweep, popsize_changes = bottleneck)
+  
+  expect_equal(sim$bottle_time1, bottleneck$time[1]/(4*Ne))
+  expect_equal(sim$bottle_time2, bottleneck$time[2]/(4*Ne))
+  expect_equal(sim$bottle_size1, bottleneck$size[1])
+  expect_equal(sim$bottle_size2, bottleneck$size[2])
+  
 })
 
 #run this if you want to check s=0 convert to neutral warning

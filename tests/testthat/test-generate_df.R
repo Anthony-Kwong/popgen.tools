@@ -17,7 +17,7 @@ test_that("generate_df works",{
   l_sim<-list()
   
   for(i in 1:nsim){
-    l_sim[[i]]<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+    l_sim[[i]]<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep)
   }
   
   snp_include=50
@@ -87,7 +87,7 @@ test_that("generate_df works",{
   l_sim<-list()
   
   for(i in 1:nsim){
-    l_sim[[i]]<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+    l_sim[[i]]<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep)
   }
   
   snp_include=50
@@ -110,8 +110,6 @@ test_that("generate_df works",{
 
 test_that("generate_df works",{
   #These are tests for split_type=base
-  
-  #test only works sometimes. Investigating. 
   
   ## neutral test
   

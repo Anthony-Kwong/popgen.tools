@@ -7,26 +7,27 @@
 #' @param samplesize Number of samples to take from the population
 #' @param s selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0. 
 #' @param discoal_path path to your discoal program
-#' @param fix_generation number of generations ago when the selected mutation was fixed. Default value is 0. 
+#' @param fix_time number of generations ago when the selected mutation was fixed. Default value is 0. 
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
 #' @param popsize_changes A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
-#' of the change in generations. 
+#' of the change in generations. Current version supports 2 changes per simulation to model bottlenecks.  
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
 #' sweep: the kind of selective sweep modelled. s: the selection coefficient
 #'
 #' @export
 #'
-#' @examples sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+#' @examples sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep)
 #'
 #' @importFrom stringr str_extract_all
+#' @importFrom tibble tibble
 #' @import magrittr
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_generation=NA,seed,sweep,start_freq=NA,popsize_changes=NULL){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_time=NA,seed,sweep,start_freq=NA,popsize_changes=NULL){
   
   #====================================================================================
   
@@ -85,9 +86,9 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     }
   }
   
-  #fix_generation is not needed for neutral simulations
-  if(is.na(fix_generation)==F && sweep=="neutral"){
-    msg=paste("fix_generation is not used for neutral simulations.Consider simulating under neutral_fixation to condition under a mutation getting fixed at a particular timepoint")
+  #fix_time is not needed for neutral simulations
+  if(is.na(fix_time)==F && sweep=="neutral"){
+    msg=paste("fix_time is not used for neutral simulations.Consider simulating under neutral_fixation to condition under a mutation getting fixed at a particular timepoint")
     stop(msg)
   }
   
@@ -99,6 +100,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   }
   
   #warning when s is unspecified for selective sweeps
+  
   
   
   #setting up params for discoal command. Discoals has to scale mutation, recombination rates and selection coefficient by Ne.
@@ -113,8 +115,8 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   #Scaled time of fixation. 
   #The time is defined by the number of coalescent units and only scales with pop size.
   
-  if(is.na(fix_generation)==F){
-    tau= (fix_generation/(4*Ne)) %>% no_scientific() 
+  if(is.na(fix_time)==F){
+    tau= (fix_time/(4*Ne)) %>% no_scientific() 
   }
 
   #These params are scaled by the number of sites. 
@@ -220,18 +222,56 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   #each individual as a row
   genome_matrix<-t(sapply(sim[start:end],string_grab,USE.NAMES = FALSE))
   
-  if(sweep=="neutral" || sweep=="neutral_fixation"){
-    #select coeff is 0 for neutral case
-    obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,0,fix_generation)
-    return(obj)
+  #fill in bottleneck predictors for the constant pop case. 
+  #Note we currently support 2 popsize changes. 
+  if(is.null(popsize_changes)==T){
+    size=c(1,1)
+    time=c(0,0)
+    popsize_changes=tibble::tibble(size,time)
   }
   
-  #for soft and hard sweeps, we need to include the selection coefficient
-  obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,s,fix_generation)
+  #construct sim object
+  obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
+              genome_matrix = genome_matrix,sweep = sweep,select_coeff = s,fix_time = fix_time,
+              bottle_time1 = popsize_changes$time[1],bottle_size1 = popsize_changes$size[1],
+              bottle_time2 = popsize_changes$time[2],bottle_size2 = popsize_changes$size[2])
   return(obj)
-#  return(list(cmd,seeds,segsites,positions,genome_matrix))
+  
+  #construct sim object
+  # if(is.null(popsize_changes)==T){
+  #   if(sweep=="neutral" || sweep=="neutral_fixation"){
+  #     #select coeff is 0 for neutral case
+  #     obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
+  #                  genome_matrix = genome_matrix,sweep = sweep,select_coeff = 0,fix_time = fix_time,
+  #                  bottletime1 = popsize_changes$time[1],bottlesize1 = popsize_changes$size[1],
+  #                  bottletime2 = popsize_changes$time[2],bottlesize2 = popsize_changes$size[2])
+  #     return(obj)
+  #   } else {
+  #     #for soft and hard sweeps, we need to include the selection coefficient
+  #     obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
+  #                  genome_matrix = genome_matrix,sweep = sweep,select_coeff = s,fix_time = fix_time,
+  #                  bottletime1 = popsize_changes$time[1],bottlesize1 = popsize_changes$size[1],
+  #                  bottletime2 = popsize_changes$time[2],bottlesize2 = popsize_changes$size[2])
+  #     return(obj)
+  #   }
+  # }
+  # 
+  # 
+  # #construct sim object for bottleneck case
+  # if(is.null(popsize_changes)==F){
+  #   if(sweep=="neutral" || sweep=="neutral_fixation"){
+  #     #select coeff is 0 for neutral case
+  #     obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,0,fix_time)
+  #     return(obj)
+  #   } else {
+  #     #for soft and hard sweeps, we need to include the selection coefficient
+  #     obj<-sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,s,fix_time)
+  #     return(obj)
+  #   }
+  # }
+  
 }
 
-#sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_generation)
+#sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_time)
 #write_rds
 #pluck command, purr

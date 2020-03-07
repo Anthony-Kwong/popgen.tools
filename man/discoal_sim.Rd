@@ -12,7 +12,7 @@ discoal_sim(
   samplesize,
   s = 0,
   discoal_path,
-  fix_generation = NA,
+  fix_time = NA,
   seed,
   sweep,
   start_freq = NA,
@@ -34,7 +34,7 @@ discoal_sim(
 
 \item{discoal_path}{path to your discoal program}
 
-\item{fix_generation}{number of generations ago when the selected mutation was fixed. Default value is 0.}
+\item{fix_time}{number of generations ago when the selected mutation was fixed. Default value is 0.}
 
 \item{seed}{vector of 2 numbers used for the simulations}
 
@@ -43,7 +43,7 @@ discoal_sim(
 \item{start_freq}{Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency.}
 
 \item{popsize_changes}{A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
-of the change in generations.}
+of the change in generations. Current version supports 2 changes per simulation to model bottlenecks.}
 }
 \value{
 an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
@@ -54,6 +54,6 @@ sweep: the kind of selective sweep modelled. s: the selection coefficient
 discoal_sim function
 }
 \examples{
-sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep)
+sim<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep)
 
 }

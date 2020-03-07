@@ -14,7 +14,7 @@ test_that("sum_stats works",{
   id=1
   seed=c(1,1)
   
-  temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep_type,seed=seed)
+  temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep_type,seed=seed)
   output<-sum_stats(sim=temp,split_type="mut",nwins = nwins, ID=id, snp=200)
   G<-temp$genomes
   G_wins<-sub_win(G,nwins)
@@ -74,7 +74,7 @@ test_that("sum_stats works",{
   seed=c(1,2)
   snp_inc=200
   
-  temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_generation=fix,sweep=sweep_type,seed=seed)
+  temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep_type,seed=seed)
   output<-sum_stats(sim=temp,split_type="mut",nwins = nwins, ID=id, snp=snp_inc)
   
   #trim matrix

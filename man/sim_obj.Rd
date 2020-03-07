@@ -12,25 +12,39 @@ sim_obj(
   genome_matrix,
   sweep,
   select_coeff,
-  fix_generation
+  fix_time,
+  bottle_time1 = 0,
+  bottle_size1 = 1,
+  bottle_time2 = 0,
+  bottle_size2 = 1
 )
 }
 \arguments{
-\item{cmd}{the command used to generate the simulation}
+\item{cmd}{The command used to generate the simulation}
 
-\item{seeds}{}
+\item{seeds}{The two random seeds used in the discoal simulation}
 
-\item{segsites}{}
+\item{segsites}{Number of segregating sites found in sampled population}
 
-\item{positions}{}
+\item{positions}{A vector with elements between 0,1. Designates the position of each seg site.}
 
-\item{genome_matrix}{}
+\item{genome_matrix}{Rows are samples. Columns are mutations/segregating sites.}
 
-\item{sweep}{}
+\item{sweep}{Type of sweep simulated.}
 
-\item{select_coeff}{}
+\item{select_coeff}{S value for the strength of the sweep.}
 
-\item{fix_generation}{}
+\item{fix_time}{The time of fixation of the fixed mutation.}
+
+\item{bottle_time1}{Time (in generations) of the most recent popsize change.}
+
+\item{bottle_size1}{Multiplier for the sampled/reference population size. 
+Refers to the most recent popsize change, looking back from the present.}
+
+\item{bottle_time2}{Time (in generations) of the second most recent popsize change.}
+
+\item{bottle_size2}{Multiplier for the sampled/reference population size. 
+Refers to the second most recent popsize change, looking back from the present.}
 }
 \value{
 an object called sim_obj
