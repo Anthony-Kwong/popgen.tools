@@ -1,3 +1,5 @@
+# Test discoal command entry----
+
 test_that("Discoal command entered correctly", {
   
   ##tests for constant population size models
@@ -82,6 +84,32 @@ test_that("Discoal command entered correctly", {
   expect_equal(input_cmd,test_cmd)
 })
 
+test_that("Discoal command converted to neutral correctly",{
+  #test that s=0 converts into a neutral command
+  mu=1e-7
+  recomb_rate=1e-9
+  Ne=100000
+  genome_length=1e5
+  samplesize=10
+  s = 0
+  fix=1
+  discoal_path="~/work/programs/discoal/discoal"
+  sweep="hard"
+  
+  #I am supposed to produce a warning. 
+  sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,
+                    samplesize=samplesize,discoal_path=discoal_path,
+                    sweep=sweep,fix_time = fix)
+  input_cmd=sim$cmd
+  theta=no_scientific(4*Ne*mu*genome_length) 
+  rho=no_scientific(4*Ne*recomb_rate*genome_length)  
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho)
+  expect_equal(test_cmd,input_cmd)
+  expect_equal("neutral",sim$sweep)
+})
+
+# Test random seeds extraction----
+
 test_that("Seed extraction successful",{
 
   #input parameters
@@ -120,27 +148,7 @@ test_that("Seed extraction successful",{
   expect_equal(used_seed,seeds)
 })
 
-test_that("Discoal command converted to neutral correctly",{
-  #test that s=0 converts into a neutral command
-  mu=1e-7
-  recomb_rate=1e-9
-  Ne=100000
-  genome_length=1e5
-  samplesize=10
-  s = 0
-  fix=1
-  discoal_path="~/work/programs/discoal/discoal"
-  sweep="hard"
-
-  sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,
-                    samplesize=samplesize,discoal_path=discoal_path,
-                    sweep=sweep,fix_time = fix)
-  input_cmd=sim$cmd
-  theta=no_scientific(4*Ne*mu*genome_length) 
-  rho=no_scientific(4*Ne*recomb_rate*genome_length)  
-  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho)
-  expect_equal(test_cmd,input_cmd)
-})
+# Test segsite extraction ----
 
 test_that("Segsites extraction successful",{
   
@@ -199,6 +207,8 @@ test_that("Segsites extraction successful",{
   expect_equal(extracted_seg,actual_seg)
 })
 
+#Test position vector extraction ----
+
 test_that("Postions extraction successful",{
   #input parameters
   mu=2e-8
@@ -218,6 +228,8 @@ test_that("Postions extraction successful",{
   actual_pos=c(0.575357, 0.592501, 0.677530, 0.991324 )
   expect_equal(extracted_pos,actual_pos)
 })
+
+#Test genome matrix extraction-----
 
 test_that("Genome matrix extraction successful",{
   #fix. Code acts funny when there is only one segsite
@@ -259,6 +271,8 @@ test_that("Genome matrix extraction successful",{
   extract=matrix(unlist(sim$genomes),nrow=samplesize)
   expect_equal(actual,extract)
 })
+
+#Test bottleneck info extraction----
 
 test_that("Bottleneck recorded correctly",{
   
