@@ -120,6 +120,28 @@ test_that("Seed extraction successful",{
   expect_equal(used_seed,seeds)
 })
 
+test_that("Discoal command converted to neutral correctly",{
+  #test that s=0 converts into a neutral command
+  mu=1e-7
+  recomb_rate=1e-9
+  Ne=100000
+  genome_length=1e5
+  samplesize=10
+  s = 0
+  fix=1
+  discoal_path="~/work/programs/discoal/discoal"
+  sweep="hard"
+
+  sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,
+                    samplesize=samplesize,discoal_path=discoal_path,
+                    sweep=sweep,fix_time = fix)
+  input_cmd=sim$cmd
+  theta=no_scientific(4*Ne*mu*genome_length) 
+  rho=no_scientific(4*Ne*recomb_rate*genome_length)  
+  test_cmd=paste(discoal_path, no_scientific(samplesize),1,no_scientific(200000),"-t",theta,"-r", rho)
+  expect_equal(test_cmd,input_cmd)
+})
+
 test_that("Segsites extraction successful",{
   
   #testing for hard sweeps
