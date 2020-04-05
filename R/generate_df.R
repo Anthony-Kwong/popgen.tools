@@ -20,13 +20,14 @@ generate_df<-function(sim_list,nwins,split_type="base",snp,form="wide",fun="none
   #extend arguments into vectors for pmap
   #generate IDs for each simulation
   id <- (1:num_sim)
-  num_wins <- rep(nwins,num_sim)
-  split_type <- rep(split_type,num_sim)
-  snp <- rep(snp,num_sim)
-  form <- rep(form,num_sim)
-  fun <- rep(fun,num_sim)
+ # num_wins <- rep(nwins,num_sim)
+#  split_type <- rep(split_type,num_sim)
+ # snp <- rep(snp,num_sim)
+#  form <- rep(form,num_sim)
+# fun <- rep(fun,num_sim)
   
-  df_list<-purrr::pmap(list(sim_list,num_wins,split_type,id,snp,form,fun),sum_stats)
+  df_list<-purrr::pmap(list(sim_list,nwins=nwins,split_type=split_type,
+                            id,snp=snp,form=form,fun=fun),sum_stats)
   df<-dplyr::bind_rows(df_list)
   
   #change sweep and position into factors.
