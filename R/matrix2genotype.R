@@ -10,7 +10,8 @@
 #' @return A dataframe of genotype objects. 
 #' @export
 #'
-#' @examples insert later
+#' @examples   seq = matrix(sample(0:1, size = 5*10, replace = TRUE), nc = 5) 
+#'  matrix2genotype(seq)
 #' 
 #' @importFrom genetics genotype
 matrix2genotype = function(G){
