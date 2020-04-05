@@ -18,3 +18,8 @@ a numeric value for the omega statistic between at SNP column i.
 \description{
 Computes w for some SNP position i, in a genome matrix.
 }
+\examples{
+  mat <- matrix(runif(64), 8, 8)
+mat[upper.tri(mat)==F] <- 0
+LD_w(mat,2)
+}

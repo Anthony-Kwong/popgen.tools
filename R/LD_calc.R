@@ -36,7 +36,7 @@ LD_calc = function(G){
   
   r = data$`R^2`
   x = seq(2,ngeno-2)
-  w = sapply(x, LD_w, r=G)
+  w = sapply(x, LD_w, r=r)
   w_max= max(w)
   
   df = tibble::tibble("LD_avg"= LD_avg, 

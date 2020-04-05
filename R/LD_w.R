@@ -9,7 +9,9 @@
 #' @return a numeric value for the omega statistic between at SNP column i. 
 #' @export
 #'
-#' @examples
+#' @examples   mat <- matrix(runif(64), 8, 8)
+#' mat[upper.tri(mat)==F] <- 0
+#' LD_w(mat,2)
 LD_w = function (r,i){
   
   nsam = ncol(r)
