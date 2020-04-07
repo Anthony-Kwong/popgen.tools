@@ -10,10 +10,10 @@
 #' @return A dataframe of genotype objects. 
 #' @export
 #'
-#' @examples   seq = matrix(sample(0:1, size = 5*10, replace = TRUE), nc = 5) 
+#' @examples   seq = matrix(sample(0:1, size = 6*10, replace = TRUE), nc = 10) 
 #'  matrix2genotype(seq)
 #' 
-#' @importFrom genetics genotype
+#' @importFrom genetics genotype makeGenotypes
 matrix2genotype = function(G){
 
   nsam = nrow(G)
@@ -39,8 +39,9 @@ matrix2genotype = function(G){
     counter = counter + 1
   }
   
-  names(diploids) = string_labels("g",length(indices))
+  names(diploids) = paste0("g", 1:length(diploids))
   df= do.call(data.frame, diploids)
+  df = genetics::makeGenotypes(t(df))
   
   return(df)
 }

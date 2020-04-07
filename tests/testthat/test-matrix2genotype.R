@@ -9,9 +9,9 @@ test_that("matrix2genotype works",{
   g2 = genetics::genotype(seq[3,],seq[4,])
 
   output = matrix2genotype(seq)
-  expect_equal(output$g_1,g1)
-  expect_equal(output$g_2,g2)
-  
+  df = data.frame(g1,g2) %>% t() %>% genetics::makeGenotypes()
+  expect_equal(df,output)
+
   
   set.seed(6221242)
   SNP = 10
@@ -27,9 +27,10 @@ test_that("matrix2genotype works",{
   }
   
   output = matrix2genotype(seq)
+  gen_df = do.call(data.frame, diploids)
+  names(gen_df) = paste0("g",1:length(diploids))
+  gen_df = genetics::makeGenotypes(t(gen_df))
   
-  for( i in 1:ndip) {
-    expect_equal ( output[,i], diploids [[i]] )
-  }
+  expect_equal(gen_df,output)
   
 })

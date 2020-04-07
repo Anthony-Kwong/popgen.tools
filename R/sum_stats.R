@@ -141,22 +141,28 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
+  #LD stats 
+  LD_values = lapply(win_list,LD_calc)
+  LD_values = do.call(rbind,LD_values)
+  
   #collect stats
-  win_stats<-list("H"=H,"D"=D)
+  win_stats<-list("H"=H,"D"=D, 
+                  "LD_avg" = LD_values$LD_avg,
+                  "LD_max" = LD_values$LD_max,
+                  "w_max" = LD_values$w_max)
   
   #output raw values
   #win_stats<-lapply(win_stats,norm_vec)
   
   
   # Haplotype stats (h1,h2,h12,h123)----
-  h_values<-lapply(win_list,h_stats) 
-  names(h_values)<-string_labels("subwindow",length(h_values))
+  h_values <- lapply(win_list,h_stats) 
+  names(h_values) <- string_labels("subwindow",length(h_values))
   
   #apply function over stats, note that h_stats are not transformed
   if(fun=="norm"){
-    win_stats<-lapply(win_stats,norm_vec)
+    win_stats <- lapply(win_stats,norm_vec)
   }
-
 
   #tying everything together into a wide dataframe
   
@@ -183,10 +189,18 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
     names(df)[index:(index+nwins-1)]<-string_labels("H",nwins)
 
     index=which(names(df)=="D1")
-    names(df)[index:(index+nwins-1)]<-string_labels("D",nwins)    
+    names(df)[index:(index+nwins-1)]<-string_labels("D",nwins)  
+    
+    index = which(names(df)=="LD_avg1")
+    names(df)[index:(index+nwins-1)]<-string_labels("LD_avg",nwins)  
+    
+    index = which(names(df)=="LD_max1")
+    names(df)[index:(index+nwins-1)]<-string_labels("LD_max",nwins) 
+    
+    index = which(names(df)=="w_max1")
+    names(df)[index:(index+nwins-1)]<-string_labels("w_max",nwins) 
         
     index=which(names(df)=="h11")
-    
     names(df)[index:(index+nwins-1)]<-string_labels("h1",nwins)
     
     index=which(names(df)=="h21")

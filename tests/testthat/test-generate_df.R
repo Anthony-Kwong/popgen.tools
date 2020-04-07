@@ -176,7 +176,7 @@ test_that("generate_df works",{
   }
   
   snp_include=110
-  nwins=11
+  nwins=5
   
   df<-generate_df(l_sim,nwins = nwins,split_type="base",snp = snp_include)
   

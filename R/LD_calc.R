@@ -23,6 +23,7 @@
 LD_calc = function(G){
   
   genotypes = matrix2genotype(G)
+  #print(genotypes)
   ngeno = ncol(genotypes)
   data = genetics::LD(genotypes)
   
@@ -42,6 +43,6 @@ LD_calc = function(G){
   df = tibble::tibble("LD_avg"= LD_avg, 
                       "LD_max" = LD_max,
                       "w_max" = w_max)
-  
+  #print("done")
   return(df)
 }

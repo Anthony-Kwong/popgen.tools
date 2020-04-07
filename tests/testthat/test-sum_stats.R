@@ -45,6 +45,13 @@ test_that("sum_stats works",{
   D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
   
+  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- do.call(rbind,LD_act)
+  LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
+  LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
+  w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
+  
+  
   h_act<-lapply(G_wins,h_stats) 
   x<-rep(NA,nwins)
   haplo_act<-cbind(x,x,x,x)
@@ -60,11 +67,13 @@ test_that("sum_stats works",{
   
   expect_equal(H_act,H_output)
   expect_equal(D_act,D_output)
+  expect_equal(LD_act$LD_avg,LD_avg_output)
+  expect_equal(LD_act$LD_max,LD_max_output)
+  expect_equal(LD_act$w_max,w_max_output)
   expect_equal(as.numeric(h1_output),haplo_act[,1])
   expect_equal(as.numeric(h2_output),haplo_act[,2])
   expect_equal(as.numeric(h12_output),haplo_act[,3])
   expect_equal(as.numeric(h123_output),haplo_act[,4])
-  
 })
 
 ## Hard simulation test with window_trim ----
@@ -139,6 +148,18 @@ test_that("sum_stats works",{
   expect_equal(as.numeric(h12_output),haplo_act[,3])
   expect_equal(as.numeric(h123_output),haplo_act[,4])
   
+  #LD stats 
+  
+  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- do.call(rbind,LD_act)
+  LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
+  LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
+  w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
+  
+  expect_equal(LD_act$LD_avg,LD_avg_output)
+  expect_equal(LD_act$LD_max,LD_max_output)
+  expect_equal(LD_act$w_max,w_max_output)
+  
 })
 
 ## Norm transformation across window test ---- 
@@ -210,6 +231,22 @@ test_that("sum_stat works",{
   expect_equal(as.numeric(h2_output),haplo_act[,2])
   expect_equal(as.numeric(h12_output),haplo_act[,3])
   expect_equal(as.numeric(h123_output),haplo_act[,4])
+  
+  #LD stats
+  
+  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- do.call(rbind,LD_act)
+  LD_avg_act <- LD_act$LD_avg %>% norm_vec()
+  LD_max_act <- LD_act$LD_max %>% norm_vec()
+  w_max_act <- LD_act$w_max %>% norm_vec()
+  
+  LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric() %>% norm_vec()
+  LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric() %>% norm_vec()
+  w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric() %>% norm_vec()
+  
+  expect_equal(LD_avg_act,LD_avg_output)
+  expect_equal(LD_max_act,LD_max_output)
+  expect_equal(w_max_act,w_max_output)
 
 })
 
@@ -283,6 +320,18 @@ test_that("sum_stats works",{
   expect_equal(as.numeric(h2_output),haplo_act[,2])
   expect_equal(as.numeric(h12_output),haplo_act[,3])
   expect_equal(as.numeric(h123_output),haplo_act[,4])
+  
+  #LD stats 
+  
+  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- do.call(rbind,LD_act)
+  LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
+  LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
+  w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
+  
+  expect_equal(LD_act$LD_avg,LD_avg_output)
+  expect_equal(LD_act$LD_max,LD_max_output)
+  expect_equal(LD_act$w_max,w_max_output)
 
 })
 
@@ -360,6 +409,18 @@ test_that("sum_stats works",{
   expect_equal(as.numeric(h2_output),haplo_act[,2])
   expect_equal(as.numeric(h12_output),haplo_act[,3])
   expect_equal(as.numeric(h123_output),haplo_act[,4])
+  
+  #LD stats 
+  
+  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- do.call(rbind,LD_act)
+  LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
+  LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
+  w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
+  
+  expect_equal(LD_act$LD_avg,LD_avg_output)
+  expect_equal(LD_act$LD_max,LD_max_output)
+  expect_equal(LD_act$w_max,w_max_output)
   
 })
 
