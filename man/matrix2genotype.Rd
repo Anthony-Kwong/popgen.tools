@@ -20,7 +20,7 @@ genotype.The second pair of rows will be the second genotype and so on. Hence, t
 input matrix must have an even number of rows.
 }
 \examples{
-  seq = matrix(sample(0:1, size = 5*10, replace = TRUE), nc = 5) 
+  seq = matrix(sample(0:1, size = 6*10, replace = TRUE), nc = 10) 
  matrix2genotype(seq)
 
 }

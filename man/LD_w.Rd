@@ -10,7 +10,8 @@ LD_w(r, i)
 \item{r}{: correlation matrix showing the correlations between each SNP 
 position, squared.}
 
-\item{i}{index for a column in r.}
+\item{i}{:index for a column in r. i must be bigger than 1 and less than the number
+of columns in r-1.}
 }
 \value{
 a numeric value for the omega statistic between at SNP column i.
