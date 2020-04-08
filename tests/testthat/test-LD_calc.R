@@ -15,9 +15,13 @@ test_that("LD_calc works",{
   w = sapply(y, LD_w, r=r)
   w_max = max(w)
   
+  r_values = r[upper.tri(r)]
+  Zns = mean(r_values)
+  
   df = tibble::tibble("LD_avg" = LD_avg,
                       "LD_max" = LD_max,
-                      "w_max" = w_max)
+                      "w_max" = w_max,
+                      "Zns" = Zns)
   
   output = LD_calc(seq)
   expect_equal(output,df)

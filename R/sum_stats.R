@@ -149,7 +149,8 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   win_stats<-list("H"=H,"D"=D, 
                   "LD_avg" = LD_values$LD_avg,
                   "LD_max" = LD_values$LD_max,
-                  "w_max" = LD_values$w_max)
+                  "w_max" = LD_values$w_max,
+                  "Zns" = LD_values$Zns)
   
   #output raw values
   #win_stats<-lapply(win_stats,norm_vec)
@@ -199,6 +200,9 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
     
     index = which(names(df)=="w_max1")
     names(df)[index:(index+nwins-1)]<-string_labels("w_max",nwins) 
+    
+    index = which(names(df)=="Zns1")
+    names(df)[index:(index+nwins-1)]<-string_labels("Zns",nwins)
         
     index=which(names(df)=="h11")
     names(df)[index:(index+nwins-1)]<-string_labels("h1",nwins)

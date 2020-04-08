@@ -30,7 +30,7 @@ LD_calc = function(G){
   
   # compute standardised D ----
   D = data$`D'`
-  D_values = D_stan[upper.tri(D)]
+  D_values = D[upper.tri(D)]
   LD_avg = mean (D_values)
   LD_max = max(D_values)
   

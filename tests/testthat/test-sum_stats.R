@@ -50,7 +50,7 @@ test_that("sum_stats works",{
   LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
   LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
   w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
-  
+  Zns_output <- output %>% dplyr::select(Zns_1:Zns_10) %>% as.numeric()
   
   h_act<-lapply(G_wins,h_stats) 
   x<-rep(NA,nwins)
@@ -70,6 +70,7 @@ test_that("sum_stats works",{
   expect_equal(LD_act$LD_avg,LD_avg_output)
   expect_equal(LD_act$LD_max,LD_max_output)
   expect_equal(LD_act$w_max,w_max_output)
+  expect_equal(LD_act$Zns,Zns_output)
   expect_equal(as.numeric(h1_output),haplo_act[,1])
   expect_equal(as.numeric(h2_output),haplo_act[,2])
   expect_equal(as.numeric(h12_output),haplo_act[,3])
@@ -155,10 +156,12 @@ test_that("sum_stats works",{
   LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
   LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
   w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
+  Zns_output <- output %>% dplyr::select(Zns_1:Zns_10) %>% as.numeric()
   
   expect_equal(LD_act$LD_avg,LD_avg_output)
   expect_equal(LD_act$LD_max,LD_max_output)
   expect_equal(LD_act$w_max,w_max_output)
+  expect_equal(LD_act$Zns,Zns_output)
   
 })
 
@@ -239,15 +242,18 @@ test_that("sum_stat works",{
   LD_avg_act <- LD_act$LD_avg %>% norm_vec()
   LD_max_act <- LD_act$LD_max %>% norm_vec()
   w_max_act <- LD_act$w_max %>% norm_vec()
+  Zns_act <- LD_act$Zns %>% norm_vec()
   
   LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric() %>% norm_vec()
   LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric() %>% norm_vec()
   w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric() %>% norm_vec()
+  Zns_output <- output %>% dplyr::select(Zns_1:Zns_10) %>% as.numeric() %>% norm_vec()
+  
   
   expect_equal(LD_avg_act,LD_avg_output)
   expect_equal(LD_max_act,LD_max_output)
   expect_equal(w_max_act,w_max_output)
-
+  expect_equal(Zns_act,Zns_output)
 })
 
 ## Split windows by base test ---- 
