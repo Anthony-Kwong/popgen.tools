@@ -21,17 +21,26 @@
 #'  LD_calc(seq)
 #' @importFrom genetics LD
 #' @importFrom tibble tibble
+#' @importFrom tester is_numeric_matrix
 LD_calc = function(G){
   
+  #check input ----
+  if(tester::is_numeric_matrix(G)==F){
+    input_class = class(G)
+    msg = paste0("Input G must be a numeric matrix.
+                 Currently, G is a ", input_class)
+    stop(msg)
+  }
+  
+  #compute LD stats ----
   genotypes = matrix2genotype(G)
-  #print(genotypes)
   ngeno = ncol(genotypes)
   data = genetics::LD(genotypes)
   
   # compute standardised D ----
-  #use abs(), sign shouldn't matter
+  # we take the absolute value as we are interested in the magnitude not the size. 
   
-  D = data$`D'`
+  D = abs(data$`D'`)
   D_values = D[upper.tri(D)]
   LD_avg = mean (D_values)
   LD_max = max(D_values)

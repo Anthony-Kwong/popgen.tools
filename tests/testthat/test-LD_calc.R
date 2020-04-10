@@ -4,7 +4,7 @@ test_that("LD_calc works",{
   
   genomes = matrix2genotype(seq)
   data = genetics::LD(genomes)
-  D = data$`D'`
+  D = abs(data$`D'`)
   D_values = D[upper.tri(D)]
   
   LD_avg = mean(D_values)

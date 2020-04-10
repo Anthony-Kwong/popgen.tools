@@ -20,6 +20,7 @@
 generate_df<-function(sim_list,nwins,split_type="base",snp,form="wide",fun="none",
                       LD_downsample=F, ds_prop=NA, ds_seed=NA){
   
+  #generate a random seed if one was not given
   if(is.na(ds_seed)){
     ds_seed = sample(.Machine$integer.max, 1)
   }

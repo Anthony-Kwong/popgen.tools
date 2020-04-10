@@ -13,7 +13,25 @@
 #' @examples   mat <- matrix(runif(64), 8, 8)
 #' mat[upper.tri(mat)==F] <- NA
 #' LD_w(mat,2)
+#' @importFrom tester is_numeric_matrix is_integer
 LD_w = function (r,i){
+  
+  #check inputs
+  if(tester::is_numeric_matrix(r)==F){
+    input_class = class(r)
+    msg = paste0("Input G must be a numeric matrix.
+                 Currently, G is a ", input_class)
+    stop(msg)
+  }
+  
+  #ensure the lower triangular and diagonal elements are na
+  lower_elements = c(diag(r), r[lower.tri(r)])
+  check = is.na(lower_elements)
+  if(all(check)==F){
+    stop("Input r must have NA values on the diagonal and the lower triangular elements.
+         It is a correlation matrix.")
+  }
+  
   nsam = ncol(r)
   
   #terminate if there are 3 or less SNPs. We can't compute w in this case. 
@@ -21,6 +39,10 @@ LD_w = function (r,i){
     warning("There are 3 or less SNPs in this window. Can't compute w values.
             Returning NA.")
     return(NA)
+  }
+  
+  if(tester::is_integer(i)==F){
+    stop("i must be an integer. It is a column index.")
   }
   
   if(i<=1 || i>=(nsam-1)){
