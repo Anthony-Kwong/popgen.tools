@@ -8,26 +8,33 @@
 #' @param snp: number of snps to include per simulation
 #' @param form: Option for dataframe to be in "tall" or "wide" form. 
 #' @param fun: function to apply over summary statistics (haplotype stats excluded). See sum_stats documentation for details. 
+#' @param LD_downsample: logical option to downsample genome matrix for the purposes of computing LD statistics. Default is FALSE. 
+#' @param ds_prop: Used with LD_downsample. Proportion of columns to downsample without replacement from the genome matrix. 
+#' @param ds_seed: Optional. Numeric seed for the LD_downsample. 
 #' @importFrom purrr pmap
 #' @importFrom dplyr bind_rows
 #' @return dataframe containing summary statistics of all the subwindows across all the simulations. 
 #' @export 
 #'
 #' @examples generate_df(sim_list,10)
-generate_df<-function(sim_list,nwins,split_type="base",snp,form="wide",fun="none"){
+generate_df<-function(sim_list,nwins,split_type="base",snp,form="wide",fun="none",
+                      LD_downsample=F, ds_prop=NA, ds_seed=NA){
+  
+  if(is.na(ds_seed)){
+    ds_seed = sample(.Machine$integer.max, 1)
+  }
+  
   num_sim<-length(sim_list)
-  
-  #extend arguments into vectors for pmap
-  #generate IDs for each simulation
   id <- (1:num_sim)
- # num_wins <- rep(nwins,num_sim)
-#  split_type <- rep(split_type,num_sim)
- # snp <- rep(snp,num_sim)
-#  form <- rep(form,num_sim)
-# fun <- rep(fun,num_sim)
+  seeds <- sample(.Machine$integer.max, num_sim)
   
-  df_list<-purrr::pmap(list(sim_list,nwins=nwins,split_type=split_type,
-                            id,snp=snp,form=form,fun=fun),sum_stats)
+  arg_list= list(sim_list,nwins=nwins,split_type=split_type,
+                 id,snp=snp,form=form,fun=fun,
+                 LD_downsample=LD_downsample,
+                 ds_prop = ds_prop,
+                 ds_seed = seeds)
+  
+  df_list<-purrr::pmap(arg_list,sum_stats)
   df<-dplyr::bind_rows(df_list)
   
   #change sweep and position into factors.

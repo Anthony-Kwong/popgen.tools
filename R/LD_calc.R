@@ -29,6 +29,8 @@ LD_calc = function(G){
   data = genetics::LD(genotypes)
   
   # compute standardised D ----
+  #use abs(), sign shouldn't matter
+  
   D = data$`D'`
   D_values = D[upper.tri(D)]
   LD_avg = mean (D_values)

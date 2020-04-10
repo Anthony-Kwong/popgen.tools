@@ -25,7 +25,7 @@ downsample_mat = function (G , p, seed = NA){
   n = round( ncol(G)*p )  
   
   if(is.na(seed)){
-    seed = sample.int(9999999,1)
+    seed = sample.int(.Machine$integer.max,1)
   }
   
   set.seed(seed)

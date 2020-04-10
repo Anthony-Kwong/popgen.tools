@@ -5,10 +5,13 @@
 #' @param sim: a simulation object
 #' @param nwins: number of subwindows to split each genome matrix within the simulation.
 #' @param split_type: Method of splitting the genome matrix. Valid options are "base" and "mut".
-#' @param ID: an ID value to group subwindows under the simulation it came from. 
+#' @param ID: a numeric ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
 #' @param fun: option to apply a function over the ss across a simulation. Default is "none". The haplotype statistics (h_stats) don't get transformed. Options include "norm"
+#' @param LD_downsample: logical option to downsample genome matrix for the purposes of computing LD statistics. Default is FALSE. 
+#' @param ds_prop: Used with LD_downsample. Proportion of columns to downsample without replacement from the genome matrix. 
+#' @param ds_seed: Optional. Numeric seed for the LD_downsample. 
 #' @importFrom tibble enframe as_tibble tibble
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
@@ -17,7 +20,7 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
+sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none", LD_downsample=F, ds_prop=NA ,ds_seed=NA){
   
   # ensure arguments are entered correctly ----
   
@@ -70,6 +73,20 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
     stop("Invalid argument:fun. See documentation for valid options")
   }
   
+  #LD_downsample
+  if(LD_downsample && is.na(ds_prop)){
+    stop("ds_prop must be designated when LD_downsample is T.")
+  }
+  
+  if(is.na(ds_prop)==F){
+    if(ds_prop > 1 || ds_prop < 0){
+      stop("ds_prop is a proportion. It must be between 0 and 1.")
+    }
+  }
+  
+  if(is.na(ds_seed)){
+    ds_seed = sample(.Machine$integer.max,1)
+  }
   
   #Quick way to see where the simulations are up to. 
   print(ID)
@@ -141,8 +158,21 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none"){
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   #D<-D %>% tibble::enframe(name=NULL,value="Taj_D") 
   
-  #LD stats 
-  LD_values = lapply(win_list,LD_calc)
+  #LD stats ----
+  
+  if(LD_downsample){
+#    t1 = Sys.time()
+    set.seed(ds_seed)
+    seeds = sample(.Machine$integer.max,nwins)
+    down_win_list=purrr::pmap(list(win_list, p=ds_prop, seed=seeds), downsample_mat)
+    LD_values = lapply(down_win_list,LD_calc)
+#    t2 = Sys.time()
+  }else {
+#    a1 = Sys.time()
+    LD_values = lapply(win_list,LD_calc)
+#    a2= Sys.time()
+  }
+  
   LD_values = do.call(rbind,LD_values)
   
   #collect stats

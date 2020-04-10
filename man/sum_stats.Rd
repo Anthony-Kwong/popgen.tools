@@ -4,7 +4,18 @@
 \alias{sum_stats}
 \title{sum_stats function}
 \usage{
-sum_stats(sim, nwins, split_type, ID, snp, form = "wide", fun = "none")
+sum_stats(
+  sim,
+  nwins,
+  split_type,
+  ID,
+  snp,
+  form = "wide",
+  fun = "none",
+  LD_downsample = F,
+  ds_prop = NA,
+  ds_seed = NA
+)
 }
 \arguments{
 \item{sim:}{a simulation object}
@@ -13,13 +24,19 @@ sum_stats(sim, nwins, split_type, ID, snp, form = "wide", fun = "none")
 
 \item{split_type:}{Method of splitting the genome matrix. Valid options are "base" and "mut".}
 
-\item{ID:}{an ID value to group subwindows under the simulation it came from.}
+\item{ID:}{a numeric ID value to group subwindows under the simulation it came from.}
 
 \item{snp:}{number of snps to include per simulation}
 
 \item{form:}{output data frame in "wide" or "tall" form. This is an optional argument with default="wide".}
 
 \item{fun:}{option to apply a function over the ss across a simulation. Default is "none". The haplotype statistics (h_stats) don't get transformed. Options include "norm"}
+
+\item{LD_downsample:}{logical option to downsample genome matrix for the purposes of computing LD statistics. Default is FALSE.}
+
+\item{ds_prop:}{Used with LD_downsample. Proportion of columns to downsample without replacement from the genome matrix.}
+
+\item{ds_seed:}{Optional. Numeric seed for the LD_downsample.}
 }
 \value{
 list of summary stats for the input genome matrix

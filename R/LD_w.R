@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples   mat <- matrix(runif(64), 8, 8)
-#' mat[upper.tri(mat)==F] <- 0
+#' mat[upper.tri(mat)==F] <- NA
 #' LD_w(mat,2)
 LD_w = function (r,i){
   nsam = ncol(r)
@@ -27,18 +27,17 @@ LD_w = function (r,i){
     stop("index i must be between 1 and number of columns in r-1, exclusively.")
   }
   
-  r[is.na(r)] = 0
   L = r[,1:i]
   R = r[,(i+1):nsam]
   
   #compute nominator term
-  top_sums = sum(L) + sum(R[(i+1):nsam,])
+  top_sums = sum(L, na.rm = T) + sum(R[(i+1):nsam,],na.rm = T)
   top_norm = choose(i,2) + choose(nsam-i,2)
   
   nominator = top_sums/top_norm
   
   #compute denominator term
-  bot_sum = sum(R[(1:i),])
+  bot_sum = sum(R[(1:i),], na.rm = T)
   bot_norm = i*(nsam - i)
   
   denominator = bot_sum/bot_norm

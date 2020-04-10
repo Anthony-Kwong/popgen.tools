@@ -21,6 +21,6 @@ Computes w for some SNP position i, in a genome matrix.
 }
 \examples{
   mat <- matrix(runif(64), 8, 8)
-mat[upper.tri(mat)==F] <- 0
+mat[upper.tri(mat)==F] <- NA
 LD_w(mat,2)
 }

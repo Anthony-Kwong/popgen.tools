@@ -10,7 +10,10 @@ generate_df(
   split_type = "base",
   snp,
   form = "wide",
-  fun = "none"
+  fun = "none",
+  LD_downsample = F,
+  ds_prop = NA,
+  ds_seed = NA
 )
 }
 \arguments{
@@ -25,6 +28,12 @@ generate_df(
 \item{form:}{Option for dataframe to be in "tall" or "wide" form.}
 
 \item{fun:}{function to apply over summary statistics (haplotype stats excluded). See sum_stats documentation for details.}
+
+\item{LD_downsample:}{logical option to downsample genome matrix for the purposes of computing LD statistics. Default is FALSE.}
+
+\item{ds_prop:}{Used with LD_downsample. Proportion of columns to downsample without replacement from the genome matrix.}
+
+\item{ds_seed:}{Optional. Numeric seed for the LD_downsample.}
 }
 \value{
 dataframe containing summary statistics of all the subwindows across all the simulations.
