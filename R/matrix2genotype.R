@@ -14,18 +14,19 @@
 #'  matrix2genotype(seq)
 #' 
 #' @importFrom genetics genotype makeGenotypes
+#' @importFrom tester is_odd
 matrix2genotype = function(G){
 
   nsam = nrow(G)
   
   #check input
-  if((nsam %% 2) != 0){
+  if(is_odd(nsam)){
     msg = paste("The number of rows in G must be even.")
     stop(msg)
   }
   
-  if(is.numeric(G) == F){
-    msg = paste ("Input matrix must be numeric")
+  if(is_genome_matrix(G) == F){
+    msg = paste ("Input matrix must be a valid genome matrix. See documentation on is_genome_matrix.")
     stop(msg)
   }
   

@@ -21,13 +21,12 @@
 #'  LD_calc(seq)
 #' @importFrom genetics LD
 #' @importFrom tibble tibble
-#' @importFrom tester is_numeric_matrix
 LD_calc = function(G){
   
   #check input ----
-  if(tester::is_numeric_matrix(G)==F){
+  if(is_genome_matrix(G)==F){
     input_class = class(G)
-    msg = paste0("Input G must be a numeric matrix.
+    msg = paste0("Input G must be a valid genome matrix.
                  Currently, G is a ", input_class)
     stop(msg)
   }

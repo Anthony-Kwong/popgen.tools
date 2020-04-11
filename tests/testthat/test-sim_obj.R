@@ -6,7 +6,7 @@ test_that ("simulation object constructly correctly", {
   segsites=10
   positions=c(0.4,0.6)
   set.seed(2019)
-  genome_matrix=matrix(sample(0:1, size = 9, replace = TRUE), nc = 3)
+  genome_matrix=matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
   sweep="hard"
   select_coeff=0.1
   fix_time=3

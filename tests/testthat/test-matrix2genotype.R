@@ -2,14 +2,16 @@ test_that("matrix2genotype works",{
   
   set.seed(6221941)
   SNP = 10
-  nsam = 4
+  nsam = 6
   seq = matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP) 
   
   g1 = genetics::genotype(seq[1,],seq[2,])
   g2 = genetics::genotype(seq[3,],seq[4,])
+  g3 = genetics::genotype(seq[5,],seq[6,])
+  
 
   output = matrix2genotype(seq)
-  df = data.frame(g1,g2) %>% t() %>% genetics::makeGenotypes()
+  df = data.frame(g1,g2,g3) %>% t() %>% genetics::makeGenotypes()
   expect_equal(df,output)
 
   

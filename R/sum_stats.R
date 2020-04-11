@@ -142,6 +142,11 @@ sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none", LD_downs
     stop("Invalid argument for split_type. Valid options are \"base\" and \"mut\".")
   }
   
+  #check every element in win_list is a valid genome matrix
+  if( all( sapply(win_list,is_genome_matrix) ) ==F ){
+    stop("The window splits in sum_stats produced invalid genome matrices.")
+  }
+  
   
   #Compute SS on subwindows----
 

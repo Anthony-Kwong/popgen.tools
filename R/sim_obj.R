@@ -28,7 +28,12 @@
 #' @examples This is meant to be a hidden function.
 sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_time=0,
                   bottle_time1=0,bottle_size1=1,bottle_time2=0,bottle_size2=1){
-
+  
+  #check inputs
+  if(is_genome_matrix(genome_matrix)==F){
+    stop("Invalid genome matrix given to sim_obj constructor.")
+  }
+  
   obj<-list(
   cmd=cmd,
   seeds=seeds,
