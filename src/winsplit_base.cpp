@@ -66,8 +66,8 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
     //if start=end. There are no SNPs in that genome window.
     if(end==start_indices[i]){
       warning("No SNPs found within a window. Setting window to NULL");
-      windows[i]=NULL;
-      break;
+      windows[i]= R_NaN;
+      continue;
     }
     windows[i]=G(Range(0,nsam-1),Range(start,end));
     start=end+1;

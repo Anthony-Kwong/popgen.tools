@@ -97,9 +97,12 @@ test_that("Discoal command converted to neutral correctly",{
   sweep="hard"
   
   #I am supposed to produce a warning. 
-  sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,
+  sim = suppressWarnings( 
+    discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=genome_length,
                     samplesize=samplesize,discoal_path=discoal_path,
                     sweep=sweep,fix_time = fix)
+  )
+  
   input_cmd=sim$cmd
   theta=no_scientific(4*Ne*mu*genome_length) 
   rho=no_scientific(4*Ne*recomb_rate*genome_length)  

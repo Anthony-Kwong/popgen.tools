@@ -22,11 +22,15 @@ R_winsplit_base<-function(G, pos, n){
   }
   
   wins = list()
-  start=1
-  for(j in 2:(n+1)){
-    end=start_indices[j]
-    wins[[j-1]]=G[,start:end]
-    start=end+1
+  start= start_indices[1]
+  for(j in 1:n){
+    end=start_indices[j+1]
+    if(end == start_indices[j]){
+      wins[[j]]=NaN
+      next
+    }
+    wins[[j]]=G[,start:end] %>% as.matrix()
+    start= end + 1
   }
   
   return(wins)
@@ -112,7 +116,7 @@ test_that("winsplit_base works",{
   SNP = 500
   nwins = 10
   nsam = 30
-  seq <-matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  seq <- matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
   pos <- runif(0,1,n=SNP) %>% sort()
   cen = 250
   k = 125
@@ -121,6 +125,26 @@ test_that("winsplit_base works",{
   pos_trim = vector_trim(pos, cen, k)
   C_says = winsplit_base(G, pos_trim, nwins)
   R_says = R_winsplit_base( G, pos_trim, nwins)
+  
+  for(i in 1:nwins){
+    check=all.equal(C_says[[i]],R_says[[i]])
+    expect_equal(check,T)
+  }
+  
+  #checking effect of having no SNPs in a block
+  
+  #auto check for trimmed sims
+  set.seed(21)
+  SNP = 20
+  nwins = 4
+  nsam = 5
+  seq <- matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  pos1 <- runif(0,0.25,n=(SNP/2)) %>% sort()
+  pos2 <- runif(0.75,1,n=(SNP/2)) %>% sort()
+  pos = c(pos1, pos2) 
+  
+  C_says = suppressWarnings ( winsplit_base( seq, pos, nwins) )
+  R_says = R_winsplit_base( seq, pos, nwins)
   
   for(i in 1:nwins){
     check=all.equal(C_says[[i]],R_says[[i]])
