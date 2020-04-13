@@ -5,8 +5,7 @@
 #' and the maximum values of D' for the input block. D' is denoted LD in the code
 #' to avoid confusion with Tajima's D. Function also computes w_max.
 #' 
-#' For underlying theory see
-#' w_max: DOI: 10.1534/genetics.103.025387  
+#' @references w_max: DOI: 10.1534/genetics.103.025387  
 #' D': Lewontin RC. The Interaction of Selection and Linkage. I. General Considerations; Heterotic Models. Genetics. 1964 Jan;49(1):49-67. PMID: 17248194; PMCID: PMC1210557.
 #' Zns: Kelly, J.K., 1997. A test of neutrality based on interlocus associations. Genetics, 146(3), pp.1197-1206. Vancouver	
 #'
@@ -21,9 +20,19 @@
 #'  LD_calc(seq)
 #' @importFrom genetics LD
 #' @importFrom tibble tibble
+#' @importFrom tester has_NA
 LD_calc = function(G){
   
   #check input ----
+  if(tester::has_NA(G)){
+    warning("Input matrix is NA. Returning NA for LD stats")
+    df = tibble::tibble("LD_avg"= NA, 
+                   "LD_max" = NA,
+                   "w_max" = NA,
+                   "Zns" = NA)
+    return(df)
+  }
+  
   if(is_genome_matrix(G)==F){
     input_class = class(G)
     msg = paste0("Input G must be a valid genome matrix.

@@ -1,4 +1,5 @@
 test_that("LD_calc works",{
+  #case 1----
   set.seed(6291)
   seq <- matrix(sample(0:1, size = 60, replace = TRUE), nc = 6)
   
@@ -25,4 +26,13 @@ test_that("LD_calc works",{
   
   output = LD_calc(seq)
   expect_equal(output,df)
+  
+  #check NA input returns NA
+  null_win = as.numeric(NA) %>% matrix()
+  check = suppressWarnings(LD_calc(null_win))
+  df = tibble::tibble("LD_avg"= NA, 
+                      "LD_max" = NA,
+                      "w_max" = NA,
+                      "Zns" = NA)
+  expect_equal (check, df)
 })

@@ -14,12 +14,17 @@
 #'  matrix2genotype(seq)
 #' 
 #' @importFrom genetics genotype makeGenotypes
-#' @importFrom tester is_odd
+#' @importFrom tester is_odd has_NA
 matrix2genotype = function(G){
 
   nsam = nrow(G)
   
   #check input
+  if(tester::has_NA(G)){
+    warning("Input matrix is NA.")
+    return(NA)
+  }
+  
   if(is_odd(nsam)){
     msg = paste("The number of rows in G must be even.")
     stop(msg)

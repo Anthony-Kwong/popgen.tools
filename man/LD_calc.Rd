@@ -19,13 +19,12 @@ standardized LD coefficient D' for each column pair and returns the average
 and the maximum values of D' for the input block. D' is denoted LD in the code
 to avoid confusion with Tajima's D. Function also computes w_max.
 }
-\details{
-For underlying theory see
-w_max: DOI: 10.1534/genetics.103.025387  
-D': Lewontin RC. The Interaction of Selection and Linkage. I. General Considerations; Heterotic Models. Genetics. 1964 Jan;49(1):49-67. PMID: 17248194; PMCID: PMC1210557.
-Zns: Kelly, J.K., 1997. A test of neutrality based on interlocus associations. Genetics, 146(3), pp.1197-1206. Vancouver
-}
 \examples{
   seq <-matrix(sample(0:1, size =16 , replace = TRUE), nc = 4)
  LD_calc(seq)
+}
+\references{
+w_max: DOI: 10.1534/genetics.103.025387  
+D': Lewontin RC. The Interaction of Selection and Linkage. I. General Considerations; Heterotic Models. Genetics. 1964 Jan;49(1):49-67. PMID: 17248194; PMCID: PMC1210557.
+Zns: Kelly, J.K., 1997. A test of neutrality based on interlocus associations. Genetics, 146(3), pp.1197-1206. Vancouver
 }

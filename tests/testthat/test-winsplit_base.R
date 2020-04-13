@@ -26,7 +26,7 @@ R_winsplit_base<-function(G, pos, n){
   for(j in 1:n){
     end=start_indices[j+1]
     if(end == start_indices[j]){
-      wins[[j]]=NaN
+      wins[[j]]= as.numeric(NA) %>% matrix()
       next
     }
     wins[[j]]=G[,start:end] %>% as.matrix()
@@ -53,17 +53,8 @@ test_that("winsplit_base works",{
   ans[[2]] = seq[,6:7]
   ans[[3]] = seq[,8:10]
   
-  #R version
-  for(i in 1:3){
-    check=all.equal(R_says[[i]],ans[[i]])
-    expect_equal(check,T)
-  }
-  
-  #C version
-  for(i in 1:3){
-    check=all.equal(C_says[[i]],ans[[i]])
-    expect_equal(check,T)
-  }
+  expect_equal(C_says, ans)
+  expect_equal(R_says, R_says)
   
   #autocheck, untrimmed
   
@@ -75,10 +66,8 @@ test_that("winsplit_base works",{
   C_says <- winsplit_base(seq,pos,n=nwins)
   R_says <- R_winsplit_base(seq,pos,n=nwins)
   
-  for(i in 1:nwins){
-    check=all.equal(C_says[[i]],R_says[[i]])
-    expect_equal(check,T)
-  }
+  expect_equal(C_says, R_says)
+  
   
   #test for trimmed simulations, manual
   set.seed(21)
@@ -106,10 +95,8 @@ test_that("winsplit_base works",{
     expect_equal(check,T)
   }
   
-  for(i in 1:nwins){
-    check=all.equal(R_says[[i]],ans[[i]])
-    expect_equal(check,T)
-  }
+  expect_equal(C_says, R_says)
+  
   
   #auto check for trimmed sims
   set.seed(21)
@@ -126,10 +113,7 @@ test_that("winsplit_base works",{
   C_says = winsplit_base(G, pos_trim, nwins)
   R_says = R_winsplit_base( G, pos_trim, nwins)
   
-  for(i in 1:nwins){
-    check=all.equal(C_says[[i]],R_says[[i]])
-    expect_equal(check,T)
-  }
+  expect_equal(C_says, R_says)
   
   #checking effect of having no SNPs in a block
   
@@ -146,9 +130,6 @@ test_that("winsplit_base works",{
   C_says = suppressWarnings ( winsplit_base( seq, pos, nwins) )
   R_says = R_winsplit_base( seq, pos, nwins)
   
-  for(i in 1:nwins){
-    check=all.equal(C_says[[i]],R_says[[i]])
-    expect_equal(check,T)
-  }
+  expect_equal(C_says, R_says)
   
 })

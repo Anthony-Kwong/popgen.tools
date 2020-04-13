@@ -13,10 +13,11 @@
 #' @examples   mat <- matrix(runif(64), 8, 8)
 #' mat[upper.tri(mat)==F] <- NA
 #' LD_w(mat,2)
-#' @importFrom tester is_numeric_matrix is_integer
+#' @importFrom tester is_numeric_matrix is_integer has_NA
 LD_w = function (r,i){
   
   #check inputs
+  
   if(tester::is_numeric_matrix(r)==F){
     input_class = class(r)
     msg = paste0("Input G must be a numeric matrix.
@@ -24,7 +25,7 @@ LD_w = function (r,i){
     stop(msg)
   }
   
-  #ensure the lower triangular and diagonal elements are na
+  #ensure the lower triangular and diagonal elements are NA
   lower_elements = c(diag(r), r[lower.tri(r)])
   check = is.na(lower_elements)
   if(all(check)==F){

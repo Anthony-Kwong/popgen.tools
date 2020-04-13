@@ -11,7 +11,13 @@
 #'
 #' @examples seq <-matrix(sample(0:1, size =40 , replace = TRUE), nc = 10)
 #' downsample_mat(seq, 0.2)
+#' @importFrom tester has_NA
 downsample_mat = function (G , p, seed = NA){
+  
+  if(tester::has_NA(G)){
+    warning("Input matrix is NA")
+    return(NA)
+  }
   
   if(is.matrix(G)!=T){
     stop("Parameter G must be a matrix.")

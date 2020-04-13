@@ -30,4 +30,11 @@ test_that("downsample_mat works",{
   act = seq[,kcol]
   
   expect_equal(output, act)
+  
+  #check NA input, returns NA
+  check= suppressWarnings(
+    downsample_mat(NaN, p = 0.1)
+  )
+  expect_equal(check, NA)
+  
 })

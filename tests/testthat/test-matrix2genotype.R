@@ -1,5 +1,6 @@
 test_that("matrix2genotype works",{
   
+  #case 1----
   set.seed(6221941)
   SNP = 10
   nsam = 6
@@ -14,7 +15,7 @@ test_that("matrix2genotype works",{
   df = data.frame(g1,g2,g3) %>% t() %>% genetics::makeGenotypes()
   expect_equal(df,output)
 
-  
+  #case 2 ----
   set.seed(6221242)
   SNP = 10
   nsam = 20
@@ -35,4 +36,7 @@ test_that("matrix2genotype works",{
   
   expect_equal(gen_df,output)
   
+  #check NA input returns NA
+  check = suppressWarnings(matrix2genotype(NA))
+  expect_equal (check, NA)
 })
