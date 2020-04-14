@@ -74,6 +74,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// have_na
+bool have_na(NumericMatrix M);
+RcppExport SEXP _popgen_tools_have_na(SEXP MSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type M(MSEXP);
+    rcpp_result_gen = Rcpp::wrap(have_na(M));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _popgen_tools_rcpp_hello_world() {
@@ -376,6 +387,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_theta_h", (DL_FUNC) &_popgen_tools_theta_h, 1},
     {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 2},
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
+    {"_popgen_tools_have_na", (DL_FUNC) &_popgen_tools_have_na, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
     {"_popgen_tools_a1f", (DL_FUNC) &_popgen_tools_a1f, 1},

@@ -78,6 +78,19 @@ h_stats <- function(G) {
     .Call('_popgen_tools_h_stats', PACKAGE = 'popgen.tools', G)
 }
 
+#' have_na function
+#' 
+#' Checks if a NumericMatrix has any NA values. Returns T if it does, F otherwise.
+#' 
+#' @param M: A NumericMatrix
+#' @return A boolean indicating whether the input matrix has any NAs. 
+#' @examples A = matrix(1:4, nrow = 2)
+#' have_na(A)
+#' @export 
+have_na <- function(M) {
+    .Call('_popgen_tools_have_na', PACKAGE = 'popgen.tools', M)
+}
+
 rcpp_hello_world <- function() {
     .Call('_popgen_tools_rcpp_hello_world', PACKAGE = 'popgen.tools')
 }

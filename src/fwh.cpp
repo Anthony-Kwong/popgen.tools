@@ -1,6 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
-#include "popgen.h"
+#include "matrix_check.h"
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp 
@@ -43,6 +43,12 @@ int count(NumericVector vec,int target){
 //' @export
 // [[Rcpp::export]]
 double theta_h(NumericMatrix G){
+  
+  //check input
+  if(have_na(G)){
+    Rcpp::warning("Input matrix is NA. Returning NA.");
+    return (R_NaN);
+  }
   
   //compute the frequency of each SNP/mutation
   NumericVector column_sum=colSums(G);

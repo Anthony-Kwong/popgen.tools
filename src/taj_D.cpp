@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 using namespace Rcpp;
+#include "matrix_check.h"
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -95,6 +96,13 @@ double e2f(double a1, double a2, double c2){
 //' @export
 // [[Rcpp::export]]
 double theta_t(NumericMatrix G){
+  
+  //check input
+  if(have_na(G)){
+    Rcpp::warning("Input matrix is NA. Returning NA.");
+    return (R_NaN);
+  }
+  
   int num_sam=G.nrow();
   int num_seg=G.ncol();
   
@@ -144,6 +152,13 @@ double theta_t(NumericMatrix G){
 //' @export
 // [[Rcpp::export]]
 double theta_w(NumericMatrix G){
+  
+  //check input
+  if(have_na(G)){
+    Rcpp::warning("Input matrix is NA. Returning NA.");
+    return (R_NaN);
+  }
+  
   int N=G.nrow();
   int num_seg=G.ncol();
   double theta_w;
@@ -164,6 +179,12 @@ double theta_w(NumericMatrix G){
 //' @export
 // [[Rcpp::export]]
 double var_taj(NumericMatrix G){
+
+    //check input
+  if(have_na(G)){
+    Rcpp::warning("Input matrix is NA. Returning NA.");
+    return (R_NaN);
+  }
   
   int nsam=G.nrow();
   
