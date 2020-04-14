@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "unique_rows.h"
+#include "matrix_check.h"
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp 
@@ -24,6 +25,13 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 NumericVector h_stats(NumericMatrix G) {
+  //check input
+  if(have_na(G)){
+    Rcpp::warning("Input matrix is NA. Returning NA.");
+    NumericVector h_stats (4);
+    std::fill(h_stats.begin(), h_stats.end(), NumericVector::get_na());
+    return (h_stats);
+  }
   
   //compute the haplotype frequencies
   NumericVector freq=row_freq(G);

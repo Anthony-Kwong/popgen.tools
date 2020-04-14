@@ -62,5 +62,13 @@ test_that("hstats computed correctly",{
   indices<-sample(nrow(seq))
   seq<-seq[indices, ]
   expect_equal(R_hstats(seq),h_stats(seq))
+  
+  #test NA input returns NA. 
+  null_win = as.numeric(NA) %>% matrix()
+  check = suppressWarnings(  h_stats(null_win)  )
+  null_stats = rep(NA,4) %>% as.numeric()
+  expect_equal(check, null_stats)
+  
+  
   })
 
