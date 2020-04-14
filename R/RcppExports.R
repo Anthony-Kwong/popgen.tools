@@ -288,18 +288,6 @@ vector_trim <- function(x, cen, k) {
     .Call('_popgen_tools_vector_trim', PACKAGE = 'popgen.tools', x, cen, k)
 }
 
-#' w_max function
-#' 
-#' Computes w_max for a binary, genome matrix. Each column is a SNP, each row is a sample. 
-#' 
-#' @param G: Binary genome matrix consisting of 1's and 0's.
-#' @return scalar value of w_max for the genome matrix
-#' @examples w_max(G)
-#' @export
-w_max <- function(x) {
-    .Call('_popgen_tools_w_max', PACKAGE = 'popgen.tools', x)
-}
-
 #' window_trim function
 #' 
 #' Trims the outer columns of a matrix. 

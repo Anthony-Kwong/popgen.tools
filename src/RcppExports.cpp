@@ -342,17 +342,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// w_max
-NumericVector w_max(NumericVector x);
-RcppExport SEXP _popgen_tools_w_max(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(w_max(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // window_trim
 NumericMatrix window_trim(NumericMatrix G, int cen, int k);
 RcppExport SEXP _popgen_tools_window_trim(SEXP GSEXP, SEXP cenSEXP, SEXP kSEXP) {
@@ -410,7 +399,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_vec_equal", (DL_FUNC) &_popgen_tools_vec_equal, 2},
     {"_popgen_tools_vec_split", (DL_FUNC) &_popgen_tools_vec_split, 2},
     {"_popgen_tools_vector_trim", (DL_FUNC) &_popgen_tools_vector_trim, 3},
-    {"_popgen_tools_w_max", (DL_FUNC) &_popgen_tools_w_max, 1},
     {"_popgen_tools_window_trim", (DL_FUNC) &_popgen_tools_window_trim, 3},
     {"_popgen_tools_winsplit_base", (DL_FUNC) &_popgen_tools_winsplit_base, 3},
     {NULL, NULL, 0}

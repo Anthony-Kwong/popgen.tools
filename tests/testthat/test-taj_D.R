@@ -98,6 +98,11 @@ test_that("Tajima variance term computer correctly",{
   var=e_1*nsam+e_2*nsam*(nsam-1)
   
   expect_equal(var,var_taj(seq))
+  
+  #test NA input returns NA. 
+  null_win = as.numeric(NA) %>% matrix()
+  check = suppressWarnings(  var_taj(null_win)  )
+  expect_equal(check, NaN)
 })
 
 test_that("Taj_D: theta_t function work correctly",{
@@ -115,6 +120,11 @@ test_that("Taj_D: theta_t function work correctly",{
   SNP=200
   seq <-matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP) 
   expect_equal(theta_t(seq),test_theta_t(seq))
+  
+  #test NA input returns NA. 
+  null_win = as.numeric(NA) %>% matrix()
+  check = suppressWarnings(  theta_t(null_win)  )
+  expect_equal(check, NaN)
 })
 
 test_that("Taj_D:theta_w computed correctly",{
@@ -128,6 +138,11 @@ test_that("Taj_D:theta_w computed correctly",{
   SNP=200
   seq <-matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP) 
   expect_equal(theta_w(seq),test_theta_w(seq))
+  
+  #test NA input returns NA. 
+  null_win = as.numeric(NA) %>% matrix()
+  check = suppressWarnings(  theta_w(null_win)  )
+  expect_equal(check, NaN)
   
 })
 
@@ -143,6 +158,10 @@ test_that("Tajima D computed correctly",{
   test=(t-w)*v^(-0.5)
   
   expect_equal(taj_D(t,w,v),test)
+  
+  #test NA input returns NA. 
+  check = suppressWarnings(  taj_D(NaN, NaN, NaN) )
+  expect_equal(check, NaN)
   
 })
 
