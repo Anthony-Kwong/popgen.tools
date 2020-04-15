@@ -1,6 +1,10 @@
 ##R version of theta_h for testing purposes
 
 R_theta_h<-function(M){
+  
+  if(ncol(M)<5){
+    return (NaN)
+  }
   x<-colSums(M)
   N<-nrow(M)
   Si=rep(0,N-1)
@@ -35,7 +39,9 @@ test_that("Fay and Wu's H computed correctly",{
   set.seed(2018)
   SNP=4
   seq <-matrix(sample(0:1, size = SNP*3, replace = TRUE), nc = SNP)
-  expect_equal(R_theta_h(seq),theta_h(seq))
+  suppressWarnings(
+    expect_equal(R_theta_h(seq),theta_h(seq))
+  )
 
   set.seed(123)
   SNP=50

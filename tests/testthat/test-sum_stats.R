@@ -21,8 +21,13 @@ test_that("sum_stats downsampling works",{
                     samplesize=samplesize,s=s,discoal_path=discoal_path,
                     fix_time=fix,sweep=sweep_type,seed=seed)
   
-  output = sum_stats(sim = sim,split_type="base",nwins = nwins, ID=id, snp = snp_inc,
-                     LD_downsample = T, ds_prop = ds_prop, ds_seed = ds_seed)
+  output = suppressWarnings(
+    sum_stats(sim = sim,split_type="base",nwins = nwins, ID=id, snp = snp_inc,
+              LD_downsample = T, ds_prop = ds_prop, ds_seed = ds_seed)
+  )
+    
+
+
   
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
@@ -84,7 +89,9 @@ test_that("sum_stats downsampling works",{
                             downsample_mat)
   
   
-  LD_act <- lapply(down_win_list, LD_calc)
+  LD_act <- suppressWarnings(
+    lapply(down_win_list, LD_calc)
+  )
   LD_act <- do.call(rbind,LD_act)
   
   LD_avg <- output %>% dplyr::select(LD_avg_1:LD_avg_5) %>% as.numeric()
@@ -527,4 +534,30 @@ test_that("sum_stats works",{
   expect_equal(LD_act$w_max,w_max_output)
   
 })
+
+# Blocks with too few SNPs case
+
+# test_that("sum_stats returns NAs when there are too few SNPs",{
+#   mu=1e-8
+#   recomb_rate= 0
+#   Ne=100
+#   nBases=1e5
+#   samplesize=200
+#   s=0.1
+#   fix=1
+#   discoal_path="~/work/programs/discoal/discoal"
+#   sweep_type="hard"
+#   nwins=5
+#   id=1
+#   seed=c(9,8)
+#   snp_inc = 250
+#   ds_seed = 52
+#   ds_prop = 0.1
+#   
+#   sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,
+#                     samplesize=samplesize,s=s,discoal_path=discoal_path,
+#                     fix_time=fix,sweep=sweep_type,seed=seed)
+#   output = sum_stats(sim,ID=1,snp=100)
+# })
+
 

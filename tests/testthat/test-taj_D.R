@@ -10,6 +10,9 @@
 #output: Number of pairwise differences normalised by the number of pairs. 
 
 test_theta_t<-function(G){
+  if(ncol(G)<5){
+    return(NaN)
+  }
   
   pair_diff=dist(G,method="manhattan")
   total_diff=sum(pair_diff)
@@ -109,8 +112,10 @@ test_that("Taj_D: theta_t function work correctly",{
   set.seed(2019)
   seq <-matrix(sample(0:1, size = 9, replace = TRUE), nc = 3) 
   #4 pairwise diff
-  expect_equal(theta_t(seq),test_theta_t(seq))
-  
+  suppressWarnings(
+    expect_equal(theta_t(seq),test_theta_t(seq))
+  )
+
   set.seed(1729)
   SNP=20
   seq <-matrix(sample(0:1, size = SNP*8, replace = TRUE), nc = SNP) 

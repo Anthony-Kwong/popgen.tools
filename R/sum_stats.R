@@ -3,8 +3,8 @@
 #' Turns a simulation object into a data frame. The genome matrix is partitioned into subwindows and summary statistics are computed. Each subwindow is a row on the output tibble. 
 #'
 #' @param sim: a simulation object
-#' @param nwins: number of subwindows to split each genome matrix within the simulation.
-#' @param split_type: Method of splitting the genome matrix. Valid options are "base" and "mut".
+#' @param nwins: number of subwindows to split each genome matrix within the simulation. Default is 1.
+#' @param split_type: Method of splitting the genome matrix. Valid options are "base" and "mut". Default is "base".
 #' @param ID: a numeric ID value to group subwindows under the simulation it came from. 
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
@@ -20,7 +20,7 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,nwins,split_type,ID,snp,form="wide",fun="none", LD_downsample=F, ds_prop=NA ,ds_seed=NA){
+sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none", LD_downsample=F, ds_prop=NA ,ds_seed=NA){
   
   # ensure arguments are entered correctly ----
   

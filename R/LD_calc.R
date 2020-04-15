@@ -33,6 +33,15 @@ LD_calc = function(G){
     return(df)
   }
   
+  if(ncol(G) < 5) {
+    warning("Less than 5 SNPs in a block. Returning NA for LD stats")
+    df = tibble::tibble("LD_avg"= NA, 
+                        "LD_max" = NA,
+                        "w_max" = NA,
+                        "Zns" = NA)
+    return(df)
+  }
+  
   if(is_genome_matrix(G)==F){
     input_class = class(G)
     msg = paste0("Input G must be a valid genome matrix.

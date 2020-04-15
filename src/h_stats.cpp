@@ -33,6 +33,13 @@ NumericVector h_stats(NumericMatrix G) {
     return (h_stats);
   }
   
+  if(G.ncol()<5){
+    Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
+    NumericVector h_stats (4);
+    std::fill(h_stats.begin(), h_stats.end(), NumericVector::get_na());
+    return (h_stats);
+  }
+  
   //compute the haplotype frequencies
   NumericVector freq=row_freq(G);
   

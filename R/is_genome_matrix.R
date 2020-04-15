@@ -13,6 +13,12 @@
 #' is_genome_matrix(seq)
 #' @importFrom tester is_numeric_matrix
 is_genome_matrix <- function (x){
+  #allow null windows to pass with warning
+  if(any(is.na(x))){
+    warning("NAs found in block. Probably null window. Summary stats will give NAs for this block")
+    return(T)
+  }
+  
   
   if(tester::is_numeric_matrix(x) == F){
     return (F)
