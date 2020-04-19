@@ -6,8 +6,8 @@
 \usage{
 sum_stats(
   sim,
-  nwins,
-  split_type,
+  nwins = 1,
+  split_type = "base",
   ID,
   snp,
   form = "wide",
@@ -20,9 +20,9 @@ sum_stats(
 \arguments{
 \item{sim:}{a simulation object}
 
-\item{nwins:}{number of subwindows to split each genome matrix within the simulation.}
+\item{nwins:}{number of subwindows to split each genome matrix within the simulation. Default is 1.}
 
-\item{split_type:}{Method of splitting the genome matrix. Valid options are "base" and "mut".}
+\item{split_type:}{Method of splitting the genome matrix. Valid options are "base" and "mut". Default is "base".}
 
 \item{ID:}{a numeric ID value to group subwindows under the simulation it came from.}
 

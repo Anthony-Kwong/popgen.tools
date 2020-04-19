@@ -537,27 +537,24 @@ test_that("sum_stats works",{
 
 # Blocks with too few SNPs case
 
-# test_that("sum_stats returns NAs when there are too few SNPs",{
-#   mu=1e-8
-#   recomb_rate= 0
-#   Ne=100
-#   nBases=1e5
-#   samplesize=200
-#   s=0.1
-#   fix=1
-#   discoal_path="~/work/programs/discoal/discoal"
-#   sweep_type="hard"
-#   nwins=5
-#   id=1
-#   seed=c(9,8)
-#   snp_inc = 250
-#   ds_seed = 52
-#   ds_prop = 0.1
-#   
-#   sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,
-#                     samplesize=samplesize,s=s,discoal_path=discoal_path,
-#                     fix_time=fix,sweep=sweep_type,seed=seed)
-#   output = sum_stats(sim,ID=1,snp=100)
-# })
+test_that("sum_stats returns NAs when there are too few SNPs",{
+
+   # bottle_time1=0,bottle_size1=1,bottle_time2=0,bottle_size2=1)
+  cmd="test_cmd"
+  seeds=c(1,2)
+  segsites=100
+  set.seed(1)
+# seq <- matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  pos1 <- runif(0,0.5,n=(segsites/2)) %>% sort()
+  pos2 <- runif(0.75,1,n=(segsites/2)) %>% sort()
+  pos = c(pos1, pos2) 
+  
+  seq = matrix(sample(0:1, size = segsites*100, replace = T), nc = segsites)
+  sweep = "neutral"
+  select_coeff = 0
+  sim = sim_obj(cmd, seeds, segsites, pos, seq, sweep,select_coeff)
+  
+  output = sum_stats(sim,nwins=5,ID=1,snp=1000)
+})
 
 
