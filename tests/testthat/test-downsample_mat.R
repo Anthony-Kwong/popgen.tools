@@ -1,6 +1,6 @@
 test_that("downsample_mat works",{
   set.seed(5)
-  seq <-matrix(sample(0:1, size =40 , replace = TRUE), nc = 10)
+  seq <-matrix(sample(0:1, size = 40 , replace = TRUE), nc = 10)
   p <- 0.4
   seed = 52
   

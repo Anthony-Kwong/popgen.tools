@@ -28,6 +28,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// first_over
+int first_over(NumericVector x, double target);
+RcppExport SEXP _popgen_tools_first_over(SEXP xSEXP, SEXP targetSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type target(targetSEXP);
+    rcpp_result_gen = Rcpp::wrap(first_over(x, target));
+    return rcpp_result_gen;
+END_RCPP
+}
 // count
 int count(NumericVector vec, int target);
 RcppExport SEXP _popgen_tools_count(SEXP vecSEXP, SEXP targetSEXP) {
@@ -82,6 +94,18 @@ BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< NumericMatrix >::type M(MSEXP);
     rcpp_result_gen = Rcpp::wrap(have_na(M));
+    return rcpp_result_gen;
+END_RCPP
+}
+// is_sorted
+bool is_sorted(NumericVector x, bool ascend);
+RcppExport SEXP _popgen_tools_is_sorted(SEXP xSEXP, SEXP ascendSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type ascend(ascendSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_sorted(x, ascend));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -372,11 +396,13 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_any_sug", (DL_FUNC) &_popgen_tools_any_sug, 1},
     {"_popgen_tools_find_index", (DL_FUNC) &_popgen_tools_find_index, 2},
+    {"_popgen_tools_first_over", (DL_FUNC) &_popgen_tools_first_over, 2},
     {"_popgen_tools_count", (DL_FUNC) &_popgen_tools_count, 2},
     {"_popgen_tools_theta_h", (DL_FUNC) &_popgen_tools_theta_h, 1},
     {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 2},
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_have_na", (DL_FUNC) &_popgen_tools_have_na, 1},
+    {"_popgen_tools_is_sorted", (DL_FUNC) &_popgen_tools_is_sorted, 2},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
     {"_popgen_tools_a1f", (DL_FUNC) &_popgen_tools_a1f, 1},

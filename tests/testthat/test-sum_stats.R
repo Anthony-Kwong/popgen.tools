@@ -44,8 +44,7 @@ test_that("sum_stats downsampling works",{
   G_wins = winsplit_base(G, pos_vec, nwins)
 
   #check SFS stats
-  #check SS were computed correctly
-  
+
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
@@ -537,27 +536,89 @@ test_that("sum_stats works",{
 
 # Blocks with too few SNPs case
 
-# test_that("sum_stats returns NAs when there are too few SNPs",{
-#   mu=1e-8
-#   recomb_rate= 0
-#   Ne=100
-#   nBases=1e5
-#   samplesize=200
-#   s=0.1
-#   fix=1
-#   discoal_path="~/work/programs/discoal/discoal"
-#   sweep_type="hard"
-#   nwins=5
-#   id=1
-#   seed=c(9,8)
-#   snp_inc = 250
-#   ds_seed = 52
-#   ds_prop = 0.1
-#   
-#   sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,
-#                     samplesize=samplesize,s=s,discoal_path=discoal_path,
-#                     fix_time=fix,sweep=sweep_type,seed=seed)
-#   output = sum_stats(sim,ID=1,snp=100)
-# })
+test_that("sum_stats returns NAs when there are too few SNPs",{
+
+  # bottle_time1=0,bottle_size1=1,bottle_time2=0,bottle_size2=1)
+  cmd="test_cmd"
+  seeds=c(1,2)
+  segsites=100
+  set.seed(1)
+# seq <- matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
+  set.seed(2)
+  pos1 <- runif(0,0.40,n=(segsites/2)) %>% sort()
+  pos2 <- runif(0.8,1,n=(segsites/2)) %>% sort()
+  pos = c(pos1, pos2) 
+  seq = matrix(sample(0:1, size = segsites*100, replace = T), nc = segsites)
+  sweep = "neutral"
+  select_coeff = 0
+  nwins = 5
+  sim = sim_obj(cmd, seeds, segsites, pos, seq, sweep,select_coeff)
+  
+  output = suppressWarnings(
+    sum_stats(sim,nwins= nwins,ID=1,snp=1000)
+  )
+
+  #check SFS stats
+  
+  # G = window_trim( sim$genomes ,cen = center, k=floor(snp_inc/2))
+  # pos_vec<-vector_trim(sim$pos, cen=center, k=floor(snp_inc/2)) 
+  G_wins = suppressWarnings(
+    winsplit_base(sim$genomes, pos,nwins)
+  )
+
+  ss<-list(theta_h,theta_t,theta_w,var_taj)
+  basic_values<- suppressWarnings(
+    lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
+  )
+  names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
+  
+  H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
+  H_output<-output %>% dplyr::select(H_1:H_5)
+  H_output<-as.numeric(H_output)
+  
+  D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
+  D_act<-unlist(D_act)
+  D_output<-output %>% dplyr::select(D_1:D_5)
+  D_output<-as.numeric(D_output)
+  
+  expect_equal(H_output, H_act)
+  expect_equal(D_output, D_act)
+  
+  #check haplotype stats
+  h_act<- suppressWarnings(
+    lapply(G_wins,h_stats) 
+  )
+  x<-rep(NA,nwins)
+  haplo_act<-cbind(x,x,x,x)
+  
+  for(i in 1:nwins){
+    haplo_act[i,]<-h_act[[i]]
+  }
+  
+  h1_output = output %>% dplyr::select(h1_1:h1_5)
+  h2_output = output %>% dplyr::select(h2_1:h2_5)
+  h12_output = output %>% dplyr::select(h12_1:h12_5)
+  h123_output = output %>% dplyr::select(h123_1:h123_5)
+  
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
+  
+  #check LD stats 
+  
+  LD_act <- suppressWarnings(
+    lapply(G_wins, LD_calc)
+  )
+  LD_act <- do.call(rbind,LD_act)
+  
+  LD_avg <- output %>% dplyr::select(LD_avg_1:LD_avg_5) %>% as.numeric()
+  LD_max <- output %>% dplyr::select(LD_max_1:LD_max_5) %>% as.numeric()
+  w_max <- output %>% dplyr::select(w_max_1:w_max_5) %>% as.numeric()
+  Zns <- output %>% dplyr::select(Zns_1:Zns_5) %>% as.numeric()
+  
+  LD_output= tibble::tibble(LD_avg, LD_max , w_max , Zns)
+  expect_equal(LD_act, LD_output)
+})
 
 

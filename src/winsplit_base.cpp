@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 #include "winsplit_length.h"
+#include "vector_sort.h"
 
 // This is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp 
@@ -30,41 +31,54 @@ using namespace Rcpp;
 List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
   
   int SNP=G.ncol();
-  //check inputs
+  //check inputs. Allow for NAs as this is not a summary statistics function.
   if(any_sug(pos<0) || any_sug(pos>1)){
     stop("Elements of pos must be between 0,1.");
   }
   if(SNP!=pos.size()){
     stop("Dimensions of pos must be the same as the number of columns in G");
   }
+  if(is_sorted(pos ,true) == false){
+    stop("The elements of the position vector are not in ascending order.");
+  }
   
   //compute length of window
   int last_index = pos.length()-1; //C indices start at 0
   double full_len = pos[last_index]- pos[0];
   double len = full_len/n;
-  NumericVector start_indices(n+1);
+  
+  NumericVector bounds (n+1); //initialise elements at 0.
   double start_pos = pos[0];
- // Rcout<<"start_pos "<<start_pos<<std::endl;
-  
-  for(int i=1;i<(n+1);i++){
+  //Compute the starting indices for each block
+  for(int i=1; i<n; i++){
     double target=start_pos+i*len;
-//    Rcout<< "finding nearest index for " << target <<std::endl; 
-    start_indices[i] = find_index(pos,target);
+    // Cpp starts indices at 0
+    bounds[i] = first_over(pos,target) - 1; 
   }
+  bounds[n] = last_index; //last boundary point must always be the index of the last column
   
-//  Rcout<<start_indices<<std::endl;
+  // Rcout<<bounds<<std::endl;
   
+  //split matrix into blocks. Each block starts at one of the boundary points. 
+  //Last block ends on the final boundary points. 
   List windows(n);
-  int start=start_indices[0];
+  int start=bounds[0];
   int nsam=G.nrow();
   
-  for(int i=0;i<n;i++){
-//    Rcout<<"i is "<<i<<std::endl;
-    int end=start_indices[i+1];
+  for(int i=0;i<n; i++){
+    //Rcout << i <<std::endl;
+    int end;
+    if(i==(n-1)){
+      end = bounds[i+1];
+    } else {
+      end = bounds[i+1]-1;
+    }
+     
     // Rcout<<"start is"<<start<<std::endl;
     // Rcout<<"end is"<<end<<std::endl;
+     
     //if start=end. There are no SNPs in that genome window.
-    if(end==start_indices[i]){
+    if(bounds[i]==bounds[i+1]){
       warning("No SNPs found within a window. Setting window to NULL");
       NumericMatrix m(1,1);
       std::fill(m.begin(),m.end(), NumericVector::get_na());
@@ -72,8 +86,7 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
       continue;
     }
     windows[i]=G(Range(0,nsam-1),Range(start,end));
-    start=end+1;
-   // Rcout<<start<<std::endl;
+    start= bounds[i+1];
   }
   
   return windows;
@@ -86,7 +99,8 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
 //
 
 /*** R
-seq <-matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
-pos<-seq(0,1,by=0.25)
+set.seed(1)
+seq <-matrix(sample(0:1, size = 100, replace = TRUE), nc = 10)
+pos<-runif(10, 0, 1) 
 winsplit_base(seq,pos,n=4)
 */

@@ -97,7 +97,7 @@ double e2f(double a1, double a2, double c2){
 // [[Rcpp::export]]
 double theta_t(NumericMatrix G){
   
-  //check input
+  //check input. 
   if(have_na(G)){
     Rcpp::warning("Input matrix is NA. Returning NA.");
     return (R_NaN);

@@ -29,6 +29,22 @@ find_index <- function(x, target) {
     .Call('_popgen_tools_find_index', PACKAGE = 'popgen.tools', x, target)
 }
 
+#' first_over function
+#' Takes in a sorted NumericVector and a target double. Find the first element
+#' in the vector which is larger than the target. Returns the index. Recall R 
+#' starts indices at 1 and this is what the function uses. 
+#' 
+#' @param x: A sorted NumericVector
+#' @param target: A double.
+#' @return An integer for the index of the first element in x that is larger than the target.
+#' @examples x<-runif(0,1,n=5) %>% sort() 
+#' target=0.2 
+#' find_index(x,target)
+#' @export
+first_over <- function(x, target) {
+    .Call('_popgen_tools_first_over', PACKAGE = 'popgen.tools', x, target)
+}
+
 #' count function
 #' 
 #' counts the number of times a value appears in an IntegerVector
@@ -89,6 +105,21 @@ h_stats <- function(G) {
 #' @export 
 have_na <- function(M) {
     .Call('_popgen_tools_have_na', PACKAGE = 'popgen.tools', M)
+}
+
+#' is_sorted function
+#' 
+#' Checks if a NumericVector is sorted numerically. 
+#' 
+#' @param x: NumericVector
+#' @param ascend: A boolean. If TRUE, checks if the elements of x are in ascending order.
+#' If FALSE, checks if they are in descending order. 
+#' @return A boolean indicating whether the vector is sorted.
+#' @examples x = c(1,3,5,7)
+#' is_sorted(x, ascend = T)
+#' @export 
+is_sorted <- function(x, ascend) {
+    .Call('_popgen_tools_is_sorted', PACKAGE = 'popgen.tools', x, ascend)
 }
 
 rcpp_hello_world <- function() {

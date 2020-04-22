@@ -1,2 +1,2 @@
-int find_index(NumericVector x,double target);
 bool any_sug(LogicalVector x);
+int first_over(NumericVector x, double target);
