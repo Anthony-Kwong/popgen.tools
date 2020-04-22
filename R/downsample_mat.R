@@ -27,6 +27,7 @@ downsample_mat = function (G , p, seed = NA){
     stop("Parameter p must be between 0 and 1. It is a proportion.")
   }
   
+  
   cols = ncol(G)
   n = round( ncol(G)*p )  
   

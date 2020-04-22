@@ -40,7 +40,7 @@ bool is_sorted(NumericVector x, bool ascend) {
     }
     return true;
   }
-  stop("Check loop busted. This line should never be called. :( ");
+  stop("is_sorted: Check loop busted. This line should never be called. :( ");
 }
 
 

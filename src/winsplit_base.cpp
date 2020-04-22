@@ -50,11 +50,12 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
   NumericVector bounds (n+1); //initialise elements at 0.
   double start_pos = pos[0];
   //Compute the starting indices for each block
-  for(int i=1;i<(n+1);i++){
+  for(int i=1; i<n; i++){
     double target=start_pos+i*len;
     // Cpp starts indices at 0
     bounds[i] = first_over(pos,target) - 1; 
   }
+  bounds[n] = last_index; //last boundary point must always be the index of the last column
   
   // Rcout<<bounds<<std::endl;
   

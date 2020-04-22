@@ -15,7 +15,7 @@ using namespace Rcpp;
 //' first_over function
 //' Takes in a sorted NumericVector and a target double. Find the first element
 //' in the vector which is larger than the target. Returns the index. Recall R 
-//' starts indices at 1.
+//' starts indices at 1 and this is what the function uses. 
 //' 
 //' @param x: A sorted NumericVector
 //' @param target: A double.
@@ -39,7 +39,8 @@ int first_over(NumericVector x, double target) {
       return (i+1); //account for indices starting at 1 in R.
     }
   }
-  stop("forloop broken. This line should be run.");
+  warning("first_over. All elements of input vector are less than the target. Returning NA.");
+  return R_NaN;
 }
 
 

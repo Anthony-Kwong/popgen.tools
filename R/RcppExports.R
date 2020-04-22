@@ -32,7 +32,7 @@ find_index <- function(x, target) {
 #' first_over function
 #' Takes in a sorted NumericVector and a target double. Find the first element
 #' in the vector which is larger than the target. Returns the index. Recall R 
-#' starts indices at 1.
+#' starts indices at 1 and this is what the function uses. 
 #' 
 #' @param x: A sorted NumericVector
 #' @param target: A double.

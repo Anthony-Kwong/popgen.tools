@@ -166,16 +166,12 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
   #LD stats ----
   
   if(LD_downsample){
-#    t1 = Sys.time()
     set.seed(ds_seed)
     seeds = sample(.Machine$integer.max,nwins)
     down_win_list=purrr::pmap(list(win_list, p=ds_prop, seed=seeds), downsample_mat)
     LD_values = lapply(down_win_list,LD_calc)
-#    t2 = Sys.time()
-  }else {
-#    a1 = Sys.time()
+  } else {
     LD_values = lapply(win_list,LD_calc)
-#    a2= Sys.time()
   }
   
   LD_values = do.call(rbind,LD_values)
