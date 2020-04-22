@@ -56,7 +56,7 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
     bounds[i] = first_over(pos,target) - 1; 
   }
   
-  Rcout<<bounds<<std::endl;
+  // Rcout<<bounds<<std::endl;
   
   //split matrix into blocks. Each block starts at one of the boundary points. 
   //Last block ends on the final boundary points. 
@@ -64,13 +64,20 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
   int start=bounds[0];
   int nsam=G.nrow();
   
-  for(int i=0;i<n;i++){
-//    Rcout<<"i is "<<i<<std::endl;
-    int end=bounds[i+1] - 1;
-     Rcout<<"start is"<<start<<std::endl;
-     Rcout<<"end is"<<end<<std::endl;
+  for(int i=0;i<n; i++){
+    //Rcout << i <<std::endl;
+    int end;
+    if(i==(n-1)){
+      end = bounds[i+1];
+    } else {
+      end = bounds[i+1]-1;
+    }
+     
+    // Rcout<<"start is"<<start<<std::endl;
+    // Rcout<<"end is"<<end<<std::endl;
+     
     //if start=end. There are no SNPs in that genome window.
-    if(end==bounds[i]){
+    if(bounds[i]==bounds[i+1]){
       warning("No SNPs found within a window. Setting window to NULL");
       NumericMatrix m(1,1);
       std::fill(m.begin(),m.end(), NumericVector::get_na());
@@ -79,7 +86,6 @@ List winsplit_base(NumericMatrix G, NumericVector pos, int n) {
     }
     windows[i]=G(Range(0,nsam-1),Range(start,end));
     start= bounds[i+1];
-   // Rcout<<start<<std::endl;
   }
   
   return windows;

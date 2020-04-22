@@ -86,6 +86,8 @@ test_that("winsplit_base works",{
   ans[[3]] = G[,6:11]
   
   expect_equal(R_says, ans)
+  expect_equal(C_says, ans)
+  
   
   #expect_equal(C_says, R_says)
   
@@ -105,9 +107,10 @@ test_that("winsplit_base works",{
   ans[[3]] = NA %>% as.numeric %>% as.matrix()
   ans[[4]] = seq[,11:20]
   
-  #C_says = suppressWarnings ( winsplit_base( seq, pos, nwins) )
+  C_says = suppressWarnings ( winsplit_base( seq, pos, nwins) )
   R_says = R_winsplit_base( seq, pos, nwins)
   
+  expect_equal(ans,C_says)
   expect_equal(ans,R_says)
   
   #autocheck, untrimmed
@@ -122,10 +125,7 @@ test_that("winsplit_base works",{
   
   expect_equal(C_says, R_says)
   
-  
-
-  
-  #auto check for trimmed sims
+  #auto check for trimmed sims ----
   set.seed(21)
   SNP = 500
   nwins = 10
@@ -139,23 +139,6 @@ test_that("winsplit_base works",{
   pos_trim = vector_trim(pos, cen, k)
   C_says = winsplit_base(G, pos_trim, nwins)
   R_says = R_winsplit_base( G, pos_trim, nwins)
-  
-  expect_equal(C_says, R_says)
-  
-  #checking effect of having no SNPs in a block
-  
-  #auto check for trimmed sims
-  set.seed(21)
-  SNP = 20
-  nwins = 4
-  nsam = 5
-  seq <- matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
-  pos1 <- runif(0,0.25,n=(SNP/2)) %>% sort()
-  pos2 <- runif(0.75,1,n=(SNP/2)) %>% sort()
-  pos = c(pos1, pos2) 
-  
-  C_says = suppressWarnings ( winsplit_base( seq, pos, nwins) )
-  R_says = R_winsplit_base( seq, pos, nwins)
   
   expect_equal(C_says, R_says)
   
