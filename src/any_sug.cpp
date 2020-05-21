@@ -23,7 +23,7 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 bool any_sug(LogicalVector x){
-  // Note the use of is_true to return a bool type
+  // Note the use of is_true to return a bool type 
   return is_true(any(x == TRUE));
 }
 
