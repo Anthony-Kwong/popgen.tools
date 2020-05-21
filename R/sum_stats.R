@@ -137,7 +137,18 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
   if(split_type=="base"){
     win_list=winsplit_base(G,pos_vec,nwins)
   } else if (split_type=="mut"){
-    win_list= sub_win(G,nwins)
+    #split windows based by ~equal SNPs
+    split_wins = sub_win(G,nwins)
+    win_list= split_wins$windows
+    
+    #compute the length of each block in bases
+    j = seq(2, nwins + 1)
+    base_lengths = sapply(j, function(j){ pos_vec[ split_wins$bounds[j] ] - 
+        pos_vec[ split_wins$bounds[j-1] ]})
+    base_lengths = as.data.frame(base_lengths) %>% t()
+    colnames(base_lengths) = string_labels("block_base_length", nwins)
+    row.names(base_lengths) = NULL
+    
   } else {
     stop("Invalid argument for split_type. Valid options are \"base\" and \"mut\".")
   }
@@ -177,7 +188,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
   LD_values = do.call(rbind,LD_values)
   
   #collect stats
-  win_stats<-list("H"=H,"D"=D, 
+  win_stats<-list("H"= H,"D"= D, 
                   "LD_avg" = LD_values$LD_avg,
                   "LD_max" = LD_values$LD_max,
                   "w_max" = LD_values$w_max,
@@ -251,6 +262,10 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
     temp<-tibble::tibble(ID,sweep,s_coef,bottle_time1,bottle_size1,
                          bottle_time2,bottle_size2)
     wide_df<-cbind(temp,stats)
+    
+    if(split_type == "mut"){
+      wide_df = cbind(wide_df, base_lengths)
+    }
 
     return(wide_df)
   }
@@ -309,7 +324,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
 #inserting for testing purposes. Will remove. This bit causes trouble if left in when building. 
  # data<-readRDS("~/work/MPhil/data/hard.rds")
  # sim<-data[[70]]
- # df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
+ #df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
  #test<-generate_df(df,2)
  # 
  # generate_df(data,10)

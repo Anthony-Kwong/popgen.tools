@@ -137,7 +137,7 @@ test_that("sum_stats works",{
   #check SS were computed correctly
   
   ss<-list(theta_h,theta_t,theta_w,var_taj)
-  basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
+  basic_values<-lapply(ss, function(f) sapply(G_wins$windows, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
   H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
@@ -149,14 +149,14 @@ test_that("sum_stats works",{
   D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
   
-  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- lapply(G_wins$windows, LD_calc)
   LD_act <- do.call(rbind,LD_act)
   LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
   LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
   w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
   Zns_output <- output %>% dplyr::select(Zns_1:Zns_10) %>% as.numeric()
   
-  h_act<-lapply(G_wins,h_stats) 
+  h_act<-lapply(G_wins$windows,h_stats) 
   x<-rep(NA,nwins)
   haplo_act<-cbind(x,x,x,x)
   
@@ -221,7 +221,7 @@ test_that("sum_stats works",{
   #check SS were computed correctly
   
   ss<-list(theta_h,theta_t,theta_w,var_taj)
-  basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
+  basic_values<-lapply(ss, function(f) sapply(G_wins$windows, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
   H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
@@ -233,7 +233,7 @@ test_that("sum_stats works",{
   D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
   
-  h_act<-lapply(G_wins,h_stats) 
+  h_act<-lapply(G_wins$windows,h_stats) 
   x<-rep(NA,nwins)
   haplo_act<-cbind(x,x,x,x)
   
@@ -255,7 +255,7 @@ test_that("sum_stats works",{
   
   #LD stats 
   
-  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- lapply(G_wins$windows, LD_calc)
   LD_act <- do.call(rbind,LD_act)
   LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
   LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
@@ -305,7 +305,7 @@ test_that("sum_stat works",{
 
   #check SS were computed correctly
   ss<-list(theta_h,theta_t,theta_w,var_taj)
-  basic_values<-lapply(ss, function(f) sapply(G_wins, function(d) f(d) ) )
+  basic_values<-lapply(ss, function(f) sapply(G_wins$windows, function(d) f(d) ) )
   names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
   
   H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
@@ -319,7 +319,7 @@ test_that("sum_stat works",{
   D_output<-output %>% dplyr::select(D_1:D_10)
   D_output<-as.numeric(D_output)
   
-  h_act<-lapply(G_wins,h_stats) 
+  h_act<-lapply(G_wins$windows,h_stats) 
   x<-rep(NA,nwins)
   haplo_act<-cbind(x,x,x,x)
   
@@ -341,7 +341,7 @@ test_that("sum_stat works",{
   
   #LD stats
   
-  LD_act <- lapply(G_wins, LD_calc)
+  LD_act <- lapply(G_wins$windows, LD_calc)
   LD_act <- do.call(rbind,LD_act)
   LD_avg_act <- LD_act$LD_avg %>% norm_vec()
   LD_max_act <- LD_act$LD_max %>% norm_vec()

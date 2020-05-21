@@ -22,9 +22,10 @@ test_that("vec_split computed correctly",{
   
   A<-rbind(z,z)
   m_list<-sub_win(A,n)
+  M <- m_list$windows
   
   for(i in 1:3){
-    expect_equal(vec_list[i],list(m_list[[i]][1,]))
+    expect_equal(vec_list[i],list(M[[i]][1,]))
   }
   
 })
