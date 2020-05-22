@@ -119,9 +119,10 @@ test_that("sum_stats works",{
   nwins=10
   id=1
   seed=c(1,1)
+  snp_inc = 200
   
   temp<-discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,samplesize=samplesize,s=s,discoal_path=discoal_path,fix_time=fix,sweep=sweep_type,seed=seed)
-  output<-sum_stats(sim=temp,split_type="mut",nwins = nwins, ID=id, snp=200)
+  output<-sum_stats(sim=temp,split_type="mut",nwins = nwins, ID=id, snp= snp_inc)
   G<-temp$genomes
   G_wins<-sub_win(G,nwins)
   
@@ -133,6 +134,18 @@ test_that("sum_stats works",{
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
   
+  #check that the block base lengths are correct
+
+  #no need for trimming the position vector
+  # center = abs(temp$pos - 0.5) %>% which.min()
+  # pos_vec = vector_trim(temp$pos, cen = center, k = floor(snp_inc/2))
+  
+  j = seq(2, nwins + 1)
+  base_lengths = sapply(j, function(j){ temp$pos[ G_wins$bounds[j] ] - 
+      temp$pos[ G_wins$bounds[j-1] ]})
+  
+  len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
+  expect_equal(base_lengths, as.numeric(len_output))
   
   #check SS were computed correctly
   
@@ -218,6 +231,16 @@ test_that("sum_stats works",{
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
   
+  #check the block base lengths
+  
+  pos_vec = vector_trim(temp$pos, cen = center, k = floor(snp_inc/2))
+  j = seq(2, nwins + 1)
+  base_lengths = sapply(j, function(j){ pos_vec[ G_wins$bounds[j] ] - 
+      pos_vec[ G_wins$bounds[j-1] ]})
+  
+  len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
+  expect_equal(base_lengths, as.numeric(len_output))
+  
   #check SS were computed correctly
   
   ss<-list(theta_h,theta_t,theta_w,var_taj)
@@ -302,6 +325,16 @@ test_that("sum_stat works",{
   expect_equal(0,output$bottle_time2)
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
+  
+  #check the block base lengths
+  
+  pos_vec = vector_trim(temp$pos, cen = center, k = floor(snp_inc/2))
+  j = seq(2, nwins + 1)
+  base_lengths = sapply(j, function(j){ pos_vec[ G_wins$bounds[j] ] - 
+      pos_vec[ G_wins$bounds[j-1] ]})
+  
+  len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
+  expect_equal(base_lengths, as.numeric(len_output))
 
   #check SS were computed correctly
   ss<-list(theta_h,theta_t,theta_w,var_taj)
