@@ -149,6 +149,12 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
     colnames(base_lengths) = string_labels("block_base_length", nwins)
     row.names(base_lengths) = NULL
     
+    #compute number of SNPs in each block. This is more for checking purposes.
+    snp_lengths = sapply(win_list, ncol)
+    snp_lengths = as.data.frame(snp_lengths) %>% t()
+    colnames(snp_lengths) = string_labels("block_snp_length", nwins)
+    row.names(snp_lengths) = NULL
+    
   } else {
     stop("Invalid argument for split_type. Valid options are \"base\" and \"mut\".")
   }
@@ -264,7 +270,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
     wide_df<-cbind(temp,stats)
     
     if(split_type == "mut"){
-      wide_df = cbind(wide_df, base_lengths)
+      wide_df = cbind(wide_df, base_lengths, snp_lengths)
     }
 
     return(wide_df)
@@ -322,7 +328,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
 }
 
 #inserting for testing purposes. Will remove. This bit causes trouble if left in when building. 
- # data<-readRDS("~/work/MPhil/data/hard.rds")
+ # data<-readRDS("~/work/MPhil/old_data/hard.rds")
  # sim<-data[[70]]
  #df<-read_csv("~/Documents/GitHub/popgen.analysis.pipeline/data/toy_df.csv")
  #test<-generate_df(df,2)

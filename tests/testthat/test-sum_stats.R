@@ -147,6 +147,10 @@ test_that("sum_stats works",{
   len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
   expect_equal(base_lengths, as.numeric(len_output))
   
+  snp_len = sapply(G_wins$windows,ncol)
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_10)
+  expect_equal(snp_len, as.numeric(snp_output) )
+  
   #check SS were computed correctly
   
   ss<-list(theta_h,theta_t,theta_w,var_taj)
@@ -240,6 +244,10 @@ test_that("sum_stats works",{
   
   len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
   expect_equal(base_lengths, as.numeric(len_output))
+  
+  snp_len = sapply(G_wins$windows,ncol)
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_10)
+  expect_equal(snp_len, as.numeric(snp_output) )
   
   #check SS were computed correctly
   
@@ -335,6 +343,10 @@ test_that("sum_stat works",{
   
   len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
   expect_equal(base_lengths, as.numeric(len_output))
+  
+  snp_len = sapply(G_wins$windows,ncol)
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_10)
+  expect_equal(snp_len, as.numeric(snp_output) )
 
   #check SS were computed correctly
   ss<-list(theta_h,theta_t,theta_w,var_taj)
