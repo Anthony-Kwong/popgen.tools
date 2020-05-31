@@ -41,7 +41,8 @@ R_winsplit_base<-function(G, pos, n){
     start = end + 1
   }
   
-  return(wins)
+  output = list (windows = wins, base_length = len)
+  return(output)
 }
 
 
@@ -54,16 +55,20 @@ test_that("winsplit_base works",{
   pos <- runif(0,1,n=SNP) %>% sort()
   pos[1] = 0
   pos[10] = 1
-  C_says <- winsplit_base(seq,pos,n=3)
-  R_says <- R_winsplit_base(seq,pos,n=3)
+  nwins = 3
+  C_says <- winsplit_base(seq,pos,n = nwins)
+  R_says <- R_winsplit_base(seq,pos,n= nwins)
   
-  ans=list()
-  ans[[1]] = seq[,1:4]
-  ans[[2]] = seq[,5:7]
-  ans[[3]] = seq[,8:10]
+  wins = list()
+  wins[[1]] = seq[,1:4]
+  wins[[2]] = seq[,5:7]
+  wins[[3]] = seq[,8:10]
+  
+  len = ( tail(pos, n = 1) - pos [1])/nwins
+  ans = list(windows = wins, base_length = len)
   
   expect_equal(C_says, ans)
-  expect_equal(R_says, R_says)
+  expect_equal(R_says, ans)
   
   #test for trimmed simulations, manual ----
   set.seed(21)
@@ -80,16 +85,16 @@ test_that("winsplit_base works",{
   C_says = winsplit_base(G, pos_trim, nwins)
   R_says = R_winsplit_base( G, pos_trim, nwins)
 
-  ans = list()
-  ans[[1]] = G[,1:4]
-  ans[[2]] = G[,5] %>% as.matrix()
-  ans[[3]] = G[,6:11]
+  wins = list()
+  wins[[1]] = G[,1:4]
+  wins[[2]] = G[,5] %>% as.matrix()
+  wins[[3]] = G[,6:11]
+  
+  len = ( tail(pos_trim, n = 1) - pos_trim[1] ) / nwins
+  ans = list(windows = wins, base_length = len)
   
   expect_equal(R_says, ans)
   expect_equal(C_says, ans)
-  
-  
-  #expect_equal(C_says, R_says)
   
   #manual check, no SNPs in a block----
   set.seed(21)
@@ -101,11 +106,14 @@ test_that("winsplit_base works",{
   pos2 <- runif(0.75,1,n=(SNP/2)) %>% sort()
   pos = c(pos1, pos2) 
   
-  ans = list()
-  ans[[1]] = seq[,1:10]
-  ans[[2]] = NA %>% as.numeric %>% as.matrix()
-  ans[[3]] = NA %>% as.numeric %>% as.matrix()
-  ans[[4]] = seq[,11:20]
+  wins = list()
+  wins[[1]] = seq[,1:10]
+  wins[[2]] = NA %>% as.numeric %>% as.matrix()
+  wins[[3]] = NA %>% as.numeric %>% as.matrix()
+  wins[[4]] = seq[,11:20]
+  
+  len = (tail(pos, n = 1) - pos[1])/nwins
+  ans = list(windows = wins, base_length = len)
   
   C_says = suppressWarnings ( winsplit_base( seq, pos, nwins) )
   R_says = R_winsplit_base( seq, pos, nwins)

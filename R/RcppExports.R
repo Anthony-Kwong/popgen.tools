@@ -344,7 +344,7 @@ window_trim <- function(G, cen, k) {
 #' @param G: A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual. 
 #' @param pos: A NumericVector consisting of values between 0,1. The ith element is the position of the ith SNP in G.
 #' @param n: integer for the number of desired windows in the output list. 
-#' @return A NumericMatrix list of the windows
+#' @return A list of 2 elements. 1. A NumericMatrix list of the windows. 2. A double showing the length of each window.
 #' @examples seq <-matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
 #' pos<-runif(0,1,n=5) %>% sort()
 #' winsplit_length(seq,pos,5)

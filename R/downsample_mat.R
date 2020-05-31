@@ -5,6 +5,8 @@
 #' @param G : A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. 
 #' @param p : Proportion of columns to downsample. 
 #' @param seed: Random seed for sampling columns. (optional)
+#' @param min_col: If the number of columns in G is less than min_col, returns the original
+#' matrix G. (optional)
 #'
 #' @return A smaller NumericMatrix with randomly selected columns from G.
 #' @export
@@ -12,8 +14,9 @@
 #' @examples seq <-matrix(sample(0:1, size =40 , replace = TRUE), nc = 10)
 #' downsample_mat(seq, 0.2)
 #' @importFrom tester has_NA
-downsample_mat = function (G , p, seed = NA){
+downsample_mat = function (G , p, seed = NA, min_col = F){
   
+  #check inputs
   if(tester::has_NA(G)){
     warning("Input matrix is NA")
     return(NA)
@@ -27,7 +30,13 @@ downsample_mat = function (G , p, seed = NA){
     stop("Parameter p must be between 0 and 1. It is a proportion.")
   }
   
+  if(ncol(G) < min_col){
+    msg = paste("Input matrix has ", ncol(G), " columns. Returning original matrix.")
+    return (G)
+  }
   
+  
+  #function operations begin
   cols = ncol(G)
   n = round( ncol(G)*p )  
   

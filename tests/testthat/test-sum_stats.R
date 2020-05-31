@@ -25,10 +25,8 @@ test_that("sum_stats downsampling works",{
     sum_stats(sim = sim,split_type="base",nwins = nwins, ID=id, snp = snp_inc,
               LD_downsample = T, ds_prop = ds_prop, ds_seed = ds_seed)
   )
-    
-
-
   
+  #check non SS information
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
   expect_equal(s,output$s_coef)
@@ -37,12 +35,25 @@ test_that("sum_stats downsampling works",{
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
   
+  #check SS computation
+  
   snp_dist = abs(sim$pos-0.5)
   center = which.min(snp_dist)
   G = window_trim( sim$genomes ,cen = center, k=floor(snp_inc/2))
   pos_vec<-vector_trim(sim$pos, cen=center, k=floor(snp_inc/2)) 
-  G_wins = winsplit_base(G, pos_vec, nwins)
-
+  
+  win_splits = winsplit_base(G, pos_vec, nwins)
+  G_wins = win_splits[[1]]
+  
+  #check window stats
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_5) %>% as.numeric()
+  snp_act = sapply(G_wins, ncol)
+  expect_equal(snp_output, snp_act)
+  
+  base_output = output$base_length
+  base_act = ( tail(pos_vec, n = 1) - pos_vec[1] ) / nwins
+  expect_equal(base_output, base_act)
+    
   #check SFS stats
 
   ss<-list(theta_h,theta_t,theta_w,var_taj)
@@ -430,8 +441,9 @@ test_that("sum_stats works",{
   snp_dist<-abs(temp$pos-0.5)
   center<-which.min(snp_dist)
   G<-window_trim(temp$genomes,cen=center,k=floor(snp_inc/2))
-  positions = vector_trim(temp$pos,center,k=floor(snp_inc/2))
-  G_wins<-winsplit_base(G,pos=positions,nwins)
+  pos_vec = vector_trim(temp$pos,center,k=floor(snp_inc/2))
+  win_splits = winsplit_base(G, pos_vec, nwins)
+  G_wins = win_splits[[1]]
 
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
@@ -440,6 +452,15 @@ test_that("sum_stats works",{
   expect_equal(0,output$bottle_time2)
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
+  
+  #check window stats
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_10) %>% as.numeric()
+  snp_act = sapply(G_wins, ncol)
+  expect_equal(snp_output, snp_act)
+  
+  base_output = output$base_length
+  base_act = ( tail(pos_vec, n = 1) - pos_vec[1] ) / nwins
+  expect_equal(base_output, base_act)
 
   #check SS were computed correctly
 
@@ -519,8 +540,9 @@ test_that("sum_stats works",{
   snp_dist<-abs(temp$pos-0.5)
   center<-which.min(snp_dist)
   G<-window_trim(temp$genomes,cen=center,k=floor(snp_inc/2))
-  positions = vector_trim(temp$pos,center,k=floor(snp_inc/2))
-  G_wins<-winsplit_base(G,pos=positions,nwins)
+  pos_vec = vector_trim(temp$pos,center,k=floor(snp_inc/2))
+  win_splits = winsplit_base(G, pos_vec, nwins)
+  G_wins = win_splits[[1]]
   
   expect_equal(sweep_type,output$sweep)
   expect_equal(id,output$ID)
@@ -529,6 +551,15 @@ test_that("sum_stats works",{
   expect_equal(bottleneck$time[2],output$bottle_time2)
   expect_equal(bottleneck$size[1],output$bottle_size1)
   expect_equal(bottleneck$size[2],output$bottle_size2)
+  
+  #check window stats
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_10) %>% as.numeric()
+  snp_act = sapply(G_wins, ncol)
+  expect_equal(snp_output, snp_act)
+  
+  base_output = output$base_length
+  base_act = ( tail(pos_vec, n = 1) - pos_vec[1] ) / nwins
+  expect_equal(base_output, base_act)
   
   #check SS were computed correctly
   
@@ -607,9 +638,21 @@ test_that("sum_stats returns NAs when there are too few SNPs",{
   
   # G = window_trim( sim$genomes ,cen = center, k=floor(snp_inc/2))
   # pos_vec<-vector_trim(sim$pos, cen=center, k=floor(snp_inc/2)) 
-  G_wins = suppressWarnings(
+  win_splits = suppressWarnings(
     winsplit_base(sim$genomes, pos,nwins)
   )
+  
+  G_wins = win_splits[[1]]
+  
+  #check window stats
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_5) %>% as.numeric()
+  snp_act = sapply(G_wins, ncol)
+  expect_equal(snp_output, snp_act)
+  
+  base_output = output$base_length
+  pos_vec = sim$pos
+  base_act = ( tail(pos_vec, n = 1) - pos_vec[1] ) / nwins
+  expect_equal(base_output, base_act)
 
   ss<-list(theta_h,theta_t,theta_w,var_taj)
   basic_values<- suppressWarnings(

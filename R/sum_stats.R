@@ -135,7 +135,16 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
   }
   
   if(split_type=="base"){
-    win_list=winsplit_base(G,pos_vec,nwins)
+    split_wins = winsplit_base(G,pos_vec,nwins)
+    win_list = split_wins$windows
+    base_length = split_wins$base_length
+    
+    #compute number of SNPs in each block. This is more for checking purposes.
+    snp_lengths = sapply(win_list, ncol)
+    snp_lengths = as.data.frame(snp_lengths) %>% t()
+    colnames(snp_lengths) = string_labels("block_snp_length", nwins)
+    row.names(snp_lengths) = NULL
+    
   } else if (split_type=="mut"){
     #split windows based by ~equal SNPs
     split_wins = sub_win(G,nwins)
@@ -271,6 +280,10 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
     
     if(split_type == "mut"){
       wide_df = cbind(wide_df, base_lengths, snp_lengths)
+    }
+    
+    if(split_type == "base") {
+      wide_df = cbind(wide_df, base_length, snp_lengths)
     }
 
     return(wide_df)
