@@ -33,8 +33,8 @@ LD_calc = function(G){
     return(df)
   }
   
-  if(ncol(G) < 5) {
-    warning("Less than 5 SNPs in a block. Returning NA for LD stats")
+  if(ncol(G) < 3) {
+    warning("Less than 3 SNPs in a block. Returning NA for LD stats")
     df = tibble::tibble("LD_avg"= NA, 
                         "LD_max" = NA,
                         "w_max" = NA,

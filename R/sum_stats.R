@@ -194,7 +194,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
   if(LD_downsample){
     set.seed(ds_seed)
     seeds = sample(.Machine$integer.max,nwins)
-    down_win_list=purrr::pmap(list(win_list, p=ds_prop, seed=seeds), downsample_mat)
+    down_win_list=purrr::pmap(list(win_list, p=ds_prop, seed=seeds, min_col = 20), downsample_mat)
     LD_values = lapply(down_win_list,LD_calc)
   } else {
     LD_values = lapply(win_list,LD_calc)
