@@ -14,7 +14,7 @@ winsplit_base(G, pos, n)
 \item{n:}{integer for the number of desired windows in the output list.}
 }
 \value{
-A NumericMatrix list of the windows
+A list of 2 elements. 1. A NumericMatrix list of the windows. 2. A double showing the length of each window.
 }
 \description{
 Split a genome matrix into equally sized windows as determined by

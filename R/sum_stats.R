@@ -6,6 +6,7 @@
 #' @param nwins: number of subwindows to split each genome matrix within the simulation. Default is 1.
 #' @param split_type: Method of splitting the genome matrix. Valid options are "base" and "mut". Default is "base".
 #' @param ID: a numeric ID value to group subwindows under the simulation it came from. 
+#' @param trim_sim: a logical indicating whether outer snps should be removed. Default is T.
 #' @param snp: number of snps to include per simulation
 #' @param form: output data frame in "wide" or "tall" form. This is an optional argument with default="wide". 
 #' @param fun: option to apply a function over the ss across a simulation. Default is "none". The haplotype statistics (h_stats) don't get transformed. Options include "norm"
@@ -20,7 +21,10 @@
 #' @export
 #' @examples sum_stats(win_list)
 #' This is meant to be a hidden function. Hide in final version. 
-sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none", LD_downsample=F, ds_prop=NA ,ds_seed=NA){
+sum_stats<-function(sim,nwins=1,split_type="base",
+                    ID,trim_sim=T,snp = NA,form="wide",
+                    fun="none", 
+                    LD_downsample=F, ds_prop=NA ,ds_seed=NA){
   
   # ensure arguments are entered correctly ----
   
@@ -55,14 +59,21 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
     stop("ID must be numeric yada")
   }
   
-  #snp
-  if(floor(snp)!=snp){
-    stop("ID must be an integer")
-  }
-  if(class(snp)!="numeric"){
-    stop("ID must be numeric")
+  #trim_sim
+  if(trim_sim && is.na(snp)){
+    stop("snp argument must an integer if trim_sim is TRUE. snp is currently NA.")
   }
   
+  #snp
+  if(is.na(snp)==F){
+    if(floor(snp)!=snp){
+      stop("ID must be an integer")
+    }
+    if(class(snp)!="numeric"){
+      stop("ID must be numeric")
+    }
+  }
+
   #form
   if(form!="tall" && form!="wide"){
     stop("Invalid argument:form. form must be \"wide\" or \"tall\"")
@@ -118,7 +129,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",ID,snp,form="wide",fun="none",
   #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
   mutation_pos<-0.5
   
-  if(sim$num_seg>snp){
+  if(sim$num_seg > snp && trim_sim){
     #find closest SNP to the selected mutation
     raw_pos<-sim$pos
     snp_dist<-abs(raw_pos-mutation_pos)

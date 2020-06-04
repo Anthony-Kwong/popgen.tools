@@ -12,7 +12,9 @@ sub_win(G, num_windows)
 \item{num_win:}{Number of subwindows to break G into.}
 }
 \value{
-A NumericMatrix list of the windows
+A List of 2 elements. 1. A list of NumericMatrix for the windows. 
+2. A NumericVector of column indices, indicating the boundary points for each window. 
+We use the R setup where indices start at 1.
 }
 \description{
 Breaks down a matrix into a series of equal sized, non-overlapping windows.

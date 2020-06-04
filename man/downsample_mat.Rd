@@ -4,7 +4,7 @@
 \alias{downsample_mat}
 \title{downsample_mat function}
 \usage{
-downsample_mat(G, p, seed = NA)
+downsample_mat(G, p, seed = NA, min_col = F)
 }
 \arguments{
 \item{G}{: A NumericMatrix designating a binary genome matrix consisting of 1's and 0's.}
@@ -12,6 +12,9 @@ downsample_mat(G, p, seed = NA)
 \item{p}{: Proportion of columns to downsample.}
 
 \item{seed:}{Random seed for sampling columns. (optional)}
+
+\item{min_col:}{If the number of columns in G is less than min_col, returns the original
+matrix G. (optional)}
 }
 \value{
 A smaller NumericMatrix with randomly selected columns from G.

@@ -13,7 +13,7 @@ h_stats(G)
 A numeric vector of h stats. (h1,h2,h12,h123)
 }
 \description{
-Computes the h1,h2,h12,h123 statistics. For more information see https://doi.org/10.1371/journal.pgen.1005004.
+Computes the h1,h2,h12,h123 statistics. For more information on how these are computed see https://doi.org/10.1371/journal.pgen.1005004.
 }
 \examples{
 h_stats(G)

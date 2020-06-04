@@ -4,7 +4,8 @@
 \alias{first_over}
 \title{first_over function
 Takes in a sorted NumericVector and a target double. Find the first element
-in the vector which is larger than the target. Returns the index.}
+in the vector which is larger than the target. Returns the index. Recall R 
+starts indices at 1 and this is what the function uses.}
 \usage{
 first_over(x, target)
 }
@@ -19,7 +20,8 @@ An integer for the index of the first element in x that is larger than the targe
 \description{
 first_over function
 Takes in a sorted NumericVector and a target double. Find the first element
-in the vector which is larger than the target. Returns the index.
+in the vector which is larger than the target. Returns the index. Recall R 
+starts indices at 1 and this is what the function uses.
 }
 \examples{
 x<-runif(0,1,n=5) \%>\% sort() 

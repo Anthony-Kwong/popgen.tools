@@ -9,7 +9,8 @@ sum_stats(
   nwins = 1,
   split_type = "base",
   ID,
-  snp,
+  trim_sim = T,
+  snp = NA,
   form = "wide",
   fun = "none",
   LD_downsample = F,
@@ -25,6 +26,8 @@ sum_stats(
 \item{split_type:}{Method of splitting the genome matrix. Valid options are "base" and "mut". Default is "base".}
 
 \item{ID:}{a numeric ID value to group subwindows under the simulation it came from.}
+
+\item{trim_sim:}{a logical indicating whether outer snps should be removed. Default is T.}
 
 \item{snp:}{number of snps to include per simulation}
 
