@@ -56,42 +56,31 @@ double theta_h(NumericMatrix G){
   }
   
   //compute the frequency of each SNP/mutation
-  NumericVector column_sum=colSums(G);
+  NumericVector column_sum = colSums(G);
   
   //take the max frequency to make sum efficient
-  int max_derived=max(column_sum);
+  int max_derived = max(column_sum);
 
   //S_i is the number of mutations with frequency i among the sampled sequences. 
   //Preallocate memory for max+1 since cpp indices start at zero. The S_i[0]=0 and won't get used in the sum. 
   NumericVector S_i(max_derived + 1);
   S_i[0]=0;
 
-  for(int i=1;i<=max_derived;i++){
-    S_i[i]=count(column_sum,i);
+  for(int i = 1;i <= max_derived; i++){
+    S_i[i] = count(column_sum,i);
   }
-  
-  // Rcout<<"colsum "<<column_sum<<std::endl;
-  // Rcout<<"Si is "<<S_i<<std::endl;
-  // Rcout<<"max derived "<<max_derived<<std::endl;
  
  //compute the sum term. 
   
   double sum_term=0;
   
-  for(int i=1;i<=max_derived;i++){
-   // Rcout<<"loop "<<i<<std::endl;
-   double temp=S_i[i]*i*i;
-   sum_term=sum_term+temp;
-//    Rcout<<"Calc top "<< sum_term<<std::endl;
+  for(int i = 1;i <= max_derived; i++){
+   double temp = S_i[i]*i*i;
+   sum_term = sum_term+temp;
   }
   
-  // Rcout<<"sum term is "<< sum_term<<std::endl;
-  
-  int N=G.nrow();
-  // Rcout<<"N is "<<N<<std::endl;
-  double H=sum_term/(N*(N-1)/2);
-  
-  
+  int N = G.nrow();
+  double H = sum_term/(N*(N-1)/2);
   return H;
 }
 

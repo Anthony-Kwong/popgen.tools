@@ -84,7 +84,7 @@ fwh <- function(t_t, t_h) {
 
 #' h_stats function
 #' 
-#' Computes the h1,h2,h12,h123 statistics. For more information see https://doi.org/10.1371/journal.pgen.1005004.
+#' Computes the h1,h2,h12,h123 statistics. For more information on how these are computed see https://doi.org/10.1371/journal.pgen.1005004.
 #' 
 #' @param G: A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual. 
 #' @return A numeric vector of h stats. (h1,h2,h12,h123)
