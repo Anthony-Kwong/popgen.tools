@@ -8,6 +8,7 @@ generate_df(
   sim_list,
   nwins,
   split_type = "base",
+  trim_sim = T,
   snp,
   form = "wide",
   fun = "none",
@@ -22,6 +23,8 @@ generate_df(
 \item{nwins:}{number of subwindows desired to split each genome matrix per simulation}
 
 \item{split_type:}{Method of splitting the genome matrix. Valid options are "base" and "mut". Default "base".}
+
+\item{trim_sim:}{a logical indicating whether outer snps should be removed. Default is T.}
 
 \item{snp:}{number of snps to include per simulation}
 

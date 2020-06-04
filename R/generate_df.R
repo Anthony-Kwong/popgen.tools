@@ -5,6 +5,7 @@
 #' @param sim_list: list of simulation objects
 #' @param nwins: number of subwindows desired to split each genome matrix per simulation
 #' @param split_type: Method of splitting the genome matrix. Valid options are "base" and "mut". Default "base".
+#' @param trim_sim: a logical indicating whether outer snps should be removed. Default is T.
 #' @param snp: number of snps to include per simulation
 #' @param form: Option for dataframe to be in "tall" or "wide" form. 
 #' @param fun: function to apply over summary statistics (haplotype stats excluded). See sum_stats documentation for details. 
@@ -17,7 +18,7 @@
 #' @export 
 #'
 #' @examples generate_df(sim_list,10)
-generate_df<-function(sim_list,nwins,split_type="base",snp,form="wide",fun="none",
+generate_df<-function(sim_list,nwins,split_type="base",trim_sim = T,snp,form="wide",fun="none",
                       LD_downsample=F, ds_prop=NA, ds_seed=NA){
   
   #generate a random seed if one was not given
@@ -29,8 +30,8 @@ generate_df<-function(sim_list,nwins,split_type="base",snp,form="wide",fun="none
   id <- (1:num_sim)
   seeds <- sample(.Machine$integer.max, num_sim)
   
-  arg_list= list(sim_list,nwins=nwins,split_type=split_type,
-                 id,snp=snp,form=form,fun=fun,
+  arg_list= list(sim_list,nwins=nwins,split_type=split_type,id,
+                 trim_sim = trim_sim,snp=snp,form=form,fun=fun,
                  LD_downsample=LD_downsample,
                  ds_prop = ds_prop,
                  ds_seed = seeds)
