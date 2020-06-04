@@ -18,7 +18,7 @@
 #' @export 
 #'
 #' @examples generate_df(sim_list,10)
-generate_df<-function(sim_list,nwins,split_type="base",trim_sim = T,snp,form="wide",fun="none",
+generate_df<-function(sim_list,nwins,split_type="base",trim_sim = T,snp = NA,form="wide",fun="none",
                       LD_downsample=F, ds_prop=NA, ds_seed=NA){
   
   #generate a random seed if one was not given
