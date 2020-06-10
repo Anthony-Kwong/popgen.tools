@@ -21,13 +21,15 @@
 #' Refers to the most recent popsize change, looking back from the present. 
 #' @param bottle_time2 Time (in generations) of the second most recent popsize change.
 #' @param bottle_size2 Multiplier for the sampled/reference population size. 
+#' @param start_freq Starting frequency for when the mutation comes under selection.
+#' Applies to soft sweeps only. 
 #' Refers to the second most recent popsize change, looking back from the present. 
 #' @return an object called sim_obj
 #' @export
 #'
 #' @examples This is meant to be a hidden function.
-sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_time=0,
-                  bottle_time1=0,bottle_size1=1,bottle_time2=0,bottle_size2=1){
+sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_time = 0,
+                  bottle_time1 = 0,bottle_size1 = 1,bottle_time2 = 0,bottle_size2 = 1, start_freq = NA){
   #account for 1 SNPs windows
   if(dim(genome_matrix)[1]==1){
     warning("Only 1 SNP in genome matrix.")
@@ -48,10 +50,11 @@ sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,
   sweep=sweep,
   s=select_coeff,
   fix_time=fix_time,
-  bottle_time1=as.numeric(bottle_time1),
-  bottle_size1=as.numeric(bottle_size1),
-  bottle_time2=as.numeric(bottle_time2),
-  bottle_size2=as.numeric(bottle_size2)
+  bottle_time1 = as.numeric(bottle_time1),
+  bottle_size1 = as.numeric(bottle_size1),
+  bottle_time2 = as.numeric(bottle_time2),
+  bottle_size2 = as.numeric(bottle_size2),
+  start_freq = start_freq
   )
 
   class(obj)<-"sim_obj"

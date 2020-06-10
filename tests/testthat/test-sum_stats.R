@@ -800,4 +800,109 @@ test_that("trim_sim argument in sum_stats works",{
   expect_equal(LD_act$Zns,Zns_output)
 })
 
+#Soft sweep test ----
+
+test_that("sum_stats work for soft sweeps",{
+  #hard sweep test, no transformation, num_seg>snp included (testing trimming)
+  mu=1.5e-8
+  recomb_rate=1e-8
+  Ne=1000
+  nBases=1e6
+  samplesize=200
+  s=0.1
+  fix=1
+  discoal_path="~/work/programs/discoal/discoal"
+  sweep_type="soft"
+  nwins=10
+  id=1
+  seed=c(1,2)
+  snp_inc=200
+  f0 = 0.2
+  
+  temp<-discoal_sim(mu=mu, recomb_rate=recomb_rate, Ne=Ne, 
+                    genome_length = nBases,samplesize=samplesize,s=s,
+                    discoal_path=discoal_path,fix_time=fix,
+                    sweep=sweep_type,seed=seed, start_freq = f0)
+  output<-sum_stats(sim=temp,split_type="mut",nwins = nwins, ID=id, snp=snp_inc)
+  
+  #trim matrix
+  snp_dist<-abs(temp$pos-0.5)
+  center<-which.min(snp_dist)
+  G<-temp$genomes
+  G<-window_trim(temp$genomes,cen=center,k=floor(snp_inc/2))
+  G_wins<-sub_win(G,nwins)
+  
+  expect_equal(sweep_type,output$sweep)
+  expect_equal(id,output$ID)
+  expect_equal(s,output$s_coef)
+  expect_equal(0,output$bottle_time1)
+  expect_equal(0,output$bottle_time2)
+  expect_equal(1,output$bottle_size1)
+  expect_equal(1,output$bottle_size2)
+  expect_equal(f0, output$start_freq)
+  
+  #check the block base lengths
+  
+  pos_vec = vector_trim(temp$pos, cen = center, k = floor(snp_inc/2))
+  j = seq(2, nwins + 1)
+  base_lengths = sapply(j, function(j){ pos_vec[ G_wins$bounds[j] ] - 
+      pos_vec[ G_wins$bounds[j-1] ]})
+  
+  len_output = output %>% dplyr::select(block_base_length_1:block_base_length_10)
+  expect_equal(base_lengths, as.numeric(len_output))
+  
+  snp_len = sapply(G_wins$windows,ncol)
+  snp_output = output %>% dplyr::select(block_snp_length_1:block_snp_length_10)
+  expect_equal(snp_len, as.numeric(snp_output) )
+  
+  #check SS were computed correctly
+  
+  ss<-list(theta_h,theta_t,theta_w,var_taj)
+  basic_values<-lapply(ss, function(f) sapply(G_wins$windows, function(d) f(d) ) )
+  names(basic_values)<-c("theta_h","theta_t","theta_w","var_taj")
+  
+  H_act<-purrr::map2(basic_values$theta_t,basic_values$theta_h,fwh) %>% unlist()
+  H_output<-output %>% dplyr::select(H_1:H_10)
+  H_output<-as.numeric(H_output)
+  
+  D_act<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D)
+  D_act<-unlist(D_act)
+  D_output<-output %>% dplyr::select(D_1:D_10)
+  D_output<-as.numeric(D_output)
+  
+  h_act<-lapply(G_wins$windows,h_stats) 
+  x<-rep(NA,nwins)
+  haplo_act<-cbind(x,x,x,x)
+  
+  for(i in 1:nwins){
+    haplo_act[i,]<-h_act[[i]]
+  }
+  
+  h1_output = output %>% dplyr::select(h1_1:h1_10)
+  h2_output = output %>% dplyr::select(h2_1:h2_10)
+  h12_output = output %>% dplyr::select(h12_1:h12_10)
+  h123_output = output %>% dplyr::select(h123_1:h123_10)
+  
+  expect_equal(H_act,H_output)
+  expect_equal(D_act,D_output)
+  expect_equal(as.numeric(h1_output),haplo_act[,1])
+  expect_equal(as.numeric(h2_output),haplo_act[,2])
+  expect_equal(as.numeric(h12_output),haplo_act[,3])
+  expect_equal(as.numeric(h123_output),haplo_act[,4])
+  
+  #LD stats 
+  
+  LD_act <- lapply(G_wins$windows, LD_calc)
+  LD_act <- do.call(rbind,LD_act)
+  LD_avg_output <- output %>% dplyr::select(LD_avg_1:LD_avg_10) %>% as.numeric()
+  LD_max_output <- output %>% dplyr::select(LD_max_1:LD_max_10) %>% as.numeric()
+  w_max_output <- output %>% dplyr::select(w_max_1:w_max_10) %>% as.numeric()
+  Zns_output <- output %>% dplyr::select(Zns_1:Zns_10) %>% as.numeric()
+  
+  expect_equal(LD_act$LD_avg,LD_avg_output)
+  expect_equal(LD_act$LD_max,LD_max_output)
+  expect_equal(LD_act$w_max,w_max_output)
+  expect_equal(LD_act$Zns,Zns_output)
+})
+
 

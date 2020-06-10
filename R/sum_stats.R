@@ -112,14 +112,14 @@ sum_stats<-function(sim,nwins=1,split_type="base",
 
   
   #extract useful information from the simulation ----
-  
-  #if selection coefficient s=0, it is a neutral simulation
+
   sweep <- sim$sweep
   s_coef <- sim$s
   bottle_time1 <- sim$bottle_time1
   bottle_time2 <- sim$bottle_time2
   bottle_size1 <- sim$bottle_size1
   bottle_size2 <- sim$bottle_size2
+  start_freq <- sim$start_freq
   
 
   #Split genome matrix into subwindows----
@@ -284,10 +284,10 @@ sum_stats<-function(sim,nwins=1,split_type="base",
     index=which(names(df)=="h1231")
     names(df)[index:(index+nwins-1)]<-string_labels("h123",nwins)
     
-    stats<-as.data.frame(t(df)) 
-    temp<-tibble::tibble(ID,sweep,s_coef,bottle_time1,bottle_size1,
-                         bottle_time2,bottle_size2)
-    wide_df<-cbind(temp,stats)
+    stats <- as.data.frame(t(df)) 
+    sim_info <- tibble::tibble(ID,sweep,s_coef,bottle_time1,bottle_size1,
+                         bottle_time2,bottle_size2,start_freq)
+    wide_df<-cbind(sim_info,stats)
     
     if(split_type == "mut"){
       wide_df = cbind(wide_df, base_lengths, snp_lengths)

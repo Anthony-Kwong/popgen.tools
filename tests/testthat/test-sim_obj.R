@@ -45,10 +45,12 @@ test_that("simuation object constructed correctly", {
   bs1=0.4
   bt2=10
   bs2=0.8
+  f0 = 0.2
   
   sim=sim_obj(cmd,seeds,segsites,positions,genome_matrix,sweep,
               select_coeff,fix_time=fix_time,bottle_time1 = bt1, 
-              bottle_size1 = bs1,bottle_time2 = bt2, bottle_size2 = bs2)
+              bottle_size1 = bs1,bottle_time2 = bt2, bottle_size2 = bs2,
+              start_freq = f0)
   
   expect_equal(cmd,sim$cmd)
   expect_equal(seeds,sim$seeds)
@@ -58,6 +60,7 @@ test_that("simuation object constructed correctly", {
   expect_equal(sweep,sim$sweep)
   expect_equal(select_coeff,sim$s)
   expect_equal(fix_time,sim$fix_time)
+  expect_equal(f0, sim$start_freq)
   
   #check default bottleneck stats are recorded
   expect_equal(bt1,sim$bottle_time1)

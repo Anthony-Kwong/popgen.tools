@@ -241,8 +241,9 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   #construct sim object
   obj<-sim_obj(cmd = cmd,seeds = seeds, segsites = segsites,positions = positions,
               genome_matrix = genome_matrix,sweep = sweep,select_coeff = s,fix_time = fix_time,
-              bottle_time1 = popsize_changes$time[1],bottle_size1 = popsize_changes$size[1],
-              bottle_time2 = popsize_changes$time[2],bottle_size2 = popsize_changes$size[2])
+              bottle_time1 = popsize_changes$time[1], bottle_size1 = popsize_changes$size[1],
+              bottle_time2 = popsize_changes$time[2], bottle_size2 = popsize_changes$size[2],
+              start_freq = start_freq)
   return(obj)
   
 }
