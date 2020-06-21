@@ -16,7 +16,8 @@ sim_obj(
   bottle_time1 = 0,
   bottle_size1 = 1,
   bottle_time2 = 0,
-  bottle_size2 = 1
+  bottle_size2 = 1,
+  start_freq = NA
 )
 }
 \arguments{
@@ -44,7 +45,10 @@ Refers to the most recent popsize change, looking back from the present.}
 
 \item{bottle_time2}{Time (in generations) of the second most recent popsize change.}
 
-\item{bottle_size2}{Multiplier for the sampled/reference population size. 
+\item{bottle_size2}{Multiplier for the sampled/reference population size.}
+
+\item{start_freq}{Starting frequency for when the mutation comes under selection.
+Applies to soft sweeps only. 
 Refers to the second most recent popsize change, looking back from the present.}
 }
 \value{

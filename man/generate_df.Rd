@@ -9,7 +9,7 @@ generate_df(
   nwins,
   split_type = "base",
   trim_sim = T,
-  snp,
+  snp = NA,
   form = "wide",
   fun = "none",
   LD_downsample = F,
