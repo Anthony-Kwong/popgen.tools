@@ -128,7 +128,9 @@ rcpp_hello_world <- function() {
 
 #' sub_win function
 #' 
-#' Breaks down a matrix into a series of equal sized, non-overlapping windows.
+#' Breaks down a matrix into a series of equal sized, non-overlapping windows. When
+#' the number of columns is not divisible by the number of subwindows, the remaining
+#' columns go onto the last window. 
 #' 
 #' @param G: A binary matrix of 0's and 1's. 
 #' @param num_win: Number of subwindows to break G into. 

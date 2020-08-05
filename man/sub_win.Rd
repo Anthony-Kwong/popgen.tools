@@ -17,7 +17,9 @@ A List of 2 elements. 1. A list of NumericMatrix for the windows.
 We use the R setup where indices start at 1.
 }
 \description{
-Breaks down a matrix into a series of equal sized, non-overlapping windows.
+Breaks down a matrix into a series of equal sized, non-overlapping windows. When
+the number of columns is not divisible by the number of subwindows, the remaining
+columns go onto the last window.
 }
 \examples{
 sub_win(G,4)
