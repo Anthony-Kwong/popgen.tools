@@ -247,7 +247,3 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   return(obj)
   
 }
-
-#sim_obj<-function(cmd,seeds,segsites,positions,genome_matrix,sweep,select_coeff,fix_time)
-#write_rds
-#pluck command, purr
