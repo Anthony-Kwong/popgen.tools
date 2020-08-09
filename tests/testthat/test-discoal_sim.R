@@ -82,6 +82,23 @@ test_that("Discoal command entered correctly", {
                  no_scientific(scaled_times[1]), 0, size[1], 
                  "-en", no_scientific(scaled_times[2]),0, size[2])
   expect_equal(input_cmd,test_cmd)
+  
+  #testing command for simulating multiple demes
+  demes = 2
+  sample_dist = c(10,10)
+  time = 50
+  deme_join = tibble::tibble(time = 50, pop1 = 0, pop2 = 1)
+  
+  sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,
+                    genome_length=genome_length,samplesize=samplesize,
+                    discoal_path=discoal_path,sweep=sweep,
+                    demes = demes, sample_dist = sample_dist, deme_join = deme_join)
+  
+  test_cmd = paste(discoal_path, no_scientific(samplesize),1,
+                   no_scientific(200000),"-t",theta,"-r", rho, 
+                   "-p", demes, sample_dist[1], sample_dist[2],
+                   "-ed", deme_join$time/(4*Ne), deme_join$pop1, deme_join$pop2)
+  expect_equal(sim$cmd, test_cmd)
 })
 
 test_that("Discoal command converted to neutral correctly",{

@@ -11,13 +11,14 @@
 #' @param sweep the kind of selective sweep. Options are "hard", "soft", "neutral" and "neutral_fixation". 
 #' @param seed vector of 2 numbers used for the simulations
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
-#' @param popsize_changes A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
-#' of the change in generations. Current version supports 2 changes per simulation to model bottlenecks.  
+#' @param popsize_changes A tibble with a size and a time (measured generations) column. The size is a multiplier for the current population size. The correponding time is the time
+#' of the change in generations. Current version supports 2 changes per simulation to model bottlenecks. Discoal normally uses time in units of 4Ne but this function does the conversion. 
 #' @param demes Optional.A numeric integer indicating the number of population demes to simulate. Only one deme is simulated by default.
 #' @param sample_dist Optional. Only usable when simulating multiple demes. A numeric integer vector indicating the number of samples to make from each deme. 
 #' The sum must be equal to samplesize.
-#' @param deme_join Optional. A tibble with time, deme1, deme2 columns, indicating the time to join 2 particular demes. Time is numeric. Demes are numeric
-#' integers indicating the index of the deme. Note that discoal uses 0 indexing for the demes. Used to join demes if they are present. 
+#' @param deme_join Optional. A tibble with time, deme1, deme2 columns, indicating the time (measured in generations) to join 2 particular demes. Time is numeric. Demes are numeric
+#' integers indicating the index of the deme. Note that discoal uses 0 indexing for the demes. Used to join demes if they are present. Discoal normally uses time in units of 4Ne but 
+#' this function does the conversion.
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
 #' sweep: the kind of selective sweep modelled. s: the selection coefficient
@@ -144,8 +145,8 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     if(length(sample_dist)!= demes){
       msg = paste("The number of elements in sample_dist must match the number of demes. 
                   sample_dist is specifying the number of samples to take from each deme.")
+      stop(msg)
     }
-    stop(msg)
   }
 
   
@@ -220,9 +221,10 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   if(is.null(deme_join) == F){
     nevents = nrow(deme_join)
     deme_cmd = NULL
+    scaled_times = no_scientific(deme_join$time/(4*Ne))
     for (i in 1:nevents){
       print(i)
-      deme_cmd = paste(deme_cmd, "-ed", deme_join$time[i], 
+      deme_cmd = paste(deme_cmd, "-ed", scaled_times[i], 
                        deme_join$pop1[i], deme_join$pop2[i])
     }
     cmd = paste(cmd, deme_cmd, sep = "")
