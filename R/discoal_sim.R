@@ -4,7 +4,7 @@
 #' @param recomb_rate The recombination rate per base per generation
 #' @param Ne The effective population size
 #' @param genome_length The number of bases to simulate for each sample. 
-#' @param samplesize Number of samples to take from the population
+#' @param samplesize Total number of samples to take from the population
 #' @param s selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0. 
 #' @param discoal_path path to your discoal program
 #' @param fix_time number of generations ago when the selected mutation was fixed. 
@@ -13,6 +13,11 @@
 #' @param start_freq Used for soft sweeps only. The mutation spreads via drift (neutral) and becomes selected only once it has reached the starting frequency. 
 #' @param popsize_changes A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
 #' of the change in generations. Current version supports 2 changes per simulation to model bottlenecks.  
+#' @param demes Optional.A numeric integer indicating the number of population demes to simulate. Only one deme is simulated by default.
+#' @param sample_dist Optional. Only usable when simulating multiple demes. A numeric integer vector indicating the number of samples to make from each deme. 
+#' The sum must be equal to samplesize.
+#' @param deme_join Optional. A tibble with time, deme1, deme2 columns, indicating the time to join 2 particular demes. Time is numeric. Demes are numeric
+#' integers indicating the index of the deme. Note that discoal uses 0 indexing for the demes. Used to join demes if they are present. 
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
 #' sweep: the kind of selective sweep modelled. s: the selection coefficient
@@ -23,11 +28,14 @@
 #'
 #' @importFrom stringr str_extract_all
 #' @importFrom tibble tibble
+#' @importFrom tester is_positive_integer is_numeric_vector
 #' @import magrittr
 
 
 
-discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,fix_time=NA,seed,sweep,start_freq=NA,popsize_changes=NULL){
+discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_path,
+                      fix_time = NA,seed,sweep,start_freq = NA,popsize_changes = NULL,
+                      demes = NA, sample_dist = NA, deme_join = NULL){
   
   #====================================================================================
   
@@ -72,7 +80,7 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   
   
   #check that a valid sweep type has been entered
-  valid_sweeps=c("hard","soft","neutral","neutral_fixation")
+  valid_sweeps = c("hard","soft","neutral","neutral_fixation")
   if((sweep %in% valid_sweeps)==F){
     msg=paste("Invalid sweep parameter. You entered sweep =",sweep," See documentation on discoal_sim.")
     stop(msg)
@@ -106,9 +114,42 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
     sweep="neutral"
   }
   
-  #warning when s is unspecified for selective sweeps
+  #check deme parameters
+  if(is.na(demes)==F && is_positive_integer(demes)==F){
+    msg = paste("demes must be a positive integer! It is current of class ", class(demes))
+    stop(msg)
+  }
   
+  if(is.na(sample_dist)==F && is_numeric_vector(sample_dist)==F){
+    msg = paste("sample_dist must be a numeric vector! It is current of class ", class(sample_dist))
+    stop(msg)
+  }
   
+  if(is.na(sample_dist)==F && sum(sample_dist)!=samplesize){
+    msg = paste("The sum of sample_dist must be the same as samplesize. Otherwise discoal will give segmentation fault")
+    stop(msg)
+  }
+  
+  if(is.na(demes) && is.na(sample_dist) == F){
+    msg = paste("You have entered sample_dist but deme argument is missing.")
+    stop(msg)
+  }
+  
+  if(is.na(demes)==F && is.na(sample_dist)){
+    msg = paste("You have entered demes but sample_dist argument is missing.")
+    stop(msg)
+  }
+  
+  if(is.na(demes)==F){
+    if(length(sample_dist)!= demes){
+      msg = paste("The number of elements in sample_dist must match the number of demes. 
+                  sample_dist is specifying the number of samples to take from each deme.")
+    }
+    stop(msg)
+  }
+
+  
+  #check dimensions of sample_dist and number of demes
   
   #setting up params for discoal command. Discoals has to scale mutation, recombination rates and selection coefficient by Ne.
   #source: Kern 2017 "discoal-a coalescent simulator with selection"
@@ -166,15 +207,33 @@ discoal_sim<-function(mu,recomb_rate,Ne,genome_length,samplesize,s=0,discoal_pat
   }
   
   if(sweep=="soft"){
-    cmd=paste(cmd,"-a", alpha,"-ws", tau, "-f", start_freq)
+    cmd = paste(cmd,"-a", alpha,"-ws", tau, "-f", start_freq)
   }
   
-  #current implementation works with single population only. 
+  #additional arguments too add in extra demes
+  if(is.na(demes)==F){
+    arg = c(demes, sample_dist)
+    cmd = paste(c(cmd,"-p",arg), collapse = " ")
+  }
+  
+  #additional argument to join demes together
+  if(is.null(deme_join) == F){
+    nevents = nrow(deme_join)
+    deme_cmd = NULL
+    for (i in 1:nevents){
+      print(i)
+      deme_cmd = paste(deme_cmd, "-ed", deme_join$time[i], 
+                       deme_join$pop1[i], deme_join$pop2[i])
+    }
+    cmd = paste(cmd, deme_cmd, sep = "")
+  }
+  
+  #for population size changes current implementation works with single population only. 
   pop_index=0
   
   size_cmd = NULL
   # add popsize changes
-  if(is.null(popsize_changes)==F){
+  if(is.null(popsize_changes) == F){
     nevents = ncol(popsize_changes)
 
     #scale times,times in discoal are in units of 4Ne, where Ne is the popsize of the reference pop.

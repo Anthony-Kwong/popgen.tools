@@ -16,7 +16,10 @@ discoal_sim(
   seed,
   sweep,
   start_freq = NA,
-  popsize_changes = NULL
+  popsize_changes = NULL,
+  demes = NA,
+  sample_dist = NA,
+  deme_join = NA
 )
 }
 \arguments{
@@ -28,7 +31,7 @@ discoal_sim(
 
 \item{genome_length}{The number of bases to simulate for each sample.}
 
-\item{samplesize}{Number of samples to take from the population}
+\item{samplesize}{Total number of samples to take from the population}
 
 \item{s}{selection coefficient for the selected mutation. Default is 0. Note that for neutral simulations s must be 0.}
 
@@ -44,6 +47,14 @@ discoal_sim(
 
 \item{popsize_changes}{A tibble with a size and a time column. The size is a multiplier for the current population size. The correponding time is the time
 of the change in generations. Current version supports 2 changes per simulation to model bottlenecks.}
+
+\item{demes}{Optional.A numeric integer indicating the number of population demes to simulate. Only one deme is simulated by default.}
+
+\item{sample_dist}{Optional. Only usable when simulating multiple demes. A numeric integer vector indicating the number of samples to make from each deme. 
+The sum must be equal to samplesize.}
+
+\item{deme_join}{Optional. A tibble with time, deme1, deme2 columns, indicating the time to join 2 particular demes. Time is numeric. Demes are numeric
+integers indicating the index of the deme. Note that discoal uses 0 indexing for the demes. Used to join demes if they are present.}
 }
 \value{
 an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
