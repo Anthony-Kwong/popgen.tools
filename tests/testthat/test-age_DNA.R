@@ -30,11 +30,12 @@ test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, s
   #undergo a transition. 
   deam_seeds = sample.int(.Machine$integer.max, size = snp)
   
+  set.seed(trans_seeds)
   trans_sites = sample(x = snp, size = n_trans, replace =F)
   
   for (i in 1:length(trans_sites)){
     set.seed(flip_seeds[i])
-    coin_flip = runif(n = 1, min = 0, max = 1)
+    coin_flip = purrr::rbernoulli(1, p = 0.5)
     
     set.seed(deam_seeds[i])
     deam_index = purrr::rbernoulli(nsam, p = dmg_rate)
@@ -58,8 +59,6 @@ test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, s
       }
     }
   }
-  print(deam_seeds)
-  print(trans_seeds)
   return(G)
 }
 
@@ -103,8 +102,7 @@ test_that("age_DNA works",{
   
   for(i in 1:length(trans_index)){
     set.seed(flip_seeds[i])
-    coin_flip = runif(n = 1, min = 0, max = 1) 
-    coin_flip = round(coin_flip)
+    coin_flip = purrr::rbernoulli(1, p = 0.5)
     
     set.seed(deam_seeds[i])
     deam_index = purrr::rbernoulli(nsam, p = 0.05) #use default damage rate
@@ -135,7 +133,7 @@ test_that("age_DNA works",{
   expect_equal(G, imp_output)
   expect_equal(G, test_output)
   
-  #manual check 2
+  #manual check 2 ----
   
   # SNP = 10 
   # missing_rate = 0.2
@@ -179,8 +177,7 @@ test_that("age_DNA works",{
   
   for(i in 1:length(trans_index)){
     set.seed(flip_seeds[i])
-    coin_flip = runif(n = 1, min = 0, max = 1) 
-    coin_flip = round(coin_flip)
+    coin_flip = purrr::rbernoulli(1, p = 0.5)
     
     set.seed(deam_seeds[i])
     deam_index = purrr::rbernoulli(nsam, p = 0.05) #use default damage rate

@@ -79,8 +79,7 @@ age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed =
   for(i in 1:length(trans_index)){
     set.seed(flip_seeds[i])
     #flip coin to see if we change 0's to 1's (T), or 1's to 0's (F). 
-    coin_flip = runif(n = 1, min = 0, max = 1) 
-    coin_flip = round(coin_flip)
+    coin_flip = purrr::rbernoulli(1, p = 0.5)
     
     #determine elements of each column to convert
     set.seed(deam_seeds[i])
@@ -109,7 +108,5 @@ age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed =
       }
     }
   }
-  print(deam_seeds)
-  print(trans_seeds)
   return(G)
 }
