@@ -5,8 +5,9 @@ test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, s
   snp = ncol(G)
   
   set.seed(seed)
+  #random seeds to determine which elements go missing
   NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-  deam_seeds = sample.int(.Machine$integer.max, size = nsam)
+
   
   #add missingness
   n = snp*missing_rate
@@ -17,25 +18,48 @@ test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, s
   }
   
   #deamination
-  n = snp*trans_rate
+  n_trans = snp*trans_rate
+  n_trans = round(n_trans)
   
-  for(i in 1:nsam){
-    set.seed(deam_seeds[i])
-    deam_index = sample(x = snp, size = floor(n), replace = F)
-    transitions = which( G[i,deam_index] == 0)
-    if(length(transitions) == 0){
-      next 
-    }
-    ntrans = length(transitions)
-    trans_success = purrr::rbernoulli(ntrans, p = dmg_rate)
+  set.seed(seed)
+  #random seed to determine which columns are considered transitions
+  trans_seeds = sample.int(.Machine$integer.max, size = 1) 
+  #random seed to determine the coin flips for each transition
+  flip_seeds = sample.int(.Machine$integer.max, size = n_trans)
+  #random seed to determine which elements of the transition column actually 
+  #undergo a transition. 
+  deam_seeds = sample.int(.Machine$integer.max, size = snp)
+  
+  trans_sites = sample(x = snp, size = n_trans, replace =F)
+  
+  for (i in 1:length(trans_sites)){
+    set.seed(flip_seeds[i])
+    coin_flip = runif(n = 1, min = 0, max = 1)
     
-    trans_index = deam_index[transitions]
-    for(k in 1:ntrans){
-      if(trans_success[k]){
-        G[i, trans_index[k] ] = 1
+    set.seed(deam_seeds[i])
+    deam_index = purrr::rbernoulli(nsam, p = dmg_rate)
+    
+    if(coin_flip){
+      poss_trans = which(G[,i] == 0)
+    } else {
+      poss_trans = which(G[,i] == 1)
+    }
+    
+    if(purrr::is_empty(poss_trans)){
+      next
+    }
+    
+    for(j in poss_trans){
+      if(deam_index[j] && coin_flip){
+        G[j,i] = 1
+      }
+      if(deam_index[j] && coin_flip == F){
+        G[j,i] = 0
       }
     }
   }
+  print(deam_seeds)
+  print(trans_seeds)
   return(G)
 }
 
@@ -44,11 +68,10 @@ test_that("age_DNA works",{
   #manual check with default values of trans_rate, dmg_rate
   
   set.seed(128)
-  SNP=5
+  SNP=10
   missing_rate = 0.1
   seed = 1
-  #G <- matrix(sample(0:1, size = SNP*2, replace = TRUE), nc = SNP)
-  G <- rbind( rep(1,10),rep(0,10) )
+  G <- matrix(sample(0:1, size = SNP*5, replace = TRUE), nc = SNP)
   imp_output = age_DNA(G, missing_rate = missing_rate, seed  = seed)
   test_output = test_age_DNA(G, missing_rate = missing_rate, seed  = seed)
   
@@ -56,7 +79,6 @@ test_that("age_DNA works",{
   nsam = nrow(G)
   set.seed(seed)
   NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-  deam_seeds = sample.int(.Machine$integer.max, size = nsam)
   
   #add missingness
   snp = ncol(G)
@@ -68,21 +90,44 @@ test_that("age_DNA works",{
     G[i,index] = NA
   }
   
-  #add deamination
-  n = snp*0.776
-  for(i in 1:nsam){
+  n = snp*0.776 #use default transition rate
+  num_trans = round(n)
+  
+  set.seed(seed)
+  trans_seeds = sample.int(.Machine$integer.max, size = 1) 
+  flip_seeds = sample.int(.Machine$integer.max, size = num_trans)
+  deam_seeds = sample.int(.Machine$integer.max, size = snp)
+  
+  set.seed(trans_seeds)
+  trans_index = sample(x = snp, size = num_trans, replace = F)
+  
+  for(i in 1:length(trans_index)){
+    set.seed(flip_seeds[i])
+    coin_flip = runif(n = 1, min = 0, max = 1) 
+    coin_flip = round(coin_flip)
+    
     set.seed(deam_seeds[i])
-    deam_index = sample(x = snp, size = floor(n), replace = F)
-    valid_trans = which( G[i,deam_index] == 0)
-    num_trans = length(valid_trans)
-    if(num_trans == 0){
+    deam_index = purrr::rbernoulli(nsam, p = 0.05) #use default damage rate
+    
+    if(coin_flip){
+      possible_transitions = which(G[,i] == 0)
+    } else {
+      possible_transitions = which(G[,i] == 1)
+    }
+    
+    #Go to next iteration if there are no possible base changes to make. 
+    #Typically, this scenario should not occur. 
+    if(purrr::is_empty(possible_transitions)){
       next
     }
-    trans_success = purrr::rbernoulli(num_trans, p = 0.05)
-    trans_index = deam_index[valid_trans]
-    for(k in 1:num_trans){
-      if(trans_success[k]){
-        G[i,trans_index[k]] = 1
+    
+    #loop over all elements in a column that could be changed.
+    for(j in possible_transitions){
+      if(deam_index[j] && coin_flip){
+        G[j,i] = 1 
+      }
+      if(deam_index[j] && coin_flip==F){
+        G[j,i] = 0
       }
     }
   }
@@ -90,12 +135,88 @@ test_that("age_DNA works",{
   expect_equal(G, imp_output)
   expect_equal(G, test_output)
   
-  #auto check
+  #manual check 2
+  
+  # SNP = 10 
+  # missing_rate = 0.2
+  # seed = 102
+  # set.seed(128)
+  # G <- matrix(sample(0:1, size = SNP*10, replace = TRUE), nc = SNP)
   
   set.seed(128)
-  SNP = 20 
+  SNP=10
   missing_rate = 0.2
   seed = 102
+  G <- matrix(sample(0:1, size = SNP*10, replace = TRUE), nc = SNP)
+  imp_output = age_DNA(G, missing_rate = missing_rate, seed  = seed)
+  test_output = test_age_DNA(G, missing_rate = missing_rate, seed  = seed)
+  
+  
+  nsam = nrow(G)
+  set.seed(seed)
+  NA_seeds = sample.int(.Machine$integer.max, size = nsam)
+  
+  #add missingness
+  snp = ncol(G)
+  nsam = nrow(G)
+  n = snp*missing_rate
+  for(i in 1:nsam){
+    set.seed(NA_seeds[i])
+    index = sample(x = snp, size = floor(n), replace = F)
+    G[i,index] = NA
+  }
+  
+  n = snp*0.776 #use default transition rate
+  num_trans = round(n)
+  
+  set.seed(seed)
+  trans_seeds = sample.int(.Machine$integer.max, size = 1) 
+  flip_seeds = sample.int(.Machine$integer.max, size = num_trans)
+  deam_seeds = sample.int(.Machine$integer.max, size = snp)
+  
+  set.seed(trans_seeds)
+  trans_index = sample(x = snp, size = num_trans, replace = F)
+  
+  for(i in 1:length(trans_index)){
+    set.seed(flip_seeds[i])
+    coin_flip = runif(n = 1, min = 0, max = 1) 
+    coin_flip = round(coin_flip)
+    
+    set.seed(deam_seeds[i])
+    deam_index = purrr::rbernoulli(nsam, p = 0.05) #use default damage rate
+    
+    if(coin_flip){
+      possible_transitions = which(G[,i] == 0)
+    } else {
+      possible_transitions = which(G[,i] == 1)
+    }
+    
+    #Go to next iteration if there are no possible base changes to make. 
+    #Typically, this scenario should not occur. 
+    if(purrr::is_empty(possible_transitions)){
+      next
+    }
+    
+    #loop over all elements in a column that could be changed.
+    for(j in possible_transitions){
+      if(deam_index[j] && coin_flip){
+        G[j,i] = 1 
+      }
+      if(deam_index[j] && coin_flip==F){
+        G[j,i] = 0
+      }
+    }
+  }
+  
+  expect_equal(G, imp_output)
+  expect_equal(G, test_output)
+  
+  #auto check ----
+  
+  SNP = 10 
+  missing_rate = 0.2
+  seed = 102
+  set.seed(128)
   G <- matrix(sample(0:1, size = SNP*10, replace = TRUE), nc = SNP)
   imp_output = age_DNA(G, missing_rate = missing_rate, seed = seed)
   test_output = test_age_DNA(G, missing_rate = missing_rate, seed = seed)

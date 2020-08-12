@@ -2,16 +2,18 @@
 #' 
 #' A function to simulating DNA aging on discoal simulations. To simulate missingness, for each row 
 #' a percentage of elements are randomly sampled and become missing. To simulate deamination
-#' a percentage of elements in each row are randomly sampled according to trans_rate. Then 
-#' if the element is 0, it becomes 1 with probability designated by  dmg_rate. 
+#' a percentage of columns are randomly sampled according to trans_rate, to become transition sites. 
+#' For each transition site we flip a fair coin. If heads we change 0's to 1's, with probability as 
+#' specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
+#' specified by the dmg_rate.
 #' 
-#' doi: 10.1534/genetics.112.139949
+#' This method is adapted from doi: 10.1534/genetics.112.139949
 #'
 #' @param G : A binary, numeric genome matrix from discoal. 
 #' @param missing_rate : Probability of elements that are randomly sampled to become NA for each row in G.
-#' @param trans_rate: Probability of elements that are randomly sampled to be transitions for each row in G. 
+#' @param trans_prop: Proportion of columns (i.e. sites) that are chosen to be transition sites.
 #' Default is 0.776.
-#' @param dmg_rate: Probability that a randomly sampled transition with an ancestral allele 0 is convert to 1.
+#' @param dmg_rate: Probability of a element in a transition column changing from 0 to 1, or 1 to 0. 
 #' Default is 0.05. 
 #' @param seed: A numeric random seed. Optional.
 #' @return
@@ -19,7 +21,7 @@
 #'
 #' @examples
 #' 
-#' @importFrom purrr rbernoulli
+#' @importFrom purrr rbernoulli is_empty
 age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed = NA){
 
   #check inputs
@@ -44,11 +46,10 @@ age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed =
   nsam = nrow(G)
   set.seed(seed)
   NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-  deam_seeds = sample.int(.Machine$integer.max, size = nsam)
   
   #main function operations start here
   
-  #add missingness
+  #add missingness ----
   snp = ncol(G)
   n = snp*missing_rate
   for(i in 1:nsam){
@@ -57,32 +58,58 @@ age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed =
     G[i,index] = NA
   }
   
-  #deamination
+  #deamination ----
   n = snp*trans_rate
+  num_trans = round(n)
   
-  for(i in 1:nsam){
-    #randomly sample elements for deamination
+  set.seed(seed)
+  #random seed to determine which columns are considered transitions
+  trans_seeds = sample.int(.Machine$integer.max, size = 1) 
+  #random seed to determine the coin flips for each transition
+  flip_seeds = sample.int(.Machine$integer.max, size = num_trans)
+  #random seed to determine which elements of the transition column actually 
+  #undergo a transition. 
+  deam_seeds = sample.int(.Machine$integer.max, size = snp)
+  
+  #randomly sample columns to become transition sites
+  set.seed(trans_seeds)
+  trans_index = sample(x = snp, size = num_trans, replace = F)
+  
+  #loop over all transition sites/columns
+  for(i in 1:length(trans_index)){
+    set.seed(flip_seeds[i])
+    #flip coin to see if we change 0's to 1's (T), or 1's to 0's (F). 
+    coin_flip = runif(n = 1, min = 0, max = 1) 
+    coin_flip = round(coin_flip)
+    
+    #determine elements of each column to convert
     set.seed(deam_seeds[i])
-    deam_index = sample(x = snp, size = floor(n), replace = F)
-    #find the ancestral alleles among sampled elements
-    transitions = which(G[i,deam_index] == 0)
-    #skip to next iteration if there are no value elements for transitions
-    if(length(transitions) == 0){
-      next 
+    deam_index = purrr::rbernoulli(nsam, p = dmg_rate)
+    
+    #find the row indices corresponding to potential elements to change
+    if(coin_flip){
+      possible_transitions = which(G[,i] == 0)
+    } else {
+      possible_transitions = which(G[,i] == 1)
+    }
+
+    #Go to next iteration if there are no possible base changes to make. 
+    #Typically, this scenario should not occur. 
+    if(purrr::is_empty(possible_transitions)){
+      next
     }
     
-    #turn 0 to 1 w.p dmg_rate
-    n_trans = length(transitions)
-    trans_success = purrr::rbernoulli(n_trans, p = dmg_rate)
-    
-    #indices of elements to undergo transition
-    trans_index = deam_index[transitions]
-    for(j in 1:length(trans_index)){
-      if(trans_success[j]){
-        G[i,trans_index[j]] = 1
+    #loop over all elements in a column that could be changed.
+    for(j in possible_transitions){
+      if(deam_index[j] && coin_flip){
+        G[j,i] = 1 
+      }
+      if(deam_index[j] && coin_flip==F){
+        G[j,i] = 0
       }
     }
   }
-  
+  print(deam_seeds)
+  print(trans_seeds)
   return(G)
 }
