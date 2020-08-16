@@ -11,10 +11,10 @@ age_DNA(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed = NA)
 
 \item{missing_rate}{: Probability of elements that are randomly sampled to become NA for each row in G.}
 
-\item{trans_rate:}{Probability of elements that are randomly sampled to be transitions for each row in G. 
+\item{trans_prop:}{Proportion of columns (i.e. sites) that are chosen to be transition sites.
 Default is 0.776.}
 
-\item{dmg_rate:}{Probability that a randomly sampled transition with an ancestral allele 0 is convert to 1.
+\item{dmg_rate:}{Probability of a element in a transition column changing from 0 to 1, or 1 to 0. 
 Default is 0.05.}
 
 \item{seed:}{A numeric random seed. Optional.}
@@ -25,11 +25,13 @@ Default is 0.05.}
 \description{
 A function to simulating DNA aging on discoal simulations. To simulate missingness, for each row 
 a percentage of elements are randomly sampled and become missing. To simulate deamination
-a percentage of elements in each row are randomly sampled according to trans_rate. Then 
-if the element is 0, it becomes 1 with probability designated by  dmg_rate.
+a percentage of columns are randomly sampled according to trans_rate, to become transition sites. 
+For each transition site we flip a fair coin. If heads we change 0's to 1's, with probability as 
+specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
+specified by the dmg_rate.
 }
 \details{
-doi: 10.1534/genetics.112.139949
+This method is adapted from doi: 10.1534/genetics.112.139949
 }
 \examples{
 

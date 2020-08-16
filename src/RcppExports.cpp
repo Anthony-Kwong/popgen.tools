@@ -97,6 +97,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// het_finder
+NumericVector het_finder(NumericMatrix G);
+RcppExport SEXP _popgen_tools_het_finder(SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(het_finder(G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // is_sorted
 bool is_sorted(NumericVector x, bool ascend);
 RcppExport SEXP _popgen_tools_is_sorted(SEXP xSEXP, SEXP ascendSEXP) {
@@ -106,6 +117,18 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
     Rcpp::traits::input_parameter< bool >::type ascend(ascendSEXP);
     rcpp_result_gen = Rcpp::wrap(is_sorted(x, ascend));
+    return rcpp_result_gen;
+END_RCPP
+}
+// matrix_subset
+Rcpp::NumericMatrix matrix_subset(Rcpp::NumericMatrix G, Rcpp::IntegerVector y);
+RcppExport SEXP _popgen_tools_matrix_subset(SEXP GSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type G(GSEXP);
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_subset(G, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -402,7 +425,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_fwh", (DL_FUNC) &_popgen_tools_fwh, 2},
     {"_popgen_tools_h_stats", (DL_FUNC) &_popgen_tools_h_stats, 1},
     {"_popgen_tools_have_na", (DL_FUNC) &_popgen_tools_have_na, 1},
+    {"_popgen_tools_het_finder", (DL_FUNC) &_popgen_tools_het_finder, 1},
     {"_popgen_tools_is_sorted", (DL_FUNC) &_popgen_tools_is_sorted, 2},
+    {"_popgen_tools_matrix_subset", (DL_FUNC) &_popgen_tools_matrix_subset, 2},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
     {"_popgen_tools_a1f", (DL_FUNC) &_popgen_tools_a1f, 1},

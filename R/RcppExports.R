@@ -107,6 +107,20 @@ have_na <- function(M) {
     .Call('_popgen_tools_have_na', PACKAGE = 'popgen.tools', M)
 }
 
+#' het_finder function
+#' 
+#' Searches through the columns of a NumericMatrix and finds all the columns that 
+#' contain different elements. Returns the indices of these columns. Note that 
+#' this function uses 1 indexing to suit R. 
+#' 
+#' @param G: A NumericMatrix
+#' @return A NumericVector containing the indices of the columns with different elements.
+#' @examples  G <-matrix(sample(0:1, size = 16, replace = TRUE), nc = 4), het_finder(G)
+#' @export
+het_finder <- function(G) {
+    .Call('_popgen_tools_het_finder', PACKAGE = 'popgen.tools', G)
+}
+
 #' is_sorted function
 #' 
 #' Checks if a NumericVector is sorted numerically. 
@@ -120,6 +134,18 @@ have_na <- function(M) {
 #' @export 
 is_sorted <- function(x, ascend) {
     .Call('_popgen_tools_is_sorted', PACKAGE = 'popgen.tools', x, ascend)
+}
+
+#' matrix_subset function
+#' 
+#' Subsets selected columns from a NumericMatrix. 
+#' 
+#' @param G: A NumericMatrix
+#' @param y: An IntegerVector of indices. Uses 1 indexing to suit R.
+#' @return A NumericMatrix with subset columns of G using the indices in y.
+#' @export
+matrix_subset <- function(G, y) {
+    .Call('_popgen_tools_matrix_subset', PACKAGE = 'popgen.tools', G, y)
 }
 
 rcpp_hello_world <- function() {
