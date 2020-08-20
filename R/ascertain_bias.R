@@ -12,7 +12,8 @@
 #' The rows belonging to the outgroup are also excluded. 
 #' @export
 #'
-#' @examples
+#' @examples G <-matrix(sample(0:1, size = 40, replace = TRUE), nc = 8)
+#' ascertain_bias(G, c(7,8))
 ascertain_bias <-function(G, index){
   outgroup_G = G[index,]
   het_sites = het_finder(outgroup_G)

@@ -21,3 +21,7 @@ where some rows represent sequences from an outgroup (usually 2). The function
 identifies all heterozygous sites in the outgroup, then subsets the G at these 
 columns. The outgroup is excluded in the output matrix.
 }
+\examples{
+G <-matrix(sample(0:1, size = 40, replace = TRUE), nc = 8)
+ascertain_bias(G, c(7,8))
+}

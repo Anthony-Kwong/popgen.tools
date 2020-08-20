@@ -132,6 +132,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// random_impute
+NumericMatrix random_impute(NumericMatrix G);
+RcppExport SEXP _popgen_tools_random_impute(SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(random_impute(G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _popgen_tools_rcpp_hello_world() {
@@ -428,6 +439,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_het_finder", (DL_FUNC) &_popgen_tools_het_finder, 1},
     {"_popgen_tools_is_sorted", (DL_FUNC) &_popgen_tools_is_sorted, 2},
     {"_popgen_tools_matrix_subset", (DL_FUNC) &_popgen_tools_matrix_subset, 2},
+    {"_popgen_tools_random_impute", (DL_FUNC) &_popgen_tools_random_impute, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_sub_win", (DL_FUNC) &_popgen_tools_sub_win, 2},
     {"_popgen_tools_a1f", (DL_FUNC) &_popgen_tools_a1f, 1},

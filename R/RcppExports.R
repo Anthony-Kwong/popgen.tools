@@ -148,6 +148,23 @@ matrix_subset <- function(G, y) {
     .Call('_popgen_tools_matrix_subset', PACKAGE = 'popgen.tools', G, y)
 }
 
+#' random_impute function
+#' 
+#' Imputes NAs in a genome matrix. For each NA, we randomly sample from the non-NA
+#' elements of that column. Each element is equally likely to be selected. NA becomes
+#' the randomly selected element. 
+#' 
+#' @param G: A NumericMatrix with NAs. 
+#' @param seed: A numeric random seed.
+#' @return A NumericMatrix with imputed values in place of the NAs. 
+#' @examples G <-matrix(sample(0:1, size = 16, replace = TRUE), nc = 4)
+#' G[1,1] = NA
+#' random_impute(G)
+#' @export
+random_impute <- function(G) {
+    .Call('_popgen_tools_random_impute', PACKAGE = 'popgen.tools', G)
+}
+
 rcpp_hello_world <- function() {
     .Call('_popgen_tools_rcpp_hello_world', PACKAGE = 'popgen.tools')
 }
