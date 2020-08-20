@@ -24,7 +24,6 @@ NumericMatrix random_impute(NumericMatrix G) {
   
   NumericMatrix output = G;
   int sites = G.ncol();
-  int nsam = G.nrow();
   for(int c=0; c < sites; c++){
     NumericVector col = G(_,c);
     NumericVector na_pos = which(f_na(col));
@@ -36,9 +35,9 @@ NumericMatrix random_impute(NumericMatrix G) {
       //random sample from col
       NumericVector imp = runif(1,Named("min")=0,_["max"]=col.length());
       int imp_index = imp[0];
-      Rcout <<"imp "<< imp <<std::endl;
-      Rcout << "imp_index "<< imp_index <<std::endl;
-      Rcout << "change "<< col[imp_index]<<std::endl;
+      // Rcout <<"imp "<< imp <<std::endl;
+      // Rcout << "imp_index "<< imp_index <<std::endl;
+      // Rcout << "change "<< col[imp_index]<<std::endl;
       // Rcout << "pos_na"<< na_pos << std::endl;
       // Rcout<<"num_na"<< num_na <<std::endl; 
       output(na_pos[r],c) = col[imp_index];

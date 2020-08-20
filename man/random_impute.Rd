@@ -8,6 +8,8 @@ random_impute(G)
 }
 \arguments{
 \item{G:}{A NumericMatrix with NAs.}
+
+\item{seed:}{A numeric random seed.}
 }
 \value{
 A NumericMatrix with imputed values in place of the NAs.
