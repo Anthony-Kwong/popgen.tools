@@ -9,15 +9,18 @@ ancient_sum_stats(
   nwins = 1,
   split_type = "base",
   ID,
-  trim_sim = T,
+  trim_sim = F,
   snp = NA,
-  form = "wide",
-  LD_downsample = F,
-  ds_prop = NA,
-  ds_seed = NA
+  missing_rate,
+  trans_prop = 0.776,
+  dmg_rate = 0.05,
+  index,
+  seed = NA
 )
 }
 \arguments{
+\item{missing_rate}{: Probability of elements that are randomly sampled to become NA for each row in G.}
+
 \item{sim:}{a simulation object}
 
 \item{nwins:}{number of subwindows to split each genome matrix within the simulation. Default is 1.}
@@ -26,21 +29,9 @@ ancient_sum_stats(
 
 \item{ID:}{a numeric ID value to group subwindows under the simulation it came from.}
 
-\item{trim_sim:}{a logical indicating whether outer snps should be removed. Default is T.}
+\item{trim_sim:}{a logical indicating whether outer snps should be removed. Default is F.}
 
 \item{snp:}{number of snps to include per simulation}
-
-\item{form:}{output data frame in "wide" or "tall" form. This is an optional argument with default="wide".}
-
-\item{fun:}{option to apply a function over the ss across a simulation. Default is "none". The haplotype statistics (h_stats) don't get transformed. Options include "norm"}
-
-\item{LD_downsample:}{logical option to downsample genome matrix for the purposes of computing LD statistics. Default is FALSE.}
-
-\item{ds_prop:}{Used with LD_downsample. Proportion of columns to downsample without replacement from the genome matrix.}
-
-\item{ds_seed:}{Optional. Numeric seed for the LD_downsample.}
-
-\item{missing_rate}{: Probability of elements that are randomly sampled to become NA for each row in G.}
 
 \item{trans_prop:}{Proportion of columns (i.e. sites) that are chosen to be transition sites.
 Default is 0.776.}
@@ -48,7 +39,9 @@ Default is 0.776.}
 \item{dmg_rate:}{Probability of a element in a transition column changing from 0 to 1, or 1 to 0. 
 Default is 0.05.}
 
-\item{seed:}{a random seed for aging DNA.}
+\item{index:}{A vector of indices indicating the rows of the genome matrix which represent the outgroup.}
+
+\item{seed:}{Optional. A random seed for aging DNA.}
 }
 \value{
 A one row dataframe summary stats and information for the input simulation object.
@@ -61,5 +54,5 @@ ascertain_bias function documentation for more information. See sum_stats functi
 documentation to see how summary statistics are computed.
 }
 \examples{
-sum_stats(sim_obj)
+ancient_sum_stats(sim_obj)
 }

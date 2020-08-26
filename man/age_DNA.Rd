@@ -4,7 +4,7 @@
 \alias{age_DNA}
 \title{age_DNA function}
 \usage{
-age_DNA(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed = NA)
+age_DNA(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed = NA)
 }
 \arguments{
 \item{G}{: A binary, numeric genome matrix from discoal.}
@@ -25,7 +25,7 @@ Default is 0.05.}
 \description{
 A function to simulating DNA aging on discoal simulations. To simulate missingness, for each row 
 a percentage of elements are randomly sampled and become missing. To simulate deamination
-a percentage of columns are randomly sampled according to trans_rate, to become transition sites. 
+a percentage of columns are randomly sampled according to trans_prop, to become transition sites. 
 For each transition site we flip a fair coin. If heads we change 0's to 1's, with probability as 
 specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
 specified by the dmg_rate.

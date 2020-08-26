@@ -53,9 +53,9 @@ of the change in generations. Current version supports 2 changes per simulation 
 \item{sample_dist}{Optional. Only usable when simulating multiple demes. A numeric integer vector indicating the number of samples to make from each deme. 
 The sum must be equal to samplesize.}
 
-\item{deme_join}{Optional. A tibble with time, deme1, deme2 columns, indicating the time (measured in generations) to join 2 particular demes. Time is numeric. Demes are numeric
+\item{deme_join}{Optional. A tibble with time, pop1, pop2 columns, indicating the time (measured in generations) to join 2 particular demes. Time is numeric. Demes are numeric
 integers indicating the index of the deme. Note that discoal uses 0 indexing for the demes. Used to join demes if they are present. Discoal normally uses time in units of 4Ne but 
-this function does the conversion.}
+this function does the conversion so that time is entered in generations.}
 }
 \value{
 an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
