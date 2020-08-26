@@ -3,6 +3,7 @@
 export(LD_calc)
 export(LD_w)
 export(age_DNA)
+export(ancient_sum_stats)
 export(any_sug)
 export(ascertain_bias)
 export(count)

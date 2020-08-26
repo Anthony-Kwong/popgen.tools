@@ -17,9 +17,7 @@
 #' @importFrom tester is_not_even
 #' @importFrom rlist list.rbind
 pseudo_hap <- function (G, seed = NA){
-  if(is_genome_matrix(G) == F){
-    stop("Input is not a genome_matrix")
-  }
+
   nsam = nrow(G)
   if(tester::is_not_even(nsam)){
     stop("Number of rows in G must be even. They are odd right now.")

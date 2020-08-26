@@ -2,7 +2,7 @@
 #' 
 #' A function to simulating DNA aging on discoal simulations. To simulate missingness, for each row 
 #' a percentage of elements are randomly sampled and become missing. To simulate deamination
-#' a percentage of columns are randomly sampled according to trans_rate, to become transition sites. 
+#' a percentage of columns are randomly sampled according to trans_prop, to become transition sites. 
 #' For each transition site we flip a fair coin. If heads we change 0's to 1's, with probability as 
 #' specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
 #' specified by the dmg_rate.
@@ -22,12 +22,10 @@
 #' @examples
 #' 
 #' @importFrom purrr rbernoulli is_empty
-age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed = NA){
+age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed = NA){
 
-  #check inputs
-  if(is_genome_matrix(G) == F){
-    stop("G is not a valid genome matrix.")
-  }
+  #check inputs, no check for being a genome matrix because of ascertainment bias
+
   if(missing_rate > 1 || missing_rate < 0){
     stop("missing rate must be a numeric between 0 and 1")
   }
@@ -59,7 +57,7 @@ age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed =
   }
   
   #deamination ----
-  n = snp*trans_rate
+  n = snp*trans_prop
   num_trans = round(n)
   
   set.seed(seed)

@@ -18,7 +18,7 @@
 #' The sum must be equal to samplesize.
 #' @param deme_join Optional. A tibble with time, deme1, deme2 columns, indicating the time (measured in generations) to join 2 particular demes. Time is numeric. Demes are numeric
 #' integers indicating the index of the deme. Note that discoal uses 0 indexing for the demes. Used to join demes if they are present. Discoal normally uses time in units of 4Ne but 
-#' this function does the conversion.
+#' this function does the conversion so that time is entered in generations. 
 #' @return an object of class sim_obj. Here are the features. cmd is the command. Seeds: the seeds used in the discoal simulation.
 #' num_seg: number of segregating sites in the sampled population. pos: vector of the positions of every seg site (infinite sites model)
 #' sweep: the kind of selective sweep modelled. s: the selection coefficient

@@ -1,6 +1,6 @@
 #Test function for age_DNA
 
-test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, seed = NA){
+test_age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed = NA){
   nsam = nrow(G)
   snp = ncol(G)
   
@@ -18,7 +18,7 @@ test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, s
   }
   
   #deamination
-  n_trans = snp*trans_rate
+  n_trans = snp*trans_prop
   n_trans = round(n_trans)
   
   set.seed(seed)
@@ -64,7 +64,7 @@ test_age_DNA <- function(G, missing_rate, trans_rate = 0.776, dmg_rate = 0.05, s
 
 test_that("age_DNA works",{
 
-  #manual check with default values of trans_rate, dmg_rate
+  #manual check with default values of trans_prop, dmg_rate
   
   set.seed(128)
   SNP=10
@@ -224,7 +224,7 @@ test_that("age_DNA works",{
   missing_rate = 0.15
   seed = 1012
   G <- matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP)
-  imp_output = age_DNA(G, missing_rate = missing_rate, trans_rate = 0.5, dmg_rate = 0.1,seed = seed)
-  test_output = test_age_DNA(G, missing_rate = missing_rate, trans_rate = 0.5, dmg_rate = 0.1, seed = seed)
+  imp_output = age_DNA(G, missing_rate = missing_rate, trans_prop = 0.5, dmg_rate = 0.1,seed = seed)
+  test_output = test_age_DNA(G, missing_rate = missing_rate, trans_prop = 0.5, dmg_rate = 0.1, seed = seed)
   expect_equal(imp_output, test_output)
 })

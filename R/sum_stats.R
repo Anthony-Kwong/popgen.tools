@@ -17,9 +17,9 @@
 #' @importFrom purrr map2 pmap
 #' @importFrom dplyr bind_cols
 #' @import magrittr
-#' @return list of summary stats for the input genome matrix
+#' @return a one row dataframe summary stats for the input simulation object
 #' @export
-#' @examples sum_stats(win_list)
+#' @examples sum_stats(sim_obj)
 #' This is meant to be a hidden function. Hide in final version. 
 sum_stats<-function(sim,nwins=1,split_type="base",
                     ID,trim_sim=T,snp = NA,form="wide",
