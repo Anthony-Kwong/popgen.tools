@@ -25,8 +25,6 @@ test_that("generate_df works",{
   
   df<-generate_df(l_sim, nwins = nwins,split_type="mut",snp = snp_include,form="wide",fun="norm")
   
-  #check row 3 numbers
-  
   for(index in 1:nsim){
     batch_ans<-df[index,] 
     batch_ans<-as.numeric(batch_ans)

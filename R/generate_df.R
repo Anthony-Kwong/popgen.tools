@@ -17,7 +17,7 @@
 #' @return dataframe containing summary statistics of all the subwindows across all the simulations. 
 #' @export 
 #'
-#' @examples generate_df(sim_list,10)
+#' @examples generate_df(sim_list,nwins = 10)
 generate_df<-function(sim_list,nwins,split_type="base",trim_sim = T,snp = NA,form="wide",fun="none",
                       LD_downsample=F, ds_prop=NA, ds_seed=NA){
   
