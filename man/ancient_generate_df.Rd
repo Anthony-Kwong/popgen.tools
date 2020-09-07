@@ -8,7 +8,7 @@ ancient_generate_df(
   sim_list,
   nwins,
   split_type = "base",
-  trim_sim = T,
+  trim_sim = F,
   snp = NA,
   missing_rate,
   trans_prop = 0.776,

@@ -9,7 +9,7 @@
 #' 
 #' This method is adapted from doi: 10.1534/genetics.112.139949
 #'
-#' @param G : A binary, numeric genome matrix from discoal. 
+#' @param G : A binary, numeric genome matrix. 
 #' @param missing_rate : Probability of elements that are randomly sampled to become NA for each row in G.
 #' @param trans_prop: Proportion of columns (i.e. sites) that are chosen to be transition sites.
 #' Default is 0.776.
@@ -29,6 +29,7 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
   if(missing_rate > 1 || missing_rate < 0){
     stop("missing rate must be a numeric between 0 and 1")
   }
+  
   if(dmg_rate > 1 || dmg_rate < 0){
     stop("dmg_rate must be a numeric between 0 and 1")
   }
@@ -41,22 +42,11 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
     stop("random seed must be numeric.")
   }
   
-  nsam = nrow(G)
-  set.seed(seed)
-  NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-  
-  #main function operations start here
-  
-  #add missingness ----
-  snp = ncol(G)
-  n = snp*missing_rate
-  for(i in 1:nsam){
-    set.seed(NA_seeds[i])
-    index = sample(x = snp, size = floor(n), replace = F)
-    G[i,index] = NA
-  }
+  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
   
   #deamination ----
+  snp = ncol(G)
+  nsam = nrow(G)
   n = snp*trans_prop
   num_trans = round(n)
   

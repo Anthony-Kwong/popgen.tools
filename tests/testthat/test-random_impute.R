@@ -23,7 +23,7 @@
 # }
 
 test_that("random_impute works",{
-  #manual check
+  #manual check, got the random imputations using Rcout statements
   set.seed(2)
   G = matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
   G[1,1] = NA
@@ -37,15 +37,29 @@ test_that("random_impute works",{
   G[3,4] = 1
   expect_equal(out, G)
   
+  #manual check 2
   set.seed(22)
   G = matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
   G = age_DNA(G, missing_rate = 0.25, seed = 20)
   
   set.seed(3)
   out = random_impute(G)
-  G[2,1] = 1 
-  G[3,2] = 0
-  G[1,3] = 0
-  G[4,4] = 0
+  G[,3] = rep(0,4)
+
+  G[3,4] = 0
+  G[4,4] = 1
+  
+  G[2,5] = 0
+  G[3,5] = 1
   expect_equal(G,out)
+  
+  #manual check with a column of NAs, make sure it is convereted to 0's. 
+  set.seed(22)
+  G = matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
+  G[,4] = rep(NA,4)
+  
+  output = random_impute(G)
+  G[,4] = rep(0,4)
+  expect_equal(output,G)
+  
 })

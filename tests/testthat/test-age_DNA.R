@@ -4,18 +4,12 @@ test_age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, s
   nsam = nrow(G)
   snp = ncol(G)
   
-  set.seed(seed)
-  #random seeds to determine which elements go missing
-  NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-
+  if(is.na(seed)){
+    seed = sample.int(.Machine$integer.max, size = 1) 
+  }
   
   #add missingness
-  n = snp*missing_rate
-  for(i in 1:nsam){
-    set.seed(NA_seeds[i])
-    index = sample(x = snp, size = floor(n), replace = F)
-    G[i,index] = NA
-  }
+  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
   
   #deamination
   n_trans = snp*trans_prop
@@ -74,21 +68,14 @@ test_that("age_DNA works",{
   imp_output = age_DNA(G, missing_rate = missing_rate, seed  = seed)
   test_output = test_age_DNA(G, missing_rate = missing_rate, seed  = seed)
   
-  
-  nsam = nrow(G)
-  set.seed(seed)
-  NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-  
+
+
   #add missingness
+  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
+  
+  #add deamination
   snp = ncol(G)
   nsam = nrow(G)
-  n = snp*missing_rate
-  for(i in 1:nsam){
-    set.seed(NA_seeds[i])
-    index = sample(x = snp, size = floor(n), replace = F)
-    G[i,index] = NA
-  }
-  
   n = snp*0.776 #use default transition rate
   num_trans = round(n)
   
@@ -135,45 +122,28 @@ test_that("age_DNA works",{
   
   #manual check 2 ----
   
-  # SNP = 10 
-  # missing_rate = 0.2
-  # seed = 102
-  # set.seed(128)
-  # G <- matrix(sample(0:1, size = SNP*10, replace = TRUE), nc = SNP)
-  
   set.seed(128)
   SNP=10
+  nsam = 10
   missing_rate = 0.2
   seed = 102
-  G <- matrix(sample(0:1, size = SNP*10, replace = TRUE), nc = SNP)
+  G <- matrix(sample(0:1, size = SNP*nsam, replace = TRUE), nc = SNP)
   imp_output = age_DNA(G, missing_rate = missing_rate, seed  = seed)
   test_output = test_age_DNA(G, missing_rate = missing_rate, seed  = seed)
   
-  
-  nsam = nrow(G)
-  set.seed(seed)
-  NA_seeds = sample.int(.Machine$integer.max, size = nsam)
-  
   #add missingness
-  snp = ncol(G)
-  nsam = nrow(G)
-  n = snp*missing_rate
-  for(i in 1:nsam){
-    set.seed(NA_seeds[i])
-    index = sample(x = snp, size = floor(n), replace = F)
-    G[i,index] = NA
-  }
+  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
   
-  n = snp*0.776 #use default transition rate
+  n = SNP*0.776 #use default transition rate
   num_trans = round(n)
   
   set.seed(seed)
   trans_seeds = sample.int(.Machine$integer.max, size = 1) 
   flip_seeds = sample.int(.Machine$integer.max, size = num_trans)
-  deam_seeds = sample.int(.Machine$integer.max, size = snp)
+  deam_seeds = sample.int(.Machine$integer.max, size = SNP)
   
   set.seed(trans_seeds)
-  trans_index = sample(x = snp, size = num_trans, replace = F)
+  trans_index = sample(x = SNP, size = num_trans, replace = F)
   
   for(i in 1:length(trans_index)){
     set.seed(flip_seeds[i])

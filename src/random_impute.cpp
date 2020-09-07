@@ -24,20 +24,38 @@ NumericMatrix random_impute(NumericMatrix G) {
   
   NumericMatrix output = G;
   int sites = G.ncol();
-  for(int c=0; c < sites; c++){
+  int nsam = G.nrow();
+  // loop across the columns of G
+  for(int c = 0; c < sites; c++){
+    //Rcout << "c " << c << std::endl; 
+    //copy the c^th column
     NumericVector col = G(_,c);
+    //find all elements in column which are NA
     NumericVector na_pos = which(f_na(col));
-    na_pos = na_pos - 1; //the which function uses 1 indexing. Converting to 0 indexing for cpp.
+    //the which function from R uses 1 indexing. Converting to 0 indexing for cpp.
+    na_pos = na_pos - 1; 
     int num_na = na_pos.length();
+    
+    //if we run into a column with only NAs, convert that column to a vector of 0's.
+    if(num_na==nsam){
+      output(_,c) = NumericVector(nsam);
+      break;
+    }
+    
+    // obtain all the non-NA elements in the c^th column
     col = discard(col, f_na);
+   // Rcout << col << std::endl;
+
     for(int r=0; r<num_na; r++){
-      //Rcout << r << std::endl;
+      //Rcout <<"r "<< r << std::endl;
+      
       //random sample from col
       NumericVector imp = runif(1,Named("min")=0,_["max"]=col.length());
+      //round down to nearest integer to get a valid index
       int imp_index = imp[0];
       // Rcout <<"imp "<< imp <<std::endl;
       // Rcout << "imp_index "<< imp_index <<std::endl;
-      // Rcout << "change "<< col[imp_index]<<std::endl;
+      // Rcout << "change " << col[imp_index]<<std::endl;
       // Rcout << "pos_na"<< na_pos << std::endl;
       // Rcout<<"num_na"<< num_na <<std::endl; 
       output(na_pos[r],c) = col[imp_index];

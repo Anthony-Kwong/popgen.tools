@@ -7,7 +7,7 @@
 age_DNA(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed = NA)
 }
 \arguments{
-\item{G}{: A binary, numeric genome matrix from discoal.}
+\item{G}{: A binary, numeric genome matrix.}
 
 \item{missing_rate}{: Probability of elements that are randomly sampled to become NA for each row in G.}
 
