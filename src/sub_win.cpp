@@ -23,8 +23,9 @@ List sub_win(NumericMatrix G,int num_windows) {
   NumericVector indices(num_windows + 1); 
   indices[0] = 0;
   
-  //When there are are sub windows than SNPs, we return NULL. 
-  if(width<1){
+  //When there are more sub windows than SNPs, we return NULL. 
+  if(width < 1){
+    warning("Warning in sub_win(): Requested number of sub windows exceed the number of columns.");
     return NULL;
   }
   

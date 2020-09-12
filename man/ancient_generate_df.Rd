@@ -13,7 +13,7 @@ ancient_generate_df(
   missing_rate,
   trans_prop = 0.776,
   dmg_rate = 0.05,
-  index,
+  ascertain_indices,
   seed = NA
 )
 }
@@ -38,7 +38,8 @@ Default is 0.05.}
 
 \item{index:}{A vector of indices indicating the rows of the genome matrix which represent the outgroup.}
 
-\item{seed:}{Optional. A random seed for aging DNA.}
+\item{ascertain_indices:}{A list of 2-dimensional vectors. Each vector contains the indices of 2 
+rows in G for doing the ascertainment bias.}
 }
 \value{
 a dataframe containting the summary statistics for the list of simulation objects

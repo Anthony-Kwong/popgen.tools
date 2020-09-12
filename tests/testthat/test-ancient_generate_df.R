@@ -3,9 +3,9 @@ test_that("ancient_generate_df function works",{
   #demographic params
   mu=1.5e-8
   recomb_rate=1e-9
-  Ne=1000
+  Ne=10000
   genome_length=1e6
-  samplesize=25
+  samplesize=200 #try 100 afterwards
   s=0.01
   fix=0
   discoal_path="~/work/programs/discoal/discoal"
@@ -15,12 +15,12 @@ test_that("ancient_generate_df function works",{
   #population tree params
   seed = 1
   demes = 2
-  sample_dist = c(23,2)
+  sample_dist = c(190,10)
   deme_join = tibble::tibble(time = 50000, pop1 = 0, pop2 = 1)
   
   #DNA aging params
   missing_rate = 0.05
-  asc_index = c(23,24,25)
+  asc_index = list(c(191,192),c(193,194),c(195,196),c(197,198),c(199,200))
   trans_prop = 0.77
   dmg_rate = 0.05
   age_seed = 4
@@ -36,10 +36,19 @@ test_that("ancient_generate_df function works",{
   
   nwins = 5
   
-  df<-ancient_generate_df(l_sim, nwins = nwins,split_type="mut",
-                          missing_rate = missing_rate, trans_prop = trans_prop,
-                          dmg_rate = dmg_rate, index = asc_index, trim_sim = F, 
-                          seed = age_seed)
+  df<- suppressWarnings(
+    ancient_generate_df(l_sim, nwins = nwins,split_type="mut",
+                        missing_rate = missing_rate, trans_prop = trans_prop,
+                        dmg_rate = dmg_rate, ascertain_indices = asc_index, trim_sim = F, 
+                        seed = age_seed)
+  )
+
+  
+  # ancient_sum_stats(sim = l_sim[[1]], nwins = nwins,split_type="mut",
+  #                   missing_rate = missing_rate, trans_prop = trans_prop,
+  #                   dmg_rate = dmg_rate, ascertain_indices = asc_index, trim_sim = F,
+  #                   seed = age_seed,ID = 2)
+  
   
   set.seed(age_seed)
   seeds <- sample(.Machine$integer.max, nsim)
@@ -49,7 +58,7 @@ test_that("ancient_generate_df function works",{
       batch_ans<-as.numeric(batch_ans)
       single_ans<-ancient_sum_stats(l_sim[[sim_number]],split_type="mut",nwins = nwins,
                                     ID=sim_number, missing_rate = missing_rate,trans_prop = trans_prop,
-                                    dmg_rate = dmg_rate,index = asc_index,seed = seeds[sim_number])
+                                    dmg_rate = dmg_rate,ascertain_indices = asc_index,seed = seeds[sim_number])
       #single_ans$sweep<-as.factor(single_ans$sweep)
       single_ans<-as.numeric(single_ans)
       expect_equal(batch_ans,single_ans)

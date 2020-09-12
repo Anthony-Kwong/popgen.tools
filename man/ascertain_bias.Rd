@@ -9,7 +9,7 @@ ascertain_bias(G, index)
 \arguments{
 \item{G}{: A binary genome matrix.}
 
-\item{index}{: A vector of indices indicating the rows of G which represent the outgroup.}
+\item{index}{: A vector of 2 indices indicating the rows of G which represent the outgroup.}
 }
 \value{
 A list. 1. A genome matrix consisting of the columns of G where the outgroup 
@@ -21,7 +21,10 @@ Function to simulate ascertainment bias in ancient DNA. Takes in a genome matrix
 where some rows represent sequences from an outgroup (usually 2). The function 
 identifies all heterozygous sites in the outgroup, then subsets the G at these 
 columns. The outgroup is excluded in the output matrix. Also returns the column
-indices of the subsetting columns.
+indices of the subsetted columns. To simulate the real ascertainment process, 
+only a pair of chromosomes (i.e. 2 rows) can be used for ascertainment at a time.
+We can repeat the process for multiple pairs of rows if more outgroup samples are
+present.
 }
 \examples{
 G <-matrix(sample(0:1, size = 40, replace = TRUE), nc = 8)

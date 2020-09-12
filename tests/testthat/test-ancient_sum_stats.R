@@ -19,7 +19,7 @@ test_that("ancient_sum_stats works",{
   
   #DNA aging params
   missing_rate = 0.05
-  asc_index = c(199,200)
+  asc_index = list(c(197,198),c(199,200))
   trans_prop = 0.77
   dmg_rate = 0.05
   age_seed = 4
@@ -32,7 +32,7 @@ test_that("ancient_sum_stats works",{
   
   output = suppressWarnings(
     ancient_sum_stats(sim = sim,split_type="mut",nwins = nwins, ID=id, snp = snp_inc,
-                      index = asc_index, missing_rate = missing_rate,trans_prop = trans_prop
+                      ascertain_indices = asc_index, missing_rate = missing_rate,trans_prop = trans_prop
                       ,seed = age_seed)
   )
   
@@ -47,21 +47,36 @@ test_that("ancient_sum_stats works",{
   
   #aging DNA
   raw_G <- sim$genomes
-  asc_bias <- ascertain_bias(raw_G, index=asc_index)
-  dmg_G <- age_DNA(G = asc_bias[[1]], missing_rate = missing_rate,
+  
+  num_pairs <- length(asc_index)
+  asc_sites_list <- lapply(seq(num_pairs), function(d){ascertain_bias(raw_G, asc_index[[d]])[[2]] } )
+  asc_sites <- asc_sites_list %>%
+    unlist() %>% 
+    unique() %>%
+    sort()
+  asc_rows <- asc_index %>%
+    unlist()
+  asc_G = raw_G[-c(asc_rows),asc_sites]
+  
+  dmg_G <- age_DNA(G = asc_G, missing_rate = missing_rate,
                    trans_prop = trans_prop,dmg_rate = dmg_rate, seed = age_seed)
   set.seed(age_seed)
   imp_G <- random_impute(dmg_G)
-  imp_pos <- sim$pos[ asc_bias[[2]] ]
+  imp_pos <- sim$pos[asc_sites]
+  
+  #remove non-polymorphic sites
+  rm_G = rm_nonpoly_cols(imp_G)
+  final_G = rm_G[[1]]
+  final_pos = imp_pos[c(rm_G[[2]])]
   
   #split windows based by ~equal SNPs
-  split_wins = sub_win(imp_G,nwins)
+  split_wins = sub_win(final_G,nwins)
   win_list= split_wins$windows
   
   #compute the length of each block in bases
   j = seq(2, nwins + 1)
-  base_lengths = sapply(j, function(j){ imp_pos[ split_wins$bounds[j] ] - 
-      imp_pos[ split_wins$bounds[j-1] ]})
+  base_lengths = sapply(j, function(j){ final_pos[ split_wins$bounds[j] ] - 
+      final_pos[ split_wins$bounds[j-1] ]})
   base_lengths = as.data.frame(base_lengths) %>% t() %>% as.numeric()
   base_output = output %>% dplyr::select(block_base_length_1:block_base_length_5) %>% as.numeric()
   expect_equal(base_output, base_lengths)
@@ -73,7 +88,7 @@ test_that("ancient_sum_stats works",{
   
   #check SS computation
   
-  win_splits = sub_win(imp_G,nwins)
+  win_splits = sub_win(final_G,nwins)
   G_wins = win_splits[[1]]
   
   #check SFS stats
@@ -96,7 +111,7 @@ test_that("ancient_sum_stats works",{
   
   #check haplotype stats
   set.seed(age_seed)
-  pseudo_G = pseudo_hap(imp_G, seed = age_seed)
+  pseudo_G = pseudo_hap(final_G, seed = age_seed)
   
   G_wins = sub_win(pseudo_G,nwins)
   hap_win_list= G_wins$windows

@@ -14,7 +14,8 @@
 #' @param dmg_rate: Probability of a element in a transition column changing from 0 to 1, or 1 to 0. 
 #' Default is 0.05.
 #' @param index: A vector of indices indicating the rows of the genome matrix which represent the outgroup.
-#' @param seed: Optional. A random seed for aging DNA.
+#' @param ascertain_indices: A list of 2-dimensional vectors. Each vector contains the indices of 2 
+#' rows in G for doing the ascertainment bias.
 #' 
 #' @return a dataframe containting the summary statistics for the list of simulation objects
 #' 
@@ -24,7 +25,8 @@
 #'
 #' @examples generate_df(sim_list,nwins = 10, missing_rate = 0.05, index = c(99,100))
 ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp = NA,
-                              missing_rate, trans_prop = 0.776, dmg_rate = 0.05, index, seed = NA){
+                              missing_rate, trans_prop = 0.776, dmg_rate = 0.05,
+                              ascertain_indices, seed = NA){
   #generate a random seed if one was not given
   if(is.na(seed)){
     seed = sample(.Machine$integer.max, 1)
@@ -37,7 +39,7 @@ ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp 
   arg_list= list(sim_list,nwins=nwins,split_type=split_type,id,
                  trim_sim = trim_sim,snp=snp,
                  missing_rate = missing_rate, trans_prop = trans_prop,
-                 dmg_rate = dmg_rate, seed = seeds, index = rep(list(index),num_sim) )
+                 dmg_rate = dmg_rate, seed = seeds, ascertain_indices = rep(list(ascertain_indices),num_sim) )
   
   df_list<-purrr::pmap(arg_list,ancient_sum_stats)
   df<-dplyr::bind_rows(df_list)

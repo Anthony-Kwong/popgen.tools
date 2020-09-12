@@ -42,7 +42,9 @@ test_that("sub_win works",{
   SNP=8
   num_windows=10
   seq = matrix(sample(0:1, size = SNP*20, replace = TRUE), nc = SNP)
-  output = sub_win(G = seq, num_windows = num_windows)
+  output = suppressWarnings(
+    sub_win(G = seq, num_windows = num_windows)
+  )
   expect_equal(output, list())
   
   set.seed(2261941)

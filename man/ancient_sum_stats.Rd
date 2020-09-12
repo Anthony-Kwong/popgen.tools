@@ -14,7 +14,7 @@ ancient_sum_stats(
   missing_rate,
   trans_prop = 0.776,
   dmg_rate = 0.05,
-  index,
+  ascertain_indices,
   seed = NA
 )
 }
@@ -39,7 +39,8 @@ Default is 0.776.}
 \item{dmg_rate:}{Probability of a element in a transition column changing from 0 to 1, or 1 to 0. 
 Default is 0.05.}
 
-\item{index:}{A vector of indices indicating the rows of the genome matrix which represent the outgroup.}
+\item{ascertain_indices:}{A list of 2-dimensional vectors. Each vector contains the indices of 2 
+rows in G for doing the ascertainment bias.}
 
 \item{seed:}{Optional. A random seed for aging DNA.}
 }
@@ -49,7 +50,9 @@ A one row dataframe summary stats and information for the input simulation objec
 \description{
 Takes in a single simulation object, ages the DNA and outputs summary statistics with the 
 sum_stats function. The aging process consists of simulating missing information, pseduo-
-haplotypes, deamination/DNA damage and ascertainment bias. See the age_DNA, pseudo_hap and
+haplotypes, deamination/DNA damage and ascertainment bias. Multiple pairs of individuals 
+can be used for ascertainment bias. In that case, we will subset the columns of G which are
+heterozygous in any of the pairs of individuals. See the age_DNA, pseudo_hap and
 ascertain_bias function documentation for more information. See sum_stats function 
 documentation to see how summary statistics are computed.
 }

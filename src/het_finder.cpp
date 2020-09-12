@@ -35,6 +35,13 @@ NumericVector het_finder(NumericMatrix G) {
       j = j + 1;
     }
   }
+  //return NA if all sites are non-polymorphic
+  if(index == 0){
+    NumericVector output(1);
+    std::fill(output.begin(), output.end(), R_NaN);
+    return output;
+  }
+  
   NumericVector output = het_indices[Rcpp::Range(0,index-1)] + 1;
   return output;
 }

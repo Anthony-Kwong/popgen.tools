@@ -2,7 +2,9 @@
 #' 
 #' Takes in a single simulation object, ages the DNA and outputs summary statistics with the 
 #' sum_stats function. The aging process consists of simulating missing information, pseduo-
-#' haplotypes, deamination/DNA damage and ascertainment bias. See the age_DNA, pseudo_hap and
+#' haplotypes, deamination/DNA damage and ascertainment bias. Multiple pairs of individuals 
+#' can be used for ascertainment bias. In that case, we will subset the columns of G which are
+#' heterozygous in any of the pairs of individuals. See the age_DNA, pseudo_hap and
 #' ascertain_bias function documentation for more information. See sum_stats function 
 #' documentation to see how summary statistics are computed. 
 #'
@@ -17,16 +19,18 @@
 #' Default is 0.776.
 #' @param dmg_rate: Probability of a element in a transition column changing from 0 to 1, or 1 to 0. 
 #' Default is 0.05.
-#' @param index: A vector of indices indicating the rows of the genome matrix which represent the outgroup.
+#' @param ascertain_indices: A list of 2-dimensional vectors. Each vector contains the indices of 2 
+#' rows in G for doing the ascertainment bias. 
 #' @param seed: Optional. A random seed for aging DNA.
 #' 
+#' @import magrittr
 #' @return A one row dataframe summary stats and information for the input simulation object.
 #' @export
 #'
 #' @examples ancient_sum_stats(sim_obj)
 ancient_sum_stats <- function(sim,nwins=1,split_type="base",
                               ID,trim_sim=F,snp = NA,
-                              missing_rate, trans_prop= 0.776, dmg_rate = 0.05, index,
+                              missing_rate, trans_prop= 0.776, dmg_rate = 0.05, ascertain_indices,
                               seed = NA){
  
   #extract useful information from the simulation ----
@@ -46,11 +50,38 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   
   #DNA aging component ----
   raw_G <- sim$genomes
-  asc_bias <- ascertain_bias(raw_G, index)
-  dmg_G <- age_DNA(G = asc_bias[[1]], missing_rate = missing_rate,trans_prop = trans_prop,dmg_rate = dmg_rate, seed = seed)
+  
+  #ascertainment bias ----
+  
+  #simulate ascertainment bias using all the outgroup pairs
+  num_pairs <- length(ascertain_indices)
+  #asc_sites_list <- vector(mode = "list", length = num_pairs)
+  
+  #find the indices of all the columns that are heterozygous in any of the outgroup pairs
+  asc_sites_list <- lapply(seq(num_pairs), function(d){ascertain_bias(raw_G, ascertain_indices[[d]])[[2]] } )
+  asc_sites <- asc_sites_list %>%
+    unlist() %>% 
+    unique() %>%
+    sort() #sort removes any NAs which would indicate that no het sites were found in some outgroup pairs
+  
+  #find the indices of all the rows in the outgroup. These rows are not included for the
+  #purposes of computing the summary statistics.
+  asc_rows <- ascertain_indices %>%
+    unlist()
+  asc_G = raw_G[-c(asc_rows),asc_sites]
+  
+  #add missingness and deamination
+  dmg_G <- age_DNA(G = asc_G, missing_rate = missing_rate,trans_prop = trans_prop,dmg_rate = dmg_rate, seed = seed)
   set.seed(seed)
   imp_G <- random_impute(dmg_G)
-  imp_pos <- sim$pos[ asc_bias[[2]] ]
+  
+  #compute the position vector for the aged genome matrix
+  imp_pos <- sim$pos[asc_sites]
+  
+  #Before computing SS, we remove all non-polymorphic sites
+  rm_G = rm_nonpoly_cols(imp_G)
+  final_G = rm_G[[1]]
+  final_pos = imp_pos[c(rm_G[[2]])]
   
   #Split genome matrix into windows ----
   
@@ -59,20 +90,20 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
   mutation_pos<-0.5
   
-  if(ncol(imp_G) > snp && trim_sim){
+  if(ncol(final_G) > snp && trim_sim){
     #find closest SNP to the selected mutation
-    raw_pos<-imp_pos
+    raw_pos<-final_pos
     snp_dist<-abs(raw_pos-mutation_pos)
     center<-which.min(snp_dist)
     
     #trim the genome matrix and pos vector
-    G<-window_trim(imp_G,cen=center,k=floor(snp/2))
-    pos_vec<-vector_trim(imp_pos, cen=center, k=floor(snp/2)) 
+    G<-window_trim(final_G,cen=center,k=floor(snp/2))
+    pos_vec<-vector_trim(final_pos, cen=center, k=floor(snp/2)) 
     
   } else {
     #no trimming of genome matrix and pos vector
-    G<-imp_G
-    pos_vec <- imp_pos
+    G <- final_G
+    pos_vec <- final_pos
   }
   
   if(split_type=="base"){
@@ -90,6 +121,13 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
     #split windows based by ~equal SNPs
     split_wins = sub_win(G,nwins)
     win_list= split_wins$windows
+    
+    #return NULL result if nwins > ncol(G)
+    if(is.null(win_list)){
+      warning("Warning: Requested number of subwindows exceed the number
+              of columns in G")
+      return (NA)
+    }
     
     #compute the length of each block in bases
     j = seq(2, nwins + 1)

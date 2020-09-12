@@ -169,6 +169,22 @@ rcpp_hello_world <- function() {
     .Call('_popgen_tools_rcpp_hello_world', PACKAGE = 'popgen.tools')
 }
 
+#' nonpoly_cols function 
+#' 
+#' Takes a NumericMatrix and returns the indices of any columns that have only 1's or only 0's.
+#' If none such columns exist, the function returns NA. 
+#' 
+#' @param G: A binary NumericMatrix of 0's and 1's. 
+#' @return A list. Element 1 is a NumericMatrix with subset columns of G. Any columns with only 1's or only 0's
+#' have been removed. Element 2 is vector containing the column indices of the polymorphic
+#' columns. Note we use 1 indexing here for alignment with R.  
+#' @examples G <-matrix(sample(0:1, size = 40, replace = TRUE), nc = 8)
+#' rm_nonpoly_cols(G)
+#' @export
+rm_nonpoly_cols <- function(G) {
+    .Call('_popgen_tools_rm_nonpoly_cols', PACKAGE = 'popgen.tools', G)
+}
+
 #' sub_win function
 #' 
 #' Breaks down a matrix into a series of equal sized, non-overlapping windows. When
