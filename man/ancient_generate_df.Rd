@@ -14,7 +14,8 @@ ancient_generate_df(
   trans_prop = 0.776,
   dmg_rate = 0.05,
   ascertain_indices,
-  seed = NA
+  seed = NA,
+  impute_method
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ Default is 0.05.}
 
 \item{ascertain_indices:}{A list of 2-dimensional vectors. Each vector contains the indices of 2 
 rows in G for doing the ascertainment bias.}
+
+\item{impute_method:}{A string indicating the imputation method for missingness. Options are
+"random" and "zero." See documentation on random_impute and zero_impute for more information.}
 }
 \value{
 a dataframe containting the summary statistics for the list of simulation objects

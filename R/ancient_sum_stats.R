@@ -21,6 +21,8 @@
 #' Default is 0.05.
 #' @param ascertain_indices: A list of 2-dimensional vectors. Each vector contains the indices of 2 
 #' rows in G for doing the ascertainment bias. 
+#' @param impute_method: A string indicating the imputation method for missingness. Options are
+#' "random" and "zero." See documentation on random_impute and zero_impute for more information.
 #' @param seed: Optional. A random seed for aging DNA.
 #' 
 #' @import magrittr
@@ -31,8 +33,16 @@
 ancient_sum_stats <- function(sim,nwins=1,split_type="base",
                               ID,trim_sim=F,snp = NA,
                               missing_rate, trans_prop= 0.776, dmg_rate = 0.05, ascertain_indices,
-                              seed = NA){
+                              seed = NA, impute_method){
  
+  #check arguments are entered correctly
+  valid_impute=c("random","zero")
+  check = impute_method %in% valid_impute
+  if(check!=TRUE){
+    stop("Invalid impute_method. Options are \"random\" or \"zero\" ")
+    
+  }
+  
   #extract useful information from the simulation ----
   
   sweep <- sim$sweep
@@ -72,9 +82,17 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   
   #add missingness and deamination
   dmg_G <- age_DNA(G = asc_G, missing_rate = missing_rate,trans_prop = trans_prop,dmg_rate = dmg_rate, seed = seed)
-  set.seed(seed)
-  imp_G <- random_impute(dmg_G)
-  
+
+  #imputation
+  if(impute_method == "random"){
+    set.seed(seed) #set random seed for random impute
+    imp_G <- random_impute(dmg_G)
+  } else if (impute_method == "zero"){
+    imp_G <- zero_impute(dmg_G)
+  } else {
+    stop("Invalid impute_method.")
+  }
+
   #compute the position vector for the aged genome matrix
   imp_pos <- sim$pos[asc_sites]
   
