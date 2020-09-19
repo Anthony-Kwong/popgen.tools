@@ -48,6 +48,8 @@ test_that("ancient_sum_stats works",{
   expect_equal(0,output$bottle_time2)
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
+  expect_equal(output$impute_method,as.factor(impute_method))
+  
   
   #aging DNA
   raw_G <- sim$genomes
@@ -186,6 +188,8 @@ test_that("ancient_sum_stats works",{
   expect_equal(0,output$bottle_time2)
   expect_equal(1,output$bottle_size1)
   expect_equal(1,output$bottle_size2)
+  expect_equal(output$impute_method,as.factor(impute_method))
+  
   
   #aging DNA
   raw_G <- sim$genomes

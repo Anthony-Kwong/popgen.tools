@@ -241,11 +241,11 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   wide_df<-cbind(sim_info,stats)
   
   if(split_type == "mut"){
-    wide_df = cbind(wide_df, base_lengths, snp_lengths)
+    wide_df = cbind(wide_df, base_lengths, snp_lengths, impute_method)
   }
   
   if(split_type == "base") {
-    wide_df = cbind(wide_df, base_length, snp_lengths)
+    wide_df = cbind(wide_df, base_length, snp_lengths, impute_method)
   }
   
   return(wide_df)
