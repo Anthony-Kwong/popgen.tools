@@ -10,9 +10,10 @@
 #output: Number of pairwise differences normalised by the number of pairs. 
 
 test_theta_t<-function(G){
-  if(ncol(G)<5){
-    return(NaN)
-  }
+  # remove section because we want to compute stats for aDNA sims with few columns
+  # if(ncol(G)<5){
+  #   return(NaN)
+  # }
   
   pair_diff=dist(G,method="manhattan")
   total_diff=sum(pair_diff)

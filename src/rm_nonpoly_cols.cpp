@@ -51,7 +51,9 @@ List rm_nonpoly_cols(NumericMatrix G) {
   
   //throw error if H has no columns
   if(col_count == 0){
-    stop("Error: All columns in genome matrix are non-polymorphic. Returning NA");
+    warning("Warning: All columns in genome matrix are non-polymorphic. Returning NA");
+    List output = List::create(R_NaN,R_NaN);
+    return output;
   }
   
   

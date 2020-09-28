@@ -14,4 +14,18 @@ test_that("rm_nonpoly_cols function works",{
   expect_equal(ans, rm_nonpoly_cols(G)[[1]])
   expect_equal(seq(1,10)[-c(1,5)], rm_nonpoly_cols(G)[[2]])
   
+  #check case of no polymorphic columns
+  G <- rbind(c(0,0,0,0),c(0,0,0,0))
+  ans <- list(NaN,NaN)
+  suppressWarnings(
+    expect_equal(ans,rm_nonpoly_cols(G))
+  )
+  
+  G <- rbind(c(1,1,1,1),c(1,1,1,1))
+  ans <- list(NaN,NaN)
+  suppressWarnings(
+    expect_equal(ans,rm_nonpoly_cols(G))
+  )
+
+  
 })

@@ -2,9 +2,11 @@
 
 R_theta_h<-function(M){
   
-  if(ncol(M)<5){
-    return (NaN)
-  }
+  # remove section because we want to compute stats for aDNA sims with few columns
+  # if(ncol(M)<5){
+  #   return (NaN)
+  # }
+  
   x<-colSums(M)
   N<-nrow(M)
   Si=rep(0,N-1)
