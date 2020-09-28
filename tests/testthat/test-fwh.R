@@ -55,16 +55,16 @@ test_that("Fay and Wu's H computed correctly",{
   #colSums(seq) %>% max()
   expect_equal(R_theta_h(seq),theta_h(seq))
   
-  #test NA input returns NA. 
-  null_win = as.numeric(NA) %>% matrix()
-  check = suppressWarnings(  theta_h(null_win)  )
-  expect_equal(check, NaN)
-  
-  #fwh function
-  a=14
-  b=19
-  expect_equal(fwh(a,b),a-b)
-  expect_equal(fwh(NaN,NaN), NaN)
+  # #test NA input returns NA. 
+  # null_win = as.numeric(NA) %>% matrix()
+  # check = suppressWarnings(  theta_h(null_win)  )
+  # expect_equal(check, NaN)
+  # 
+  # #fwh function
+  # a=14
+  # b=19
+  # expect_equal(fwh(a,b),a-b)
+  # expect_equal(fwh(NaN,NaN), NaN)
   
 })
 

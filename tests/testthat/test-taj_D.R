@@ -151,23 +151,23 @@ test_that("Taj_D:theta_w computed correctly",{
   
 })
 
-test_that("Tajima D computed correctly",{
-  set.seed(1762)
-  
-  nums=rnorm(3,mean=5,sd=3)
-  
-  t=nums[1]
-  w=nums[2]
-  v=nums[3]
-  
-  test=(t-w)*v^(-0.5)
-  
-  expect_equal(taj_D(t,w,v),test)
-  
-  #test NA input returns NA. 
-  check = suppressWarnings(  taj_D(NaN, NaN, NaN) )
-  expect_equal(check, NaN)
-  
-})
-
-
+# test_that("Tajima D computed correctly",{
+#   set.seed(1762)
+#   
+#   nums=rnorm(3,mean=5,sd=3)
+#   
+#   t=nums[1]
+#   w=nums[2]
+#   v=nums[3]
+#   
+#   test=(t-w)*v^(-0.5)
+#   
+#   expect_equal(taj_D(t,w,v),test)
+#   
+#   #test NA input returns NA. 
+#   check = suppressWarnings(  taj_D(NaN, NaN, NaN) )
+#   expect_equal(check, NaN)
+#   
+# })
+# 
+# 

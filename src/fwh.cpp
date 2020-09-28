@@ -50,10 +50,12 @@ double theta_h(NumericMatrix G){
     return (R_NaN);
   }
   
-  if(G.ncol()<5){
-    Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
-    return (R_NaN);
-  }
+  //removing feature because we still want to compute a value for aDNA sims with few columns
+  
+  // if(G.ncol()<5){
+  //   Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
+  //   return (R_NaN);
+  // }
   
   //compute the frequency of each SNP/mutation
   NumericVector column_sum = colSums(G);

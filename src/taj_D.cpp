@@ -103,10 +103,12 @@ double theta_t(NumericMatrix G){
     return (R_NaN);
   }
   
-  if(G.ncol()<5){
-    Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
-    return (R_NaN);
-  }
+  //removing feature because we still want to compute a value for aDNA sims with few columns
+  
+  // if(G.ncol()<5){
+  //   Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
+  //   return (R_NaN);
+  // }
   
   int num_sam=G.nrow();
   int num_seg=G.ncol();
@@ -164,10 +166,12 @@ double theta_w(NumericMatrix G){
     return (R_NaN);
   }
   
-  if(G.ncol()<5){
-    Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
-    return (R_NaN);
-  }
+  //removing feature because we still want to compute a value for aDNA sims with few columns
+  
+  // if(G.ncol()<5){
+  //   Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
+  //   return (R_NaN);
+  // }
   
   
   int N=G.nrow();
@@ -197,11 +201,13 @@ double var_taj(NumericMatrix G){
     return (R_NaN);
   }
   
-  if(G.ncol()<5){
-    Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
-    return (R_NaN);
-  }
+  //removing feature because we still want to compute a value for aDNA sims with few columns
   
+  // if(G.ncol()<5){
+  //   Rcpp::warning("Less than 5 SNPs in genome matrix. Returning NA.");
+  //   return (R_NaN);
+  // }
+  // 
   int nsam=G.nrow();
   
   //compute Tajima_D coefficients
