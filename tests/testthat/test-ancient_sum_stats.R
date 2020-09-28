@@ -287,7 +287,7 @@ test_that("ancient_sum_stats works",{
   recomb_rate= 0
   Ne=10000
   nBases=1e6
-  samplesize=120
+  samplesize=220
   s=0.1
   fix=0
   discoal_path="~/work/programs/discoal/discoal"
@@ -296,12 +296,12 @@ test_that("ancient_sum_stats works",{
   id=1
   seed=c(9,8)
   demes = 2
-  sample_dist = c(100,20)
+  sample_dist = c(200,20)
   deme_join = tibble::tibble(time = 50000, pop1 = 0, pop2 = 1)
   
   #DNA aging params
-  missing_rate = 0.9
-  asc_index = lapply(seq(99,119,by=2), function(d){c(d,d+1)})
+  missing_rate = 0.1
+  asc_index = lapply(seq(180,219,by=2), function(d){c(d,d+1)})
   trans_prop = 0.77
   dmg_rate = 0.05
   age_seed = 4
