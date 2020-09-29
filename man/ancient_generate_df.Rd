@@ -15,7 +15,8 @@ ancient_generate_df(
   dmg_rate = 0.05,
   ascertain_indices,
   seed = NA,
-  impute_method
+  impute_method,
+  ID = NA
 )
 }
 \arguments{
@@ -44,6 +45,9 @@ rows in G for doing the ascertainment bias.}
 
 \item{impute_method:}{A string indicating the imputation method for missingness. Options are
 "random" and "zero." See documentation on random_impute and zero_impute for more information.}
+
+\item{ID:}{Optional. A numeric vector if ID values to label each observation according to the simulation 
+it came from. If argument is not used, the rows will be labelled 1,2,....}
 }
 \value{
 a dataframe containting the summary statistics for the list of simulation objects
