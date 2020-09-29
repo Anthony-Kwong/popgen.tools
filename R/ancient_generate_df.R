@@ -18,6 +18,8 @@
 #' rows in G for doing the ascertainment bias.
 #' @param impute_method: A string indicating the imputation method for missingness. Options are
 #' "random" and "zero." See documentation on random_impute and zero_impute for more information.
+#' @param ID: Optional. A numeric vector if ID values to label each observation according to the simulation 
+#' it came from. If argument is not used, the rows will be labelled 1,2,....
 #' 
 #' @return a dataframe containting the summary statistics for the list of simulation objects
 #' 
@@ -28,13 +30,25 @@
 #' @examples generate_df(sim_list,nwins = 10, missing_rate = 0.05, index = c(99,100))
 ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp = NA,
                               missing_rate, trans_prop = 0.776, dmg_rate = 0.05,
-                              ascertain_indices, seed = NA, impute_method){
+                              ascertain_indices, seed = NA, impute_method, ID = NA){
   #generate a random seed if one was not given
   if(is.na(seed)){
     seed = sample(.Machine$integer.max, 1)
   }
   num_sim<-length(sim_list)
-  id <- (1:num_sim)
+  
+  #check valid ID
+  
+  if(is.na(ID)){
+    id <- (1:num_sim)
+  } else {
+    id <- ID
+  }
+  
+  if(length(id)!=num_sim){
+    stop("Vector of IDs does not match the number of simulations.")
+  }
+  
   set.seed(seed)
   seeds <- sample(.Machine$integer.max, num_sim)
 

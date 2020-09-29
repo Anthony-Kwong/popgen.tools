@@ -13,6 +13,7 @@ test_that("ancient_generate_df function works",{
   discoal_path="~/work/programs/discoal/discoal"
   sweep="hard"
   nsim=5
+  ID = seq(6,10,by=1)
   
   #population tree params
   seed = 1
@@ -43,7 +44,7 @@ test_that("ancient_generate_df function works",{
     ancient_generate_df(l_sim, nwins = nwins,split_type="mut",
                         missing_rate = missing_rate, trans_prop = trans_prop,
                         dmg_rate = dmg_rate, ascertain_indices = asc_index, trim_sim = F, 
-                        seed = age_seed,impute_method = impute_method)
+                        seed = age_seed,impute_method = impute_method,ID = ID)
   )
 
   
@@ -60,7 +61,7 @@ test_that("ancient_generate_df function works",{
       batch_ans<-df[sim_number,] 
       batch_ans<-as.numeric(batch_ans)
       single_ans<-ancient_sum_stats(l_sim[[sim_number]],split_type="mut",nwins = nwins,
-                                    ID=sim_number, missing_rate = missing_rate,trans_prop = trans_prop,
+                                    ID=ID[sim_number], missing_rate = missing_rate,trans_prop = trans_prop,
                                     dmg_rate = dmg_rate,ascertain_indices = asc_index,seed = seeds[sim_number],
                                     impute_method = impute_method)
       #single_ans$sweep<-as.factor(single_ans$sweep)
