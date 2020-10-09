@@ -148,6 +148,20 @@ matrix_subset <- function(G, y) {
     .Call('_popgen_tools_matrix_subset', PACKAGE = 'popgen.tools', G, y)
 }
 
+#' pairwise_diff 
+#' 
+#' Computes the number of pairwise differences between all the rows of a 
+#' NumericMatrix. 
+#' 
+#' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+#' @return scalar value of the number of pairwise differences
+#' @examples G = matrix(sample(0:1, size =5*5 , replace = TRUE), nc = 5)
+#' pairwise_diff(G) 
+#' @export
+pairwise_diff <- function(G) {
+    .Call('_popgen_tools_pairwise_diff', PACKAGE = 'popgen.tools', G)
+}
+
 #' random_impute function
 #' 
 #' Imputes NAs in a genome matrix. For each NA, we randomly sample from the non-NA
@@ -238,7 +252,7 @@ e2f <- function(a1, a2, c2) {
 #' 
 #' Computes theta_t, the number of pairwise differences normalised by the number of pairs. 
 #' 
-#' @param G: G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+#' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
 #' @return scalar value of theta_t
 #' @examples theta_t(G)
 #' @export

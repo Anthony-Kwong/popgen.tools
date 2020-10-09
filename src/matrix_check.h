@@ -1,2 +1,2 @@
-bool have_na (NumericMatrix M);
+bool have_na (Rcpp::NumericMatrix M);
 

@@ -7,7 +7,7 @@
 theta_t(G)
 }
 \arguments{
-\item{G:}{G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.}
+\item{G:}{Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.}
 }
 \value{
 scalar value of theta_t

@@ -90,7 +90,7 @@ double e2f(double a1, double a2, double c2){
 //' 
 //' Computes theta_t, the number of pairwise differences normalised by the number of pairs. 
 //' 
-//' @param G: G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
+//' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
 //' @return scalar value of theta_t
 //' @examples theta_t(G)
 //' @export

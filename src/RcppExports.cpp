@@ -132,6 +132,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// pairwise_diff
+int pairwise_diff(NumericMatrix G);
+RcppExport SEXP _popgen_tools_pairwise_diff(SEXP GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    rcpp_result_gen = Rcpp::wrap(pairwise_diff(G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // random_impute
 NumericMatrix random_impute(NumericMatrix G);
 RcppExport SEXP _popgen_tools_random_impute(SEXP GSEXP) {
@@ -450,6 +461,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_popgen_tools_het_finder", (DL_FUNC) &_popgen_tools_het_finder, 1},
     {"_popgen_tools_is_sorted", (DL_FUNC) &_popgen_tools_is_sorted, 2},
     {"_popgen_tools_matrix_subset", (DL_FUNC) &_popgen_tools_matrix_subset, 2},
+    {"_popgen_tools_pairwise_diff", (DL_FUNC) &_popgen_tools_pairwise_diff, 1},
     {"_popgen_tools_random_impute", (DL_FUNC) &_popgen_tools_random_impute, 1},
     {"_popgen_tools_rcpp_hello_world", (DL_FUNC) &_popgen_tools_rcpp_hello_world, 0},
     {"_popgen_tools_rm_nonpoly_cols", (DL_FUNC) &_popgen_tools_rm_nonpoly_cols, 1},
