@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// Gcol_flip
+NumericVector Gcol_flip(NumericMatrix G, int col);
+RcppExport SEXP _popgen_tools_Gcol_flip(SEXP GSEXP, SEXP colSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type G(GSEXP);
+    Rcpp::traits::input_parameter< int >::type col(colSEXP);
+    rcpp_result_gen = Rcpp::wrap(Gcol_flip(G, col));
+    return rcpp_result_gen;
+END_RCPP
+}
 // any_sug
 bool any_sug(LogicalVector x);
 RcppExport SEXP _popgen_tools_any_sug(SEXP xSEXP) {
@@ -450,6 +462,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_popgen_tools_Gcol_flip", (DL_FUNC) &_popgen_tools_Gcol_flip, 2},
     {"_popgen_tools_any_sug", (DL_FUNC) &_popgen_tools_any_sug, 1},
     {"_popgen_tools_find_index", (DL_FUNC) &_popgen_tools_find_index, 2},
     {"_popgen_tools_first_over", (DL_FUNC) &_popgen_tools_first_over, 2},

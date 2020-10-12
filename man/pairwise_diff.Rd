@@ -17,5 +17,5 @@ Computes the number of pairwise differences between all the rows of a
 NumericMatrix.
 }
 \examples{
-G = matrix(sample(0:1, size =5*5 , replace = TRUE), nc = 5)
+G = matrix(sample(0:1, size =5*5 , replace = TRUE), nc = 5), pairwise_diff(G) 
 }

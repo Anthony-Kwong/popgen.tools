@@ -9,8 +9,7 @@ using namespace Rcpp;
 //' 
 //' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
 //' @return scalar value of the number of pairwise differences
-//' @examples G = matrix(sample(0:1, size =5*5 , replace = TRUE), nc = 5)
-//' pairwise_diff(G) 
+//' @examples G = matrix(sample(0:1, size =5*5 , replace = TRUE), nc = 5), pairwise_diff(G) 
 //' @export
 // [[Rcpp::export]]
 int pairwise_diff(NumericMatrix G) {
