@@ -1,0 +1,1 @@
+Rcpp::NumericVector Gcol_flip(Rcpp::NumericMatrix G, int col);

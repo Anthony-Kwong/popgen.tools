@@ -28,6 +28,7 @@ NumericVector Gcol_flip(NumericMatrix G, int col) {
     Rcpp::stop("input col index is smaller than 0.");
   }
   
+  //loop over each column
   for(int i=0; i < nsam; i++){
     //make deep copy of matrix over to modify. 
     Rcpp::NumericMatrix K(Rcpp::clone(G));
@@ -35,15 +36,15 @@ NumericVector Gcol_flip(NumericMatrix G, int col) {
     
     //flip the element
     if(el==1){
-      Rcout<<"flip 1"<<std::endl;
+      //Rcout<<"flip 1"<<std::endl;
       K(i,col) = 0;
     } else if (el==0){
-      Rcout<<"flip 0"<<std::endl;
+      //Rcout<<"flip 0"<<std::endl;
       K(i,col) = 1;
     } else {
       Rcpp::stop("Error in Gcol_flip. The elements of the input matrix must be either 0 or 1");
     }
-    Rcout<<K<<std::endl;
+    //Rcout<<K<<std::endl;
     //compute the number of pairwise differences
     pd(i) = pairwise_diff(K);
   }

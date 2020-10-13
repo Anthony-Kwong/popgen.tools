@@ -9,7 +9,7 @@ Gcol_flip(G, col)
 \arguments{
 \item{G:}{Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.}
 
-\item{col:}{A column index}
+\item{col:}{A column index. 0 indexing is used.}
 }
 \value{
 A NumericVector where element i is the number of pairwise differences in G if 
