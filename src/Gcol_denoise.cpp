@@ -15,7 +15,6 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 NumericMatrix Gcol_denoise(NumericMatrix G, int col) {
   
-  int nsam = G.nrow();
   int snp = G.ncol();
 
   //check input
@@ -30,7 +29,7 @@ NumericMatrix Gcol_denoise(NumericMatrix G, int col) {
   NumericVector x = Gcol_flip(G,col);
   //which_min returns the index of the first smallest element in a vector
   int flip_index = which_min(x);
-  Rcout << flip_index << std::endl;
+  //Rcout << flip_index << std::endl;
   
   //flip element in the matrix
   int el = G(flip_index,col);
