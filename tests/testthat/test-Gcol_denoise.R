@@ -4,6 +4,9 @@
 
 R_Gcol_denoise <- function(G,col){
   pwd = Gcol_flip(G,col-1)
+  if(length(unique(pwd)) == 1){
+    return(G)
+  }
   flip_index = which.min(pwd)
   el = G[flip_index,col]
   if(el == 0){
@@ -24,6 +27,13 @@ test_that("Gcol_denoise works",{
   G[3,1] = 1
   expect_equal(G, ans)
   expect_equal(ans, R_says)
+  
+  G = rbind(c(0,1),c(0,1))
+  expect_equal(Gcol_denoise(G,0),G)
+  expect_equal(Gcol_denoise(G,1),G)
+  expect_equal(R_Gcol_denoise(G,1),G)
+  expect_equal(R_Gcol_denoise(G,2),G)
+  
   
   set.seed(122)
   G = matrix(sample(0:1, size =20 , replace = TRUE), nc = 5)

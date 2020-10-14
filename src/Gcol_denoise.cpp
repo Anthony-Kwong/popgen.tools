@@ -27,6 +27,13 @@ NumericMatrix Gcol_denoise(NumericMatrix G, int col) {
   
   //find which element to flip
   NumericVector x = Gcol_flip(G,col);
+  
+  //if all flips produce the same number of pwd, return original matrix
+  int y = unique(x).length();
+  if(y < 2){
+    return G;
+  }
+  
   //which_min returns the index of the first smallest element in a vector
   int flip_index = which_min(x);
   //Rcout << flip_index << std::endl;
