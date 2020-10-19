@@ -20,6 +20,9 @@
 #' "random" and "zero." See documentation on random_impute and zero_impute for more information.
 #' @param ID: Optional. A numeric vector if ID values to label each observation according to the simulation 
 #' it came from. If argument is not used, the rows will be labelled 1,2,....
+#' @param denoise_method: A method for denoising the genome matrix for the purposes of computing the 
+#' haplotype statistics. Default is "none". Options are "cluster" and "col_flip". See G_flip abd
+#' clus_hstats documentation for more information.
 #' 
 #' @return a dataframe containting the summary statistics for the list of simulation objects
 #' 
@@ -30,7 +33,8 @@
 #' @examples generate_df(sim_list,nwins = 10, missing_rate = 0.05, index = c(99,100))
 ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp = NA,
                               missing_rate, trans_prop = 0.776, dmg_rate = 0.05,
-                              ascertain_indices, seed = NA, impute_method, ID = NA){
+                              ascertain_indices, seed = NA, impute_method, ID = NA,
+                              denoise_method = "none"){
   #generate a random seed if one was not given
   if(is.na(seed)){
     seed = sample(.Machine$integer.max, 1)
@@ -55,7 +59,9 @@ ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp 
   arg_list= list(sim_list,nwins=nwins,split_type=split_type,id,
                  trim_sim = trim_sim,snp=snp,
                  missing_rate = missing_rate, trans_prop = trans_prop,
-                 dmg_rate = dmg_rate, seed = seeds,impute_method = impute_method ,ascertain_indices = rep(list(ascertain_indices),num_sim) )
+                 dmg_rate = dmg_rate, seed = seeds,impute_method = impute_method ,
+                 ascertain_indices = rep(list(ascertain_indices),num_sim),
+                 denoise_method = denoise_method)
   
   df_list<-purrr::pmap(arg_list,ancient_sum_stats)
   df<-dplyr::bind_rows(df_list)

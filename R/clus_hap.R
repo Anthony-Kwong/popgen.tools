@@ -16,9 +16,10 @@
 #' @importFrom factoextra fviz_nbclust
 clus_hap <- function(G, max_clus){
   #check inputs
-  if(is_genome_matrix(G)==F){
-    stop("invalid genome matrix.")
-  }
+  # if(is_genome_matrix(G)==F){
+  #   stop("invalid genome matrix.")
+  # }
+  
   if(tester::is_integer(max_clus)==F){
     stop("max_clus must be an integer.")
   }

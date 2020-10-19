@@ -24,6 +24,9 @@
 #' @param impute_method: A string indicating the imputation method for missingness. Options are
 #' "random" and "zero." See documentation on random_impute and zero_impute for more information.
 #' @param seed: Optional. A random seed for aging DNA.
+#' @param denoise_method: A method for denoising the genome matrix for the purposes of computing the 
+#' haplotype statistics. Default is "none". Options are "cluster" and "col_flip". See G_flip abd
+#' clus_hstats documentation for more information.
 #' 
 #' @import magrittr
 #' @return A one row dataframe summary stats and information for the input simulation object.
@@ -33,7 +36,7 @@
 ancient_sum_stats <- function(sim,nwins=1,split_type="base",
                               ID,trim_sim=F,snp = NA,
                               missing_rate, trans_prop= 0.776, dmg_rate = 0.05, ascertain_indices,
-                              seed = NA, impute_method){
+                              seed = NA, impute_method, denoise_method = "none"){
  
   #check arguments are entered correctly
   valid_impute=c("random","zero")
@@ -82,7 +85,8 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   
   #add missingness and deamination
   dmg_G <- age_DNA(G = asc_G, missing_rate = missing_rate,trans_prop = trans_prop,dmg_rate = dmg_rate, seed = seed)
-
+  dmg_G <- rm_nonpoly_cols(dmg_G)[[1]]
+  
   #imputation
   if(impute_method == "random"){
     set.seed(seed) #set random seed for random impute
@@ -181,6 +185,12 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   set.seed(seed)
   pseudo_G = pseudo_hap(G, seed = seed)
   
+  #denoise the genome matrix of pseudo haplotypes
+  #if cluster if chosen, it will be done later
+  if (denoise_method == "col_flip"){
+    pseudo_G = G_flip(pseudo_G)
+  }
+  
   #split the genome matrix of pseudo haplotypes
   if(split_type=="base"){
     split_wins = winsplit_base(pseudo_G,pos_vec,nwins)
@@ -196,7 +206,16 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   }
   
   #skip genome matrix check because pseudo_hap can produce columns with just 0's. This is ok.
-  h_values <- lapply(hap_win_list,h_stats) 
+  
+  #For the cluster method, we cluster the haplotypes for computing hstats
+  if(denoise_method == "cluster"){
+    win_clus_vec = lapply(hap_win_list, function(G){clus_hap(G, max_clus = round( nrow(G)*0.2) ) })
+    h_values = lapply(win_clus_vec,clus_hstats)
+  } else {
+    h_values <- lapply(hap_win_list,h_stats)
+  }
+  
+  
   names(h_values) <- string_labels("subwindow",length(h_values))
   
   #h_list stores the h_stats for each subwindow. It stores 4 vectors for the statistics h1,h2,h12,h123.
@@ -237,16 +256,10 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   stats <- as.data.frame(t(df)) 
   sim_info <- tibble::tibble(ID,sweep,s_coef,bottle_time1,bottle_size1,
                              bottle_time2,bottle_size2,start_freq,
-                             missing_rate, trans_prop, dmg_rate)
-  wide_df<-cbind(sim_info,stats)
+                             missing_rate, trans_prop, dmg_rate,
+                             impute_method, denoise_method)
   
-  if(split_type == "mut"){
-    wide_df = cbind(wide_df, base_lengths, snp_lengths, impute_method)
-  }
-  
-  if(split_type == "base") {
-    wide_df = cbind(wide_df, base_length, snp_lengths, impute_method)
-  }
+  wide_df<-cbind(sim_info,stats,base_lengths, snp_lengths)
   
   return(wide_df)
 
