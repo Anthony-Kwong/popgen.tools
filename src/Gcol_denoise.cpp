@@ -11,6 +11,8 @@ using namespace Rcpp;
 //' @param: G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
 //' @param: col: A column index. 0 indexing is used. 
 //' @return: A NumericMatrix like G, with one element flipped. 
+//' @examples:   G = matrix(sample(0:1, size =15 , replace = TRUE), nc = 5)
+//' Gcol_denoise(G,3)
 //' @export
 // [[Rcpp::export]]
 NumericMatrix Gcol_denoise(NumericMatrix G, int col) {

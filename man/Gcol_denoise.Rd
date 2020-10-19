@@ -17,3 +17,7 @@ Takes a matrix and a column index. Flips the element in that column which leads
 to the greatest reduction in the number of pairwise differences. When there is 
 a tie, the first element among the tied elements is changed.
 }
+\examples{
+:   G = matrix(sample(0:1, size =15 , replace = TRUE), nc = 5)
+Gcol_denoise(G,3)
+}

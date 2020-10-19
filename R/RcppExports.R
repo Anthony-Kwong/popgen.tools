@@ -23,6 +23,8 @@ G_flip <- function(G) {
 #' @param: G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
 #' @param: col: A column index. 0 indexing is used. 
 #' @return: A NumericMatrix like G, with one element flipped. 
+#' @examples:   G = matrix(sample(0:1, size =15 , replace = TRUE), nc = 5)
+#' Gcol_denoise(G,3)
 #' @export
 Gcol_denoise <- function(G, col) {
     .Call('_popgen_tools_Gcol_denoise', PACKAGE = 'popgen.tools', G, col)
