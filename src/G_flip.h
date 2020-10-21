@@ -1,1 +1,0 @@
-Rcpp::NumericMatrix Gcol_denoise(Rcpp::NumericMatrix G, int col);

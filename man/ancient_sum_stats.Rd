@@ -16,7 +16,8 @@ ancient_sum_stats(
   dmg_rate = 0.05,
   ascertain_indices,
   seed = NA,
-  impute_method
+  impute_method,
+  denoise_method = "none"
 )
 }
 \arguments{
@@ -47,6 +48,10 @@ rows in G for doing the ascertainment bias.}
 "random" and "zero." See documentation on random_impute and zero_impute for more information.}
 
 \item{seed:}{Optional. A random seed for aging DNA.}
+
+\item{denoise_method:}{A method for denoising the genome matrix for the purposes of computing the 
+haplotype statistics. Default is "none". Options are "cluster" and "col_flip". See G_flip abd
+clus_hstats documentation for more information.}
 }
 \value{
 A one row dataframe summary stats and information for the input simulation object.

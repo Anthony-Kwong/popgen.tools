@@ -16,7 +16,8 @@ ancient_generate_df(
   ascertain_indices,
   seed = NA,
   impute_method,
-  ID = NA
+  ID = NA,
+  denoise_method = "none"
 )
 }
 \arguments{
@@ -48,6 +49,10 @@ rows in G for doing the ascertainment bias.}
 
 \item{ID:}{Optional. A numeric vector if ID values to label each observation according to the simulation 
 it came from. If argument is not used, the rows will be labelled 1,2,....}
+
+\item{denoise_method:}{A method for denoising the genome matrix for the purposes of computing the 
+haplotype statistics. Default is "none". Options are "cluster" and "col_flip". See G_flip abd
+clus_hstats documentation for more information.}
 }
 \value{
 a dataframe containting the summary statistics for the list of simulation objects

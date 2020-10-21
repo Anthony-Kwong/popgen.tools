@@ -8,7 +8,8 @@ clus_hstats(clus_vec)
 }
 \arguments{
 \item{clus_vec:}{A numeric vector indicating to which cluster, each row in the original 
-genome matrix was assigned.}
+genome matrix was assigned. The clusters are labelled from 1,2,3.... up to the some number 
+of clusters.}
 }
 \value{
 A numeric vector of haplotype statistics (h1,h2,h12,h123).
