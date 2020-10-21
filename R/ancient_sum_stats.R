@@ -25,8 +25,8 @@
 #' "random" and "zero." See documentation on random_impute and zero_impute for more information.
 #' @param seed: Optional. A random seed for aging DNA.
 #' @param denoise_method: A method for denoising the genome matrix for the purposes of computing the 
-#' haplotype statistics. Default is "none". Options are "cluster" and "col_flip". See G_flip abd
-#' clus_hstats documentation for more information.
+#' haplotype statistics. Default is "none". Options are "cluster" and "majority_flip". See majority_flip
+#' and clus_hstats documentation for more information.
 #' 
 #' @import magrittr
 #' @return A one row dataframe summary stats and information for the input simulation object.
@@ -187,8 +187,8 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   
   #denoise the genome matrix of pseudo haplotypes
   #if cluster if chosen, it will be done later
-  if (denoise_method == "col_flip"){
-    pseudo_G = G_flip(pseudo_G)
+  if (denoise_method == "majority_flip"){
+    pseudo_G = majority_flip(pseudo_G)
   }
   
   #split the genome matrix of pseudo haplotypes

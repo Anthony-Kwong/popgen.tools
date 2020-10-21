@@ -30,13 +30,13 @@ majority_flip <- function (G, seed){
       pos_flip = which(sel_col == 1)
       set.seed(seed_vec[c])
       flip = sample_vec(pos_flip)
-      print(flip)
+      #print(flip)
       G[flip,c] = 0
     } else {
       pos_flip = which(sel_col == 0)
       set.seed(seed_vec[c])
       flip = sample_vec(pos_flip)
-      print(flip)
+      #print(flip)
       G[flip,c] = 1
     }
   }
