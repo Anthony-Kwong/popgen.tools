@@ -452,6 +452,7 @@ test_that("ancient_sum_stats works",{
   age_seed = 4
   impute_method = "random"
   denoise_method = "cluster"
+  max_clus = 0.25
   
   
   sim = discoal_sim(mu=mu,recomb_rate=recomb_rate,Ne=Ne,genome_length=nBases,
@@ -463,7 +464,7 @@ test_that("ancient_sum_stats works",{
     ancient_sum_stats(sim = sim,split_type="mut",nwins = nwins, ID=id,
                       ascertain_indices = asc_index, missing_rate = missing_rate,trans_prop = trans_prop
                       ,seed = age_seed,impute_method = impute_method,
-                      denoise_method = denoise_method)
+                      denoise_method = denoise_method, max_clus = max_clus)
   )
   
   #check non SS information
@@ -550,7 +551,7 @@ test_that("ancient_sum_stats works",{
   G_wins = sub_win(pseudo_G,nwins)
   hap_win_list= G_wins$windows
   
-  win_clus_vec = lapply(hap_win_list, function(G){clus_hap(G, max_clus = round( nrow(G)*0.2) ) })
+  win_clus_vec = lapply(hap_win_list, function(G){clus_hap(G, max_clus = round( nrow(G)*max_clus) ) })
   h_values = lapply(win_clus_vec,clus_hstats)
   
   x<-rep(NA,nwins)

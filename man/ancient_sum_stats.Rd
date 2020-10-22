@@ -17,7 +17,8 @@ ancient_sum_stats(
   ascertain_indices,
   seed = NA,
   impute_method,
-  denoise_method = "none"
+  denoise_method = "none",
+  max_clus = 0.2
 )
 }
 \arguments{
@@ -50,8 +51,12 @@ rows in G for doing the ascertainment bias.}
 \item{seed:}{Optional. A random seed for aging DNA.}
 
 \item{denoise_method:}{A method for denoising the genome matrix for the purposes of computing the 
-haplotype statistics. Default is "none". Options are "cluster" and "col_flip". See G_flip abd
-clus_hstats documentation for more information.}
+haplotype statistics. Default is "none". Options are "cluster" and "majority_flip". See majority_flip
+and clus_hstats documentation for more information.}
+
+\item{max_clus:}{A number between 0 and 1. Specifies the max number of clusters to consider as a fraction
+of the total number of rows in the genome matrix. Only used with the "cluster" denoise method. Default
+value is 0.2.}
 }
 \value{
 A one row dataframe summary stats and information for the input simulation object.
