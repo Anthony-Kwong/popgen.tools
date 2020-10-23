@@ -22,6 +22,9 @@ add_missingness <- function(G, missing_rate, seed = NA){
   if(missing_rate > 1 || missing_rate < 0){
     stop("missing rate must be a numeric between 0 and 1")
   }
+  if(length(missing_rate) != 1){
+    stop("missing rate must be a single number, not a vector.")
+  }
   
   if(is.na(seed)){
     seed = sample.int(.Machine$integer.max, size = 1) 
@@ -36,6 +39,7 @@ add_missingness <- function(G, missing_rate, seed = NA){
   NA_seeds = sample.int(.Machine$integer.max, size = nsam) 
   
   for(i in 1:nsam){
+    print(i)
     set.seed(NA_seeds[i])
     index = purrr::rbernoulli(n=snp, p = missing_rate)
     G[i,which(index == TRUE)] = NA

@@ -38,11 +38,59 @@
 #' @examples ancient_sum_stats(sim_obj)
 ancient_sum_stats <- function(sim,nwins=1,split_type="base",
                               ID,trim_sim=F,snp = NA,
-                              missing_rate, trans_prop= 0.776, dmg_rate = 0.05, ascertain_indices,
+                              missing_rate, trans_prop = 0.776, dmg_rate = 0.05, ascertain_indices,
                               seed = NA, impute_method, denoise_method = "none", 
                               max_clus = 0.2){
  
-  #check arguments are entered correctly
+  #check arguments are entered correctly ----
+  
+  #sim
+  if(class(sim)!="sim_obj"){
+    stop("Argument sim is not of the class sim_obj")
+  }
+  
+  #nwins
+  if(class(nwins)!="numeric"){
+    stop("Argument nwins must be a numeric")
+  }
+  if(floor(nwins)!=nwins){
+    stop("Argument nwins must be an integer")
+  }
+  if(nwins<1){
+    stop("Argument nwins must be a positive integer")
+  }
+  
+  #split_type
+  valid_splits=c("base","mut")
+  check=split_type %in% valid_splits
+  if(check!=T){
+    stop("Invalid argument for split_type. Options are \"base\" or \"mut\" ")
+  }
+  
+  #ID
+  if(floor(ID)!=ID){
+    stop("ID must be an integer")
+  }
+  if(is.numeric(ID)==F){
+    stop("ID must be numeric")
+  }
+  
+  #trim_sim
+  if(trim_sim && is.na(snp)){
+    stop("snp argument must an integer if trim_sim is TRUE. snp is currently NA.")
+  }
+  
+  #snp
+  if(is.na(snp)==F){
+    if(floor(snp)!=snp){
+      stop("ID must be an integer")
+    }
+    if(class(snp)!="numeric"){
+      stop("ID must be numeric")
+    }
+  }
+  
+  #denoise method
   valid_impute=c("random","zero")
   check = impute_method %in% valid_impute
   if(check!=TRUE){
@@ -213,7 +261,7 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   
   #For the cluster method, we cluster the haplotypes for computing hstats
   if(denoise_method == "cluster"){
-    win_clus_vec = lapply(hap_win_list, function(G){clus_hap(G, max_clus = round( nrow(G)*max_clus) ) })
+    win_clus_vec = lapply(hap_win_list, function(M){clus_hap(M, max_clus = round( nrow(M)*max_clus) ) })
     h_values = lapply(win_clus_vec,clus_hstats)
   } else {
     h_values <- lapply(hap_win_list,h_stats)

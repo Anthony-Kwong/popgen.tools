@@ -56,7 +56,7 @@ sum_stats<-function(sim,nwins=1,split_type="base",
     stop("ID must be an integer")
   }
   if(is.numeric(ID)==F){
-    stop("ID must be numeric yada")
+    stop("ID must be numeric")
   }
   
   #trim_sim
