@@ -14,6 +14,14 @@ test_that("rm_nonpoly_cols function works",{
   expect_equal(ans, rm_nonpoly_cols(G)[[1]])
   expect_equal(seq(1,10)[-c(1,5)], rm_nonpoly_cols(G)[[2]])
   
+  set.seed(3)
+  G <- matrix(sample(0:1, size = 20, replace = TRUE), nc = 5)
+  G[,5] = rep(1,4)
+  G <- cbind(G, rep(NA,4))
+  ans <- G[,-c(5,6)]
+  expect_equal(ans, rm_nonpoly_cols(G)[[1]])
+  expect_equal(seq(1,4), rm_nonpoly_cols(G)[[2]])
+
   #check case of no polymorphic columns
   G <- rbind(c(0,0,0,0),c(0,0,0,0))
   ans <- list(NaN,NaN)

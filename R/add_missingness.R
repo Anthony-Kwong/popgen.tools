@@ -39,7 +39,6 @@ add_missingness <- function(G, missing_rate, seed = NA){
   NA_seeds = sample.int(.Machine$integer.max, size = nsam) 
   
   for(i in 1:nsam){
-    print(i)
     set.seed(NA_seeds[i])
     index = purrr::rbernoulli(n=snp, p = missing_rate)
     G[i,which(index == TRUE)] = NA

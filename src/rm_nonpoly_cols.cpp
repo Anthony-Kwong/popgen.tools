@@ -5,8 +5,10 @@ using namespace Rcpp;
 
 //' nonpoly_cols function 
 //' 
-//' Takes a NumericMatrix and returns the indices of any columns that have only 1's or only 0's.
-//' If none such columns exist, the function returns NA. 
+//' Takes a NumericMatrix and returns a list. The first element is a thinner matrix where
+//' all the columns with the same element are removed. The second element is a vector of 
+//' the indices of any columns that have all 0's, 1's and NA's. If none such columns exist, 
+//' the vector is NA. 
 //' 
 //' @param G: A binary NumericMatrix of 0's and 1's. 
 //' @return A list. Element 1 is a NumericMatrix with subset columns of G. Any columns with only 1's or only 0's
@@ -37,10 +39,13 @@ List rm_nonpoly_cols(NumericMatrix G) {
     NumericVector Gcol = G(_,i);
     // Rcout << Gcol << std::endl; 
     // Rcout << NumericVector(rows,0.0) <<std::endl; 
+    
     //check if the column has either all 0's or all 1's.
     bool all_0 = vec_equal(Gcol, NumericVector(rows,0.0));
     bool all_1 = vec_equal(Gcol, NumericVector(rows,1.0));
-    if(all_0 ==TRUE || all_1==TRUE){
+    bool all_na = all(is_na(Gcol));
+    
+    if(all_0 ==TRUE || all_1==TRUE || all_na){
       continue;
     } else {
       H(_,col_count) = Gcol;

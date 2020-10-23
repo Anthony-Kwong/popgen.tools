@@ -162,7 +162,7 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   #to equalise the number of SNPs across the simulations, we keep the central k SNPs around the selected mutation.
   
   #in our current pipeline, the selected mutation is always at 0.5. Later on we may change this. 
-  mutation_pos<-0.5
+  mutation_pos = 0.5
   
   if(ncol(final_G) > snp && trim_sim){
     #find closest SNP to the selected mutation
@@ -171,7 +171,7 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
     center<-which.min(snp_dist)
     
     #trim the genome matrix and pos vector
-    G<-window_trim(final_G,cen=center,k=floor(snp/2))
+    G <- window_trim(final_G,cen=center,k=floor(snp/2))
     pos_vec<-vector_trim(final_pos, cen=center, k=floor(snp/2)) 
     
   } else {
