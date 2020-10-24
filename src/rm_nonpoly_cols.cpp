@@ -45,7 +45,7 @@ List rm_nonpoly_cols(NumericMatrix G) {
     bool all_1 = vec_equal(Gcol, NumericVector(rows,1.0));
     bool all_na = all(is_na(Gcol));
     
-    if(all_0 ==TRUE || all_1==TRUE || all_na){
+    if(all_0 ==TRUE || all_1==TRUE || all_na == TRUE){
       continue;
     } else {
       H(_,col_count) = Gcol;

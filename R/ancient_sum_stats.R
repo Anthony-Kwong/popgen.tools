@@ -90,12 +90,20 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
     }
   }
   
-  #denoise method
+  #imputation method
   valid_impute=c("random","zero")
   check = impute_method %in% valid_impute
   if(check!=TRUE){
     stop("Invalid impute_method. Options are \"random\" or \"zero\" ")
     
+  }
+  
+  #denoise method
+  valid_denoise = c("none", "cluster", "majority_flip")
+  check = denoise_method %in% valid_denoise
+  if(check == FALSE){
+    stop("Invalid denoise_method. Options are \"none\",
+         \"cluster\" and \"majority_flip\" ")
   }
   
   #extract useful information from the simulation ----
