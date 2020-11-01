@@ -28,6 +28,8 @@ test_that("ancient_generate_df function works",{
   dmg_rate = 0.05
   age_seed = 4
   impute_method = "random"
+  denoise_method = "cluster"
+  max_clus = 0.2
   
   l_sim<-list()
   
@@ -44,7 +46,8 @@ test_that("ancient_generate_df function works",{
     ancient_generate_df(l_sim, nwins = nwins,split_type="mut",
                         missing_rate = missing_rate, trans_prop = trans_prop,
                         dmg_rate = dmg_rate, ascertain_indices = asc_index, trim_sim = F, 
-                        seed = age_seed,impute_method = impute_method,ID = ID)
+                        seed = age_seed,impute_method = impute_method,ID = ID,
+                        denoise_method = denoise_method, max_clus = max_clus)
   )
 
   
@@ -63,7 +66,8 @@ test_that("ancient_generate_df function works",{
       single_ans<-ancient_sum_stats(l_sim[[sim_number]],split_type="mut",nwins = nwins,
                                     ID=ID[sim_number], missing_rate = missing_rate,trans_prop = trans_prop,
                                     dmg_rate = dmg_rate,ascertain_indices = asc_index,seed = seeds[sim_number],
-                                    impute_method = impute_method)
+                                    impute_method = impute_method, denoise_method = denoise_method,
+                                    max_clus = max_clus)
       #single_ans$sweep<-as.factor(single_ans$sweep)
       single_ans<-as.numeric(single_ans)
       expect_equal(batch_ans,single_ans)
@@ -97,6 +101,8 @@ test_that("ancient_generate_df function works",{
   dmg_rate = 0.05
   age_seed = 4
   impute_method = "zero"
+  denoise_method = "fixed_cluster"
+  fixed_clus = 10
   
   l_sim<-list()
   
@@ -113,7 +119,8 @@ test_that("ancient_generate_df function works",{
     ancient_generate_df(l_sim, nwins = nwins,split_type="mut",
                         missing_rate = missing_rate, trans_prop = trans_prop,
                         dmg_rate = dmg_rate, ascertain_indices = asc_index, trim_sim = F, 
-                        seed = age_seed,impute_method = impute_method)
+                        seed = age_seed,impute_method = impute_method,
+                        denoise_method = denoise_method, fixed_clus = fixed_clus)
   )
   
   
@@ -132,7 +139,8 @@ test_that("ancient_generate_df function works",{
       single_ans<-ancient_sum_stats(l_sim[[sim_number]],split_type="mut",nwins = nwins,
                                     ID=sim_number, missing_rate = missing_rate,trans_prop = trans_prop,
                                     dmg_rate = dmg_rate,ascertain_indices = asc_index,seed = seeds[sim_number],
-                                    impute_method = impute_method)
+                                    impute_method = impute_method,
+                                    denoise_method = denoise_method, fixed_clus = fixed_clus)
       #single_ans$sweep<-as.factor(single_ans$sweep)
       single_ans<-as.numeric(single_ans)
       expect_equal(batch_ans,single_ans)
@@ -167,7 +175,7 @@ test_that("ancient_generate_df function works",{
   dmg_rate = 0.05
   age_seed = 5
   impute_method = "random"
-  denoise_method = "cluster"
+  denoise_method = "majority_flip"
   
   l_sim<-list()
   

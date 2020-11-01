@@ -25,11 +25,13 @@
 #' "random" and "zero." See documentation on random_impute and zero_impute for more information.
 #' @param seed: Optional. A random seed for aging DNA.
 #' @param denoise_method: A method for denoising the genome matrix for the purposes of computing the 
-#' haplotype statistics. Default is "none". Options are "cluster" and "majority_flip". See majority_flip
-#' and clus_hstats documentation for more information.
+#' haplotype statistics. Default is "none". Options are "cluster","fixed_cluster" and "majority_flip". 
+#' See majority_flip and clus_hstats documentation for more information.
 #' @param max_clus: A number between 0 and 1. Specifies the max number of clusters to consider as a fraction
 #' of the total number of rows in the genome matrix. Only used with the "cluster" denoise method. Default
 #' value is 0.2. 
+#' @param fixed_clus: Only used with the "fixed_cluster" denoise method. Specifies the number of clusters
+#' to make from rows of a genome matrix. Must be a postive integer.
 #' 
 #' @import magrittr
 #' @return A one row dataframe summary stats and information for the input simulation object.
@@ -40,7 +42,7 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
                               ID,trim_sim=F,snp = NA,
                               missing_rate, trans_prop = 0.776, dmg_rate = 0.05, ascertain_indices,
                               seed = NA, impute_method, denoise_method = "none", 
-                              max_clus = 0.2){
+                              max_clus = 0.2, fixed_clus = NA){
  
   #check arguments are entered correctly ----
   
@@ -99,11 +101,19 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   }
   
   #denoise method
-  valid_denoise = c("none", "cluster", "majority_flip")
+  valid_denoise = c("none", "cluster", "majority_flip", "fixed_cluster")
   check = denoise_method %in% valid_denoise
   if(check == FALSE){
     stop("Invalid denoise_method. Options are \"none\",
          \"cluster\" and \"majority_flip\" ")
+  }
+  
+  if(denoise_method == "fixed_cluster" && is.na(fixed_clus)){
+    stop("Must specify fixed_clus when using denoise method \"fixed_cluster\" ")
+  }
+  
+  if(max_clus < 0 || max_clus > 1){
+    stop("max_clus must be between 0 and 1.")
   }
   
   #extract useful information from the simulation ----
@@ -145,14 +155,17 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   
   #add missingness and deamination
   dmg_G <- age_DNA(G = asc_G, missing_rate = missing_rate,trans_prop = trans_prop,dmg_rate = dmg_rate, seed = seed)
-  dmg_G <- rm_nonpoly_cols(dmg_G)[[1]]
+
+  #add pseudo-haplodisation
+  set.seed(seed)
+  pseudo_G = pseudo_hap(dmg_G, seed = seed)
   
   #imputation
   if(impute_method == "random"){
     set.seed(seed) #set random seed for random impute
-    imp_G <- random_impute(dmg_G)
+    imp_G <- random_impute(pseudo_G)
   } else if (impute_method == "zero"){
-    imp_G <- zero_impute(dmg_G)
+    imp_G <- zero_impute(pseudo_G)
   } else {
     stop("Invalid impute_method.")
   }
@@ -241,24 +254,20 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   #Tajima'D taj_D(t_t, t_w, var_taj)----
   D<-purrr::pmap(list(basic_values$theta_t,basic_values$theta_w,basic_values$var_taj),taj_D) %>% unlist()
   
-  #compute haplotype stats----
-  set.seed(seed)
-  pseudo_G = pseudo_hap(G, seed = seed)
-  
   #denoise the genome matrix of pseudo haplotypes
   #if cluster if chosen, it will be done later
   if (denoise_method == "majority_flip"){
-    pseudo_G = majority_flip(pseudo_G)
+    denoise_G = majority_flip(final_G)
   }
   
-  #split the genome matrix of pseudo haplotypes
+  #split the genome matrix into windows
   if(split_type=="base"){
-    split_wins = winsplit_base(pseudo_G,pos_vec,nwins)
+    split_wins = winsplit_base(final_G,pos_vec,nwins)
     hap_win_list = split_wins$windows
     
   } else if (split_type=="mut"){
     #split windows based by ~equal SNPs
-    split_wins = sub_win(pseudo_G,nwins)
+    split_wins = sub_win(final_G,nwins)
     hap_win_list= split_wins$windows
     
   } else {
@@ -271,10 +280,12 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
   if(denoise_method == "cluster"){
     win_clus_vec = lapply(hap_win_list, function(M){clus_hap(M, max_clus = round( nrow(M)*max_clus) ) })
     h_values = lapply(win_clus_vec,clus_hstats)
+  } else if (denoise_method == "fixed_cluster"){
+    win_clus_vec = lapply(hap_win_list, function(M){kmeans(M, centers = fixed_clus)$cluster})
+    h_values = lapply(win_clus_vec,clus_hstats)
   } else {
     h_values <- lapply(hap_win_list,h_stats)
   }
-  
   
   names(h_values) <- string_labels("subwindow",length(h_values))
   

@@ -21,8 +21,13 @@
 #' @param ID: Optional. A numeric vector if ID values to label each observation according to the simulation 
 #' it came from. If argument is not used, the rows will be labelled 1,2,....
 #' @param denoise_method: A method for denoising the genome matrix for the purposes of computing the 
-#' haplotype statistics. Default is "none". Options are "cluster" and "majority_flip". See majority_flip
-#' and clus_hstats documentation for more information.
+#' haplotype statistics. Default is "none". Options are "cluster","majority_flip" and "fixed_cluster".
+#' See majority_flip and clus_hstats documentation for more information.
+#' @param max_clus: A number between 0 and 1. Specifies the max number of clusters to consider as a fraction
+#' of the total number of rows in the genome matrix. Only used with the "cluster" denoise method. Default
+#' value is 0.2. 
+#' @param fixed_clus: Only used with the "fixed_cluster" denoise method. Specifies the number of clusters
+#' to make from rows of a genome matrix. Must be a postive integer.
 #' 
 #' @return a dataframe containting the summary statistics for the list of simulation objects
 #' 
@@ -34,7 +39,7 @@
 ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp = NA,
                               missing_rate, trans_prop = 0.776, dmg_rate = 0.05,
                               ascertain_indices, seed = NA, impute_method, ID = NA,
-                              denoise_method = "none"){
+                              denoise_method = "none",max_clus = 0.2, fixed_clus = NA){
   #generate a random seed if one was not given
   if(is.na(seed)){
     seed = sample(.Machine$integer.max, 1)
@@ -61,7 +66,9 @@ ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp 
                  missing_rate = missing_rate, trans_prop = trans_prop,
                  dmg_rate = dmg_rate, seed = seeds,impute_method = impute_method ,
                  ascertain_indices = rep(list(ascertain_indices),num_sim),
-                 denoise_method = denoise_method)
+                 denoise_method = denoise_method,
+                 max_clus = max_clus,
+                 fixed_clus = fixed_clus)
   
   df_list<-purrr::pmap(arg_list,ancient_sum_stats)
   df<-dplyr::bind_rows(df_list)
