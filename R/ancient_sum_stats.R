@@ -31,7 +31,7 @@
 #' of the total number of rows in the genome matrix. Only used with the "cluster" denoise method. Default
 #' value is 0.2. 
 #' @param fixed_clus: Only used with the "fixed_cluster" denoise method. Specifies the number of clusters
-#' to make from rows of a genome matrix. Must be a postive integer.
+#' to make from rows of a genome matrix. Must be a postive integer. 
 #' 
 #' @import magrittr
 #' @return A one row dataframe summary stats and information for the input simulation object.
