@@ -48,7 +48,7 @@ ancient_generate_df<-function(sim_list,nwins,split_type="base",trim_sim = F,snp 
   
   #check valid ID
   
-  if(is.na(ID)){
+  if( any(is.na(ID)) ){
     id <- (1:num_sim)
   } else {
     id <- ID
