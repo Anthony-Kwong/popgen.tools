@@ -62,4 +62,15 @@ test_that("random_impute works",{
   G[,4] = rep(0,4)
   expect_equal(output,G)
   
+  #test to show a full column of NAs doesn't stop loop
+  set.seed(2112)
+  G = matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
+  G[,3] = rep(NA,5)
+  G[,4] = rep(NA,5)
+  output = random_impute(G)
+  
+  G[,3] = rep(0,5)
+  G[,4] = rep(0,5)
+  expect_equal(output,G)
+  
 })

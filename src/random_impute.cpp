@@ -24,6 +24,7 @@ NumericMatrix random_impute(NumericMatrix G) {
   
   NumericMatrix output = G;
   int sites = G.ncol();
+  //Rcout << sites <<std::endl;
   int nsam = G.nrow();
   // loop across the columns of G
   for(int c = 0; c < sites; c++){
@@ -39,7 +40,7 @@ NumericMatrix random_impute(NumericMatrix G) {
     //if we run into a column with only NAs, convert that column to a vector of 0's.
     if(num_na==nsam){
       output(_,c) = NumericVector(nsam);
-      break;
+      continue;
     }
     
     // obtain all the non-NA elements in the c^th column
