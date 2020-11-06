@@ -1,6 +1,7 @@
 #test function for clus_hap
 
 R_clus_hap <- function (G, n_clus){
+  uni_p = nrow(G) - sum(duplicated(G))
   #tune for the best number of clusters 
   tune_clus = factoextra::fviz_nbclust(G, kmeans, method = "silhouette",
                                        k.max = n_clus)

@@ -6,7 +6,8 @@
 #'
 #'
 #' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.
-#' @param max_clus : Integer for the maximum number of clusters to consider.
+#' @param max_clus : Integer for the maximum number of clusters to consider. If the number of 
+#' unique rows is smaller than max_clus, the number of unique rows will be used instead.
 #'
 #' @return A Numeric vector indicating the clusters to which each row belongs
 #' @examples G = matrix(sample(0:1, size =25 , replace = TRUE), nc = 5)
@@ -25,6 +26,14 @@ clus_hap <- function(G, max_clus){
   }
   if(max_clus > nrow(G)){
     stop("max_clus must not exceed the number of rows in G")
+  }
+  
+  #find the number of unique rows in genome matrix. 
+  #max_clus must not exceed the number of unique rows as this would break clustering
+  unique_dp = sum(!duplicated(G))
+  
+  if(unique_dp < max_clus){
+    max_clus = unique_dp
   }
   
   #tune the number of clusters
