@@ -2,6 +2,11 @@
 
 R_clus_hap <- function (G, n_clus){
   uni_p = nrow(G) - sum(duplicated(G))
+  
+  if(uni_p < n_clus){
+    n_clus = uni_p
+  }
+  
   #tune for the best number of clusters 
   tune_clus = factoextra::fviz_nbclust(G, kmeans, method = "silhouette",
                                        k.max = n_clus)
