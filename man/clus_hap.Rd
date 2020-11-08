@@ -7,7 +7,8 @@
 clus_hap(G, max_clus)
 }
 \arguments{
-\item{max_clus}{: Integer for the maximum number of clusters to consider.}
+\item{max_clus}{: Integer for the maximum number of clusters to consider. If the number of 
+unique rows is smaller than max_clus, the number of unique rows will be used instead.}
 
 \item{G:}{Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual.}
 }

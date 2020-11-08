@@ -830,7 +830,7 @@ test_that("ancient_sum_stats works",{
   hap_win_list= G_wins$windows
   
   #don't worry if clustering doesn't converge
-  win_clus_vec = lapply(hap_win_list, function(M){ kmeans(M, centers = max_clus)$cluster })
+  win_clus_vec = lapply(hap_win_list, function(M){fixed_clus_hap(M, n_clus = max_clus)})
   h_values = lapply(win_clus_vec,clus_hstats)
   
   x<-rep(NA,nwins)

@@ -6,6 +6,7 @@
 #'
 #' @param G: Binary genome matrix of 0's and 1's. Each column is a SNP, each row is an individual. 
 #' @param n_clus: Number of clusters to cluster the rows of G. 
+#' @param seed: Integer random seed for the clustering algorithm.
 #'
 #' @return A Numeric vector indicating the clusters to which each row belongs
 #' @export
@@ -14,8 +15,11 @@
 #' fixed_clus_hap(G, 3)
 #' @importFrom tester is_integer
 
-fixed_clus_hap <- function (G, n_clus){
+fixed_clus_hap <- function (G, n_clus, seed = NA){
   #check inputs
+  if(is.na(seed)){
+    seed = sample.int(.Machine$integer.max, size = 1)
+  }
   
   if(tester::is_integer(n_clus)==F){
     stop("max_clus must be an integer.")
@@ -33,6 +37,7 @@ fixed_clus_hap <- function (G, n_clus){
   }
   
   #cluster rows
+  set.seed(seed)
   G_clus = kmeans(G, centers = n_clus)
   clus_vec = G_clus$cluster
   

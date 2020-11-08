@@ -281,7 +281,7 @@ ancient_sum_stats <- function(sim,nwins=1,split_type="base",
     win_clus_vec = lapply(hap_win_list, function(M){clus_hap(M, max_clus = round( nrow(M)*max_clus) ) })
     h_values = lapply(win_clus_vec,clus_hstats)
   } else if (denoise_method == "fixed_cluster"){
-    win_clus_vec = lapply(hap_win_list, function(M){kmeans(M, centers = fixed_clus)$cluster})
+    win_clus_vec = lapply(hap_win_list, function(M){fixed_clus_hap(M, n_clus = fixed_clus)})
     h_values = lapply(win_clus_vec,clus_hstats)
   } else {
     h_values <- lapply(hap_win_list,h_stats)

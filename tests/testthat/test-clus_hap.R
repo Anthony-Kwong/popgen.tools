@@ -19,6 +19,8 @@ R_clus_hap <- function (G, n_clus){
   return(clus_vec)
 }
 
+#add seed to kmeans
+
 test_that("clus_hap works",{
   set.seed(1312)
   G = matrix(sample(0:1, size =5*8 , replace = TRUE), nc = 5)
