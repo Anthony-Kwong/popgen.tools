@@ -1,10 +1,10 @@
 #' age_DNA function
 #' 
-#' A function to simulating DNA aging on discoal simulations. To simulate missingness, for each row 
-#' a percentage of elements are randomly sampled and become missing. To simulate deamination
-#' a percentage of columns are randomly sampled according to trans_prop, to become transition sites. 
-#' For each transition site we flip a fair coin. If heads we change 0's to 1's, with probability as 
-#' specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
+#' A function to simulating DNA aging on discoal simulations. Deamination is simulated before missingness.
+#' To simulate missingness, for each row a percentage of elements are randomly sampled and become NA. 
+#' To simulate deamination a percentage of columns are randomly sampled according to trans_prop, 
+#' to become transition sites. For each transition site we flip a fair coin. If heads we change 0's to 1's, 
+#' with probability as specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
 #' specified by the dmg_rate.
 #' 
 #' This method is adapted from doi: 10.1534/genetics.112.139949
@@ -42,8 +42,6 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
     stop("random seed must be numeric.")
   }
   
-  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
-  
   #deamination ----
   snp = ncol(G)
   nsam = nrow(G)
@@ -53,7 +51,7 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
   set.seed(seed)
   #random seed to determine which columns are considered transitions
   trans_seeds = sample.int(.Machine$integer.max, size = 1) 
-  #random seed to determine the coin flips for each transition
+  #random seed to determine whether 0's or 1's are changed for each transition column
   flip_seeds = sample.int(.Machine$integer.max, size = num_trans)
   #random seed to determine which elements of the transition column actually 
   #undergo a transition. 
@@ -61,9 +59,10 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
   
   #randomly sample columns to become transition sites
   set.seed(trans_seeds)
+  #store indices of transition columns/sites
   trans_index = sample(x = snp, size = num_trans, replace = F)
   
-  #loop over all transition sites/columns
+  #loop over all transition sites/columns and potentially flip its elements
   for(i in 1:length(trans_index)){
     set.seed(flip_seeds[i])
     #flip coin to see if we change 0's to 1's (T), or 1's to 0's (F). 
@@ -71,6 +70,7 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
     
     #determine elements of each column to convert
     set.seed(deam_seeds[i])
+    #logical indices to store whether a column element should be flipped
     deam_index = purrr::rbernoulli(nsam, p = dmg_rate)
     
     #find the row indices corresponding to potential elements to change
@@ -96,5 +96,10 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
       }
     }
   }
-  return(G)
+  
+  #add missingness
+  
+  final_G = add_missingness(G, missing_rate = missing_rate, seed = seed)
+  
+  return(final_G)
 }

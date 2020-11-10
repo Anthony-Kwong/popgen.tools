@@ -8,9 +8,6 @@ test_age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, s
     seed = sample.int(.Machine$integer.max, size = 1) 
   }
   
-  #add missingness
-  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
-  
   #deamination
   n_trans = snp*trans_prop
   n_trans = round(n_trans)
@@ -53,7 +50,11 @@ test_age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, s
       }
     }
   }
-  return(G)
+  
+  #add missingness
+  final_G = add_missingness(G, missing_rate = missing_rate, seed = seed)
+  
+  return(final_G)
 }
 
 test_that("age_DNA works",{
@@ -67,11 +68,6 @@ test_that("age_DNA works",{
   G <- matrix(sample(0:1, size = SNP*5, replace = TRUE), nc = SNP)
   imp_output = age_DNA(G, missing_rate = missing_rate, seed  = seed)
   test_output = test_age_DNA(G, missing_rate = missing_rate, seed  = seed)
-  
-
-
-  #add missingness
-  G = add_missingness(G, missing_rate = missing_rate, seed = seed)
   
   #add deamination
   snp = ncol(G)
@@ -117,8 +113,11 @@ test_that("age_DNA works",{
     }
   }
   
-  expect_equal(G, imp_output)
-  expect_equal(G, test_output)
+  #add missingness
+  final_G = add_missingness(G, missing_rate = missing_rate, seed = seed)
+  
+  expect_equal(final_G, imp_output)
+  expect_equal(final_G, test_output)
   
   #manual check 2 ----
   
@@ -175,8 +174,11 @@ test_that("age_DNA works",{
     }
   }
   
-  expect_equal(G, imp_output)
-  expect_equal(G, test_output)
+  #add missingness
+  final_G = add_missingness(G, missing_rate = missing_rate, seed = seed)
+  
+  expect_equal(final_G, imp_output)
+  expect_equal(final_G, test_output)
   
   #auto check ----
   

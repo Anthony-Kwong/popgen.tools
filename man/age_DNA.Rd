@@ -23,11 +23,11 @@ Default is 0.05.}
 
 }
 \description{
-A function to simulating DNA aging on discoal simulations. To simulate missingness, for each row 
-a percentage of elements are randomly sampled and become missing. To simulate deamination
-a percentage of columns are randomly sampled according to trans_prop, to become transition sites. 
-For each transition site we flip a fair coin. If heads we change 0's to 1's, with probability as 
-specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
+A function to simulating DNA aging on discoal simulations. Deamination is simulated before missingness.
+To simulate missingness, for each row a percentage of elements are randomly sampled and become NA. 
+To simulate deamination a percentage of columns are randomly sampled according to trans_prop, 
+to become transition sites. For each transition site we flip a fair coin. If heads we change 0's to 1's, 
+with probability as specified by the dmg_rate. If tails, we change 1's to 0's, with probability as 
 specified by the dmg_rate.
 }
 \details{
