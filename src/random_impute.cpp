@@ -46,20 +46,25 @@ NumericMatrix random_impute(NumericMatrix G) {
     // obtain all the non-NA elements in the c^th column
     col = discard(col, f_na);
    // Rcout << col << std::endl;
-
+    
+    //loop over all NAs and impute them
     for(int r=0; r<num_na; r++){
+      
+      //note r1 is the first NA, not the first row
       //Rcout <<"r "<< r << std::endl;
       
-      //random sample from col
+      //random sample from non-NA elements
       NumericVector imp = runif(1,Named("min")=0,_["max"]=col.length());
       //round down to nearest integer to get a valid index
-      int imp_index = imp[0];
+      int imp_value = imp[0];
       // Rcout <<"imp "<< imp <<std::endl;
-      // Rcout << "imp_index "<< imp_index <<std::endl;
+      // Rcout << "imp_value "<< imp_value <<std::endl;
       // Rcout << "change " << col[imp_index]<<std::endl;
       // Rcout << "pos_na"<< na_pos << std::endl;
       // Rcout<<"num_na"<< num_na <<std::endl; 
-      output(na_pos[r],c) = col[imp_index];
+      
+      //change the NA element
+      output(na_pos[r],c) = col[imp_value];
     }
   }
   return output;

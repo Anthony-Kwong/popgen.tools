@@ -75,9 +75,9 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
     
     #find the row indices corresponding to potential elements to change
     if(coin_flip){
-      possible_transitions = which(G[,i] == 0)
+      possible_transitions = which(G[,trans_index[i]] == 0)
     } else {
-      possible_transitions = which(G[,i] == 1)
+      possible_transitions = which(G[,trans_index[i]] == 1)
     }
 
     #Go to next iteration if there are no possible base changes to make. 
@@ -89,10 +89,10 @@ age_DNA <- function(G, missing_rate, trans_prop = 0.776, dmg_rate = 0.05, seed =
     #loop over all elements in a column that could be changed.
     for(j in possible_transitions){
       if(deam_index[j] && coin_flip){
-        G[j,i] = 1 
+        G[j,trans_index[i]] = 1 
       }
       if(deam_index[j] && coin_flip==F){
-        G[j,i] = 0
+        G[j,trans_index[i]] = 0
       }
     }
   }

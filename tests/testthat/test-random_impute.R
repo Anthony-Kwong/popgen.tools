@@ -24,7 +24,7 @@
 
 test_that("random_impute works",{
   #manual check, got the random imputations using Rcout statements
-  set.seed(2)
+  set.seed(2) 
   G = matrix(sample(0:1, size = 25, replace = TRUE), nc = 5)
   G[1,1] = NA
   G[3,4] = NA
@@ -45,12 +45,11 @@ test_that("random_impute works",{
   set.seed(3)
   out = random_impute(G)
   G[,3] = rep(0,4)
-
+  G[,5] = rep(1,4)
+  
   G[3,4] = 0
   G[4,4] = 1
   
-  G[2,5] = 0
-  G[3,5] = 1
   expect_equal(G,out)
   
   #manual check with a column of NAs, make sure it is convereted to 0's. 
