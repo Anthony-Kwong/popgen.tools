@@ -17,6 +17,7 @@ clus_hstats <- function (clus_vec){
   #compute proportions of each cluster
   hap_counts = sapply( seq(1:num_hap) , function(d){count(clus_vec,d)} )
   hap_freq = hap_counts/length(clus_vec)
+  hap_freq = sort(hap_freq, decreasing = T)
   
   h1 = sum(hap_freq*hap_freq)
   h2 = h1 - hap_freq[1]^2

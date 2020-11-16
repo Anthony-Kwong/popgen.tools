@@ -13,6 +13,10 @@ R_clus_hap <- function (G, n_clus){
   tune_data = tune_clus$data
   best_clus = which.max(tune_data$y)
   
+  if(best_clus < 3){
+    best_clus = 3
+  }
+  
   G_clus = kmeans(G, centers = best_clus)
   clus_vec = G_clus$cluster
   
