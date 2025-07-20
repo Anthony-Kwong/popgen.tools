@@ -21,7 +21,7 @@ using namespace Rcpp;
 //' 
 //' @param G: A NumericMatrix designating a binary genome matrix consisting of 1's and 0's. Each column is a SNP. Each row is a sampled individual. 
 //' @return A numeric vector of h stats. (h1,h2,h12,h123)
-//' @examples h_stats(G)
+//' @examples G = matrix(sample(0:1, size =5*5 , replace = TRUE), nc = 5), h_stats(G)
 //' @export
 // [[Rcpp::export]]
 NumericVector h_stats(NumericMatrix G) {
